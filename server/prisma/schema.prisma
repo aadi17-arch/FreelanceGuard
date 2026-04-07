@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENT
+  FREELANCER
+}
+
+enum ProjectStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ContractStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum MilestoneStatus {
+  PENDING
+  IN_PROGRESS
+  SUBMITTED
+  APPROVED
+  DISPUTED
+  RESOLVED
+}
+
+enum PaymentType {
+  DEPOSIT
+  RELEASE
+  REFUND
+}
+
+model User {
+  id            String     @id @default(uuid())
+  name          String
+  email         String     @unique
+  password      String
+  role          Role
+  walletBalance Float      @default(0)
+  heldAmount    Float      @default(0)
+  projects      Project[]  @relation("ClientProjects")
+  contracts     Contract[] @relation("FreelancerContracts")
+  disputes      Dispute[]  @relation("RaisedBy")
+  createdAt     DateTime   @default(now())
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  title       String
+  description String
+  clientId    String
+  client      User          @relation("ClientProjects", fields: [clientId], references: [id])
+  status      ProjectStatus @default(OPEN)
+  contracts   Contract[]
+  createdAt   DateTime      @default(now())
+}
+
+model Contract {
+  id           String         @id @default(uuid())
+  projectId    String
+  project      Project        @relation(fields: [projectId], references: [id])
+  freelancerId String
+  freelancer   User           @relation("FreelancerContracts", fields: [freelancerId], references: [id])
+  totalAmount  Float
+  heldAmount   Float          @default(0)
+  status       ContractStatus @default(PENDING)
+  milestones   Milestone[]
+  payments     Payment[]
+  createdAt    DateTime       @default(now())
+}
+
+model Milestone {
+  id             String          @id @default(uuid())
+  contractId     String
+  contract       Contract        @relation(fields: [contractId], references: [id])
+  title          String
+  description    String
+  amount         Float
+  dueDate        DateTime
+  status         MilestoneStatus @default(PENDING)
+  submissionNote String?
+  payments       Payment[]
+  disputes       Dispute[]
+  createdAt      DateTime        @default(now())
+}
+
+model Payment {
+  id          String      @id @default(uuid())
+  contractId  String
+  contract    Contract    @relation(fields: [contractId], references: [id])
+  milestoneId String?
+  milestone   Milestone?  @relation(fields: [milestoneId], references: [id])
+  amount      Float
+  type        PaymentType
+  createdAt   DateTime    @default(now())
+}
+
+model Dispute {
+  id          String   @id @default(uuid())
+  milestoneId String
+  milestone   Milestone @relation(fields: [milestoneId], references: [id])
+  raisedById  String
+  raisedBy    User     @relation("RaisedBy", fields: [raisedById], references: [id])
+  reason      String
+  status      String   @default("OPEN") // "OPEN", "RESOLVED"
+  resolution  String?
+  createdAt   DateTime @default(now())
+}
