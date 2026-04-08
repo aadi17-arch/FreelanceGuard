@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -30,117 +31,132 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-950 px-4">
-      <div className="max-w-md w-full space-y-8 p-10 bg-gray-900 rounded-2xl border border-gray-800 shadow-2xl">
-        <div className="text-center">
-          <h2 className="mt-6 text-3xl font-extrabold text-white tracking-tight">
-            Create an Account
-          </h2>
-          <p className="mt-2 text-sm text-gray-400">
-            Join FreelanceGuard and protect your projects
-          </p>
+    <div className="min-h-screen flex items-center justify-center bg-rui-light p-4 md:p-8">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md flex flex-col items-center"
+      >
+        {/* Brand Header */}
+        <div className="mb-8 md:mb-10 text-center space-y-2">
+          <Link to="/" className="text-xl md:text-2xl font-bold tracking-tight uppercase">
+            Freelance<span className="text-rui-blue">Guard</span>
+          </Link>
+          <div className="flex items-center justify-center space-x-2">
+            <div className="h-[2px] w-4 bg-rui-gray-border"></div>
+            <span className="text-[9px] md:text-[10px] font-bold text-rui-gray-muted tracking-[0.3em] uppercase">Registration Layer</span>
+            <div className="h-[2px] w-4 bg-rui-gray-border"></div>
+          </div>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="name" className="text-sm font-medium text-gray-300 block mb-2">
-                Full Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="text-sm font-medium text-gray-300 block mb-2">
-                Email Address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                placeholder="you@example.com"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="text-sm font-medium text-gray-300 block mb-2">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                placeholder="••••••••"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-300 block mb-2">
-                I am a
-              </label>
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: "CLIENT" })}
-                  className={`py-2 rounded-xl text-center font-medium transition-all ${
-                    formData.role === "CLIENT"
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20"
-                      : "bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-750"
-                  }`}
-                >
-                  Client
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: "FREELANCER" })}
-                  className={`py-2 rounded-xl text-center font-medium transition-all ${
-                    formData.role === "FREELANCER"
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20"
-                      : "bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-750"
-                  }`}
-                >
-                  Freelancer
-                </button>
-              </div>
-            </div>
+
+        {/* Boxy Form Container - Structured Auth Aesthetic */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1, duration: 0.4 }}
+          className="auth-card w-full space-y-8"
+        >
+          <div className="text-center space-y-1">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-rui-dark">New Account</h2>
+            <p className="text-xs md:text-sm font-semibold text-rui-gray-muted">Join the global workforce</p>
           </div>
 
-          <div>
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="bg-rui-danger/10 border border-rui-danger text-rui-danger px-4 py-3 rounded-sm text-[10px] font-bold uppercase tracking-wider text-center"
+              >
+                {error}
+              </motion.div>
+            )}
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[9px] md:text-[10px] font-bold text-rui-dark uppercase tracking-widest block pl-1">Legal Name</label>
+                <input
+                  name="name"
+                  type="text"
+                  required
+                  className="auth-input"
+                  placeholder="John Doe"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[9px] md:text-[10px] font-bold text-rui-dark uppercase tracking-widest block pl-1">Email</label>
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  className="auth-input"
+                  placeholder="name@company.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[9px] md:text-[10px] font-bold text-rui-dark uppercase tracking-widest block pl-1">Security Key</label>
+                <input
+                  name="password"
+                  type="password"
+                  required
+                  className="auth-input"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-[9px] md:text-[10px] font-bold text-rui-dark uppercase tracking-widest block pl-1 text-center">Identity</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, role: "CLIENT" })}
+                    className={`py-2 md:py-3 rounded-md text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all ${
+                      formData.role === "CLIENT"
+                        ? "bg-rui-dark text-white shadow-md shadow-black/10"
+                        : "bg-rui-light text-rui-gray-muted border border-rui-gray-border"
+                    }`}
+                  >
+                    Client
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, role: "FREELANCER" })}
+                    className={`py-2 md:py-3 rounded-md text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all ${
+                      formData.role === "FREELANCER"
+                        ? "bg-rui-dark text-white shadow-md shadow-black/10"
+                        : "bg-rui-light text-rui-gray-muted border border-rui-gray-border"
+                    }`}
+                  >
+                    Partner
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-500/20 active:scale-95"
+              className="auth-button"
             >
-              Sign up
+              Initialize
             </button>
+          </form>
+
+          <div className="text-center pt-2">
+            <p className="text-[10px] md:text-xs font-bold text-rui-gray-muted uppercase tracking-widest">
+              Joined?{" "}
+              <Link to="/login" className="text-rui-blue hover:underline font-bold">Log In</Link>
+            </p>
           </div>
-        </form>
-        <div className="text-center">
-          <p className="text-sm text-gray-400">
-            Already have an account?{" "}
-            <Link to="/login" className="font-medium text-blue-500 hover:text-blue-400">
-              Log in
-            </Link>
-          </p>
-        </div>
-      </div>
+        </motion.div>
+        
+        <p className="mt-8 md:mt-12 text-[9px] md:text-[10px] font-bold text-rui-gray-muted uppercase tracking-[0.4em]">Global Protocol v1.0</p>
+      </motion.div>
     </div>
   );
 }
