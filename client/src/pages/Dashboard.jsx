@@ -59,10 +59,10 @@ export default function Dashboard() {
               <span className="absolute top-2 right-2 w-2 h-2 bg-rui-danger rounded-full border-2 border-white"></span>
             </button>
             <div className="flex items-center space-x-2 md:space-x-3 bg-rui-light px-3 py-1.5 md:px-5 md:py-2 rounded-full border border-rui-gray-border">
-              <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-rui-blue text-white flex items-center justify-center font-bold text-[10px] md:text-xs">
-                {user?.name?.[0].toUpperCase()}
+              <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-rui-blue text-white flex items-center justify-center font-bold text-[10px] md:text-xs uppercase">
+                {user?.name?.[0] || "U"}
               </div>
-              <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest hidden sm:inline">{user?.name?.split(' ')[0]}</span>
+              <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest hidden sm:inline">{user?.name?.split(' ')[0] || "User"}</span>
             </div>
             <button
               onClick={handleLogout}
@@ -103,8 +103,8 @@ export default function Dashboard() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10"
         >
           {[
-            { label: "Available Funds", val: `$${user?.walletBalance || 0}`, sub: "+$4,200 this week", color: "text-rui-dark", bg: "bg-white", icon: <Vault size={22} strokeWidth={1.2} /> },
-            { label: "Active Escrows", val: `$${user?.heldAmount || 0}`, sub: "3 awaiting approval", color: "text-white", bg: "bg-rui-dark", icon: <Lock size={22} strokeWidth={1.2} /> },
+            { label: "Available Funds", val: `$${(user?.walletBalance || 0).toLocaleString()}`, sub: "+$4,200 this week", color: "text-rui-dark", bg: "bg-white", icon: <Vault size={22} strokeWidth={1.2} /> },
+            { label: "Secured Funds", val: `$${(user?.heldAmount || 0).toLocaleString()}`, sub: "3 awaiting approval", color: "text-white", bg: "bg-rui-dark", icon: <Lock size={22} strokeWidth={1.2} /> },
             { label: "Vault Health", val: "98.5%", sub: "Top 1% of users", color: "text-rui-success", bg: "bg-white", icon: <Globe size={22} strokeWidth={1.2} /> },
           ].map((item, i) => (
             <motion.div
