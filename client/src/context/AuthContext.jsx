@@ -11,8 +11,26 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      // Here you could fetch the user profile from the backend to verify the token
-      // For now, we'll assume the token works if it exists
+      const fetchProfile = async () => {
+        try {
+          const res = await axios.get("http://localhost:5001/api/auth/profile");
+          setUser(res.data);
+        }
+        catch (err) {
+          logout();
+        }
+        finally {
+          setLoading(false);
+        }
+      };
+      if (token) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        fetchProfile();
+      }
+      else {
+        delete axios.defaults.headers.common["Authorization"];
+        setLoading(false);
+      }
       setLoading(false);
     } else {
       delete axios.defaults.headers.common["Authorization"];

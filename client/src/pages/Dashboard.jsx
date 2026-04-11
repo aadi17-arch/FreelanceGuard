@@ -1,13 +1,13 @@
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  Vault, 
-  Lock, 
-  Globe, 
-  LogOut, 
-  Plus, 
-  Settings, 
+import {
+  Vault,
+  Lock,
+  Globe,
+  LogOut,
+  Plus,
+  Settings,
   Bell,
   Activity
 } from "lucide-react";
@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
       transition: { staggerChildren: 0.1 }
     }
@@ -31,8 +31,8 @@ export default function Dashboard() {
 
   const itemVariants = {
     hidden: { opacity: 0, scale: 0.98, y: 10 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       scale: 1,
       y: 0,
       transition: { duration: 0.5, ease: "easeOut" }
@@ -40,7 +40,7 @@ export default function Dashboard() {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial="hidden"
       animate="visible"
       className="min-h-screen bg-white"
@@ -64,7 +64,7 @@ export default function Dashboard() {
               </div>
               <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest hidden sm:inline">{user?.name?.split(' ')[0]}</span>
             </div>
-            <button 
+            <button
               onClick={handleLogout}
               className="flex items-center gap-2 px-4 py-2 bg-rui-dark text-white rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest hover:bg-black transition-all"
             >
@@ -98,17 +98,17 @@ export default function Dashboard() {
         </header>
 
         {/* Organic Stats Grid - Refined Icons */}
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10"
         >
           {[
-            { label: "Available Funds", val: "$12,450.00", sub: "+$4,200 this week", color: "text-rui-dark", bg: "bg-white", icon: <Vault size={22} strokeWidth={1.2} /> },
-            { label: "Active Escrows", val: "08", sub: "3 awaiting approval", color: "text-white", bg: "bg-rui-dark", icon: <Lock size={22} strokeWidth={1.2} /> },
+            { label: "Available Funds", val: `$${user?.walletBalance || 0}`, sub: "+$4,200 this week", color: "text-rui-dark", bg: "bg-white", icon: <Vault size={22} strokeWidth={1.2} /> },
+            { label: "Active Escrows", val: `$${user?.heldAmount || 0}`, sub: "3 awaiting approval", color: "text-white", bg: "bg-rui-dark", icon: <Lock size={22} strokeWidth={1.2} /> },
             { label: "Vault Health", val: "98.5%", sub: "Top 1% of users", color: "text-rui-success", bg: "bg-white", icon: <Globe size={22} strokeWidth={1.2} /> },
           ].map((item, i) => (
-            <motion.div 
-              key={i} 
+            <motion.div
+              key={i}
               variants={itemVariants}
               whileHover={{ y: -8, scale: 1.02 }}
               className={`${item.bg} rounded-[40px] border border-rui-gray-border p-10 md:p-14 flex flex-col items-center text-center space-y-4 cursor-default shadow-xl shadow-black/[0.02]`}
@@ -124,7 +124,7 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Bottom Call to Action Section */}
-        <motion.div 
+        <motion.div
           variants={itemVariants}
           className="bg-rui-blue rounded-[40px] p-8 md:p-20 flex flex-col lg:flex-row items-center justify-between gap-12 text-center lg:text-left overflow-hidden relative shadow-2xl shadow-rui-blue/20"
         >
@@ -132,11 +132,11 @@ export default function Dashboard() {
           <div className="space-y-4 md:space-y-6 relative z-10">
             <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-none">Protect Your<br />Next Deal</h2>
             <p className="text-white/80 text-base md:text-xl font-medium max-w-lg leading-relaxed">
-              Invite a collaborator and start a secure contract in seconds. 
+              Invite a collaborator and start a secure contract in seconds.
               The ultimate bridge between talent and capital.
             </p>
           </div>
-          <motion.button 
+          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="w-full lg:w-auto bg-white text-rui-blue px-12 py-6 rounded-full font-bold text-sm uppercase tracking-widest relative z-10 shadow-2xl flex items-center justify-center gap-3"
