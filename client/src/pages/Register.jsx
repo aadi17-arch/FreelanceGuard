@@ -31,131 +31,123 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-rui-light p-4 md:p-8">
+    <div className="min-h-screen flex items-center justify-center atmospheric-bg p-4 md:p-8">
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md flex flex-col items-center"
+        className="w-full max-w-lg flex flex-col items-center"
       >
         {/* Brand Header */}
-        <div className="mb-8 md:mb-10 text-center space-y-2">
-          <Link to="/" className="text-xl md:text-2xl font-bold tracking-tight uppercase">
+        <div className="mb-8 md:mb-10 text-center space-y-4">
+          <Link to="/" className="text-2xl md:text-3xl font-bold tracking-tight uppercase">
             Freelance<span className="text-rui-blue">Guard</span>
           </Link>
-          <div className="flex items-center justify-center space-x-2">
-            <div className="h-[2px] w-4 bg-rui-gray-border"></div>
-            <span className="text-[9px] md:text-[10px] font-bold text-rui-gray-muted tracking-[0.3em] uppercase">Registration Layer</span>
-            <div className="h-[2px] w-4 bg-rui-gray-border"></div>
+          <div className="flex items-center justify-center space-x-3">
+             <span className="text-[10px] font-bold text-rui-gray-muted tracking-[0.3em] uppercase">Genesis Layer</span>
           </div>
         </div>
 
-        {/* Boxy Form Container - Structured Auth Aesthetic */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1, duration: 0.4 }}
-          className="auth-card w-full space-y-8"
-        >
-          <div className="text-center space-y-1">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-rui-dark">New Account</h2>
-            <p className="text-xs md:text-sm font-semibold text-rui-gray-muted">Join the global workforce</p>
+        {/* Geometric Form Container */}
+        <div className="rui-card-organic w-full space-y-8 shadow-2xl shadow-black/[0.02]">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-bold tracking-tight text-rui-dark">Security Registration</h2>
+            <p className="text-xs font-semibold text-rui-gray-muted">Join the decentralized escrow network.</p>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <motion.div 
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-rui-danger/10 border border-rui-danger text-rui-danger px-4 py-3 rounded-sm text-[10px] font-bold uppercase tracking-wider text-center"
-              >
+              <div className="bg-rui-danger/5 border border-rui-danger/10 text-rui-danger px-4 py-3 rounded-xl text-[10px] font-bold uppercase tracking-wider text-center">
                 {error}
-              </motion.div>
+              </div>
             )}
             <div className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-[9px] md:text-[10px] font-bold text-rui-dark uppercase tracking-widest block pl-1">Legal Name</label>
-                <input
-                  name="name"
-                  type="text"
-                  required
-                  className="auth-input"
-                  placeholder="John Doe"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-rui-gray-muted uppercase tracking-widest block pl-1">Legal Name</label>
+                  <input
+                    name="name"
+                    type="text"
+                    required
+                    className="w-full bg-rui-light/50 border border-rui-gray-border rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-rui-blue transition-colors"
+                    placeholder="John Doe"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-rui-gray-muted uppercase tracking-widest block pl-1">Identity</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, role: "CLIENT" })}
+                      className={`py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest transition-all ${
+                        formData.role === "CLIENT"
+                          ? "bg-rui-blue text-white shadow-xl shadow-rui-blue/20"
+                          : "bg-rui-light text-rui-gray-muted border border-rui-gray-border"
+                      }`}
+                    >
+                      Client
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, role: "FREELANCER" })}
+                      className={`py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest transition-all ${
+                        formData.role === "FREELANCER"
+                          ? "bg-rui-blue text-white shadow-xl shadow-rui-blue/20"
+                          : "bg-rui-light text-rui-gray-muted border border-rui-gray-border"
+                      }`}
+                    >
+                      Partner
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="space-y-1.5">
-                <label className="text-[9px] md:text-[10px] font-bold text-rui-dark uppercase tracking-widest block pl-1">Email</label>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-rui-gray-muted uppercase tracking-widest block pl-1">Email Node</label>
                 <input
                   name="email"
                   type="email"
                   required
-                  className="auth-input"
+                  className="w-full bg-rui-light/50 border border-rui-gray-border rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-rui-blue transition-colors"
                   placeholder="name@company.com"
                   value={formData.email}
                   onChange={handleChange}
                 />
               </div>
-              <div className="space-y-1.5">
-                <label className="text-[9px] md:text-[10px] font-bold text-rui-dark uppercase tracking-widest block pl-1">Security Key</label>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-rui-gray-muted uppercase tracking-widest block pl-1">Private Key</label>
                 <input
                   name="password"
                   type="password"
                   required
-                  className="auth-input"
+                  className="w-full bg-rui-light/50 border border-rui-gray-border rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-rui-blue transition-colors"
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}
                 />
               </div>
-
-              <div className="space-y-3">
-                <label className="text-[9px] md:text-[10px] font-bold text-rui-dark uppercase tracking-widest block pl-1 text-center">Identity</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, role: "CLIENT" })}
-                    className={`py-2 md:py-3 rounded-md text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all ${
-                      formData.role === "CLIENT"
-                        ? "bg-rui-dark text-white shadow-md shadow-black/10"
-                        : "bg-rui-light text-rui-gray-muted border border-rui-gray-border"
-                    }`}
-                  >
-                    Client
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, role: "FREELANCER" })}
-                    className={`py-2 md:py-3 rounded-md text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all ${
-                      formData.role === "FREELANCER"
-                        ? "bg-rui-dark text-white shadow-md shadow-black/10"
-                        : "bg-rui-light text-rui-gray-muted border border-rui-gray-border"
-                    }`}
-                  >
-                    Partner
-                  </button>
-                </div>
-              </div>
             </div>
 
             <button
               type="submit"
-              className="auth-button"
+              className="btn-pill-primary w-full !py-4"
             >
-              Initialize
+              Initialize Handshake
             </button>
           </form>
 
-          <div className="text-center pt-2">
+          <div className="text-center pt-4">
             <p className="text-[10px] md:text-xs font-bold text-rui-gray-muted uppercase tracking-widest">
-              Joined?{" "}
+              Already Authored?{" "}
               <Link to="/login" className="text-rui-blue hover:underline font-bold">Log In</Link>
             </p>
           </div>
-        </motion.div>
+        </div>
         
-        <p className="mt-8 md:mt-12 text-[9px] md:text-[10px] font-bold text-rui-gray-muted uppercase tracking-[0.4em]">Global Protocol v1.0</p>
+        <p className="mt-8 md:mt-12 text-[9px] md:text-[10px] font-bold text-rui-gray-muted uppercase tracking-[0.4em]">Node Connection Secured</p>
       </motion.div>
     </div>
   );

@@ -55,6 +55,7 @@ model User {
   contracts     Contract[] @relation("FreelancerContracts")
   disputes      Dispute[]  @relation("RaisedBy")
   createdAt     DateTime   @default(now())
+  bids          Bid[]
 }
 
 model Project {
@@ -66,6 +67,7 @@ model Project {
   status      ProjectStatus @default(OPEN)
   contracts   Contract[]
   createdAt   DateTime      @default(now())
+  bids        Bid[]
 }
 
 model Contract {
@@ -118,4 +120,20 @@ model Dispute {
   status      String   @default("OPEN") // "OPEN", "RESOLVED"
   resolution  String?
   createdAt   DateTime @default(now())
+}
+enum BidStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+model Bid {
+  id           String    @id @default(uuid())
+  projectId    String
+  project      Project   @relation(fields: [projectId], references: [id])
+  freelancerId String
+  freelancer   User      @relation(fields: [freelancerId], references: [id])
+  amount       Float
+  proposal     String
+  status       BidStatus @default(PENDING)
+  createdAt    DateTime  @default(now())
 }

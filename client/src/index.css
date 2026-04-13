@@ -2,8 +2,8 @@
 
 @theme {
   --font-heading: "Outfit", system-ui, sans-serif;
-  --font-body: "Manrope", system-ui, sans-serif;
-  
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+
   --color-rui-dark: #191c1f;
   --color-rui-white: #ffffff;
   --color-rui-light: #f4f4f4;
@@ -18,28 +18,56 @@
 @layer base {
   body {
     @apply bg-white text-rui-dark font-body antialiased;
+    font-feature-settings: 'cv02', 'cv05', 'cv11';
     letter-spacing: -0.01em;
     line-height: 1.6;
     overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading font-bold tracking-tight text-rui-dark;
   }
 }
 
 @layer components {
-  /* --- MAIN BRAND UI (Organic/Pill) --- */
+
+  /* --- MAIN BRAND UI (Geometric & Cinematic) --- */
+  .rui-card-organic {
+    @apply bg-white/80 backdrop-blur-sm border border-rui-gray-border rounded-[24px] p-8 md:p-10 transition-all duration-500 ease-out;
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.02);
+  }
+
+  .rui-card-organic:hover {
+    @apply border-rui-blue/30 shadow-2xl shadow-rui-blue/5;
+    transform: translateY(-5px);
+  }
+
+  .glass-nav {
+    @apply bg-white/70 backdrop-blur-md border-b border-rui-gray-border px-4 py-4 md:px-8 sticky top-0 z-50;
+  }
+
+  .atmospheric-bg {
+    background: radial-gradient(circle at 50% -20%, #eff6ff 0%, #ffffff 50%);
+  }
+
+  /* Strict Geometric Grid Elements */
+  .geometric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 32px;
+  }
+
   .btn-pill-primary {
-    @apply bg-rui-dark text-white hover:bg-black rounded-full transition-all duration-300 active:scale-95 font-bold px-10 py-5 inline-flex items-center justify-center text-center uppercase tracking-widest text-xs md:text-sm shadow-xl shadow-black/5;
+    @apply bg-rui-blue text-white px-8 py-3 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-[0.98] transition-all;
   }
 
   .btn-pill-secondary {
-    @apply bg-white text-rui-dark border border-rui-gray-border rounded-full hover:bg-rui-light transition-all duration-300 active:scale-95 font-bold px-10 py-5 inline-flex items-center justify-center text-center uppercase tracking-widest text-xs md:text-sm;
-  }
-
-  .rui-card-organic {
-    @apply bg-white rounded-[40px] border border-rui-gray-border p-8 md:p-12 transition-all hover:shadow-2xl hover:shadow-black/5;
+    @apply bg-white border border-rui-gray-border text-rui-dark px-8 py-3 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.2em] hover:bg-rui-light transition-all;
   }
 
   /* --- AUTH UI (Boxy/Structured) --- */

@@ -1,6 +1,10 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 
+// Unified API Base URL for Mobile & Local Access
+const API_URL = "http://192.168.1.12:5001/api";
+axios.defaults.baseURL = API_URL;
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -8,57 +12,60 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
+  // Synchronize Profile on Token Change
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      const fetchProfile = async () => {
-        try {
-          const res = await axios.get("http://localhost:5001/api/auth/profile");
-          setUser(res.data);
-        }
-        catch (err) {
-          logout();
-        }
-        finally {
-          setLoading(false);
-        }
-      };
-      if (token) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        fetchProfile();
+    const fetchProfile = async () => {
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
       }
-      else {
-        delete axios.defaults.headers.common["Authorization"];
+      
+      try {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const res = await axios.get("/auth/profile");
+        setUser(res.data);
+      } catch (err) {
+        console.error("Auth session expired");
+        logout();
+      } finally {
         setLoading(false);
       }
-      setLoading(false);
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-      setLoading(false);
-    }
+    };
+
+    fetchProfile();
   }, [token]);
 
   const login = async (email, password) => {
     try {
-      const res = await axios.post("http://localhost:5001/api/auth/login", { email, password });
+      const res = await axios.post("/auth/login", { email, password });
       setToken(res.data.token);
       setUser(res.data.user);
       localStorage.setItem("token", res.data.token);
       return { success: true };
-    } catch (error) {
-      return { success: false, message: error.response?.data?.message || "Login failed" };
+    } catch (err) {
+      return { success: false, message: err.response?.data?.message || "Login failed" };
     }
   };
 
   const register = async (name, email, password, role) => {
     try {
-      const res = await axios.post("http://localhost:5001/api/auth/register", { name, email, password, role });
+      const res = await axios.post("/auth/register", { name, email, password, role });
       setToken(res.data.token);
       setUser(res.data.user);
       localStorage.setItem("token", res.data.token);
       return { success: true };
-    } catch (error) {
-      return { success: false, message: error.response?.data?.message || "Registration failed" };
+    } catch (err) {
+      return { success: false, message: err.response?.data?.message || "Registration failed" };
+    }
+  };
+
+  const refreshUser = async () => {
+    try {
+      const res = await axios.get("/auth/profile");
+      setUser(res.data);
+    } catch (err) {
+      console.error("Failed to refresh user profile");
     }
   };
 
@@ -70,7 +77,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

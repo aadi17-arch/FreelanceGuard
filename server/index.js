@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
+import bidRoutes from "./routes/bidRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/bids", bidRoutes);
 
 app.get('/', (req, res) => {
   res.send('FreelanceGuard API is running...');

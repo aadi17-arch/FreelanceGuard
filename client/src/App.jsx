@@ -4,6 +4,8 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import CreateProject from "./pages/CreateProject";
+import Market from "./pages/Market";
+import ProjectDetails from "./pages/ProjectDetails";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-project" element={<CreateProject />} />
+        <Route path="/marketplace" element={<Market />} />
+        <Route path="/project/:id" element={<ProjectDetails />} />
       </Routes>
     </Router>
   );

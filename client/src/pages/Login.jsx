@@ -22,65 +22,54 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-rui-light p-4 md:p-8">
+    <div className="min-h-screen flex items-center justify-center atmospheric-bg p-4 md:p-8">
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md flex flex-col items-center"
       >
         {/* Symmetric Brand Header */}
-        <div className="mb-8 md:mb-12 text-center space-y-2">
-          <Link to="/" className="text-xl md:text-2xl font-bold tracking-tight uppercase">
+        <div className="mb-8 md:mb-12 text-center space-y-4">
+          <Link to="/" className="text-2xl md:text-3xl font-bold tracking-tight uppercase">
             Freelance<span className="text-rui-blue">Guard</span>
           </Link>
-          <div className="flex items-center justify-center space-x-2">
-            <div className="h-[2px] w-4 bg-rui-gray-border"></div>
-            <span className="text-[9px] md:text-[10px] font-bold text-rui-gray-muted tracking-[0.3em] uppercase">Auth Layer</span>
-            <div className="h-[2px] w-4 bg-rui-gray-border"></div>
+          <div className="flex items-center justify-center space-x-3">
+             <span className="text-[10px] font-bold text-rui-gray-muted tracking-[0.3em] uppercase">Auth Node</span>
           </div>
         </div>
 
-        {/* Boxy Form Container - Structured Auth Aesthetic */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1, duration: 0.4 }}
-          className="auth-card w-full space-y-8"
-        >
-          <div className="text-center space-y-1">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-rui-dark">Welcome Back</h2>
-            <p className="text-xs md:text-sm font-semibold text-rui-gray-muted">Access your secure workspace</p>
+        {/* Geometric Form Container */}
+        <div className="rui-card-organic w-full space-y-8 shadow-2xl shadow-black/[0.02]">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-bold tracking-tight text-rui-dark">Verify Residency</h2>
+            <p className="text-xs font-semibold text-rui-gray-muted">Access your encrypted workspace terminal.</p>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <motion.div 
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-rui-danger/10 border border-rui-danger text-rui-danger px-4 py-3 rounded-sm text-[10px] font-bold uppercase tracking-wider text-center"
-              >
+              <div className="bg-rui-danger/5 border border-rui-danger/10 text-rui-danger px-4 py-3 rounded-xl text-[10px] font-bold uppercase tracking-wider text-center">
                 {error}
-              </motion.div>
+              </div>
             )}
-            <div className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-[9px] md:text-[10px] font-bold text-rui-dark uppercase tracking-widest block pl-1">Email Terminal</label>
+            <div className="space-y-5">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-rui-gray-muted uppercase tracking-widest block pl-1">Email Terminal</label>
                 <input
                   type="email"
                   required
-                  className="auth-input"
+                  className="w-full bg-rui-light/50 border border-rui-gray-border rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-rui-blue transition-colors"
                   placeholder="name@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className="space-y-1.5">
-                <label className="text-[9px] md:text-[10px] font-bold text-rui-dark uppercase tracking-widest block pl-1">Private Code</label>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-rui-gray-muted uppercase tracking-widest block pl-1">Access Protocol</label>
                 <input
                   type="password"
                   required
-                  className="auth-input"
+                  className="w-full bg-rui-light/50 border border-rui-gray-border rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-rui-blue transition-colors"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -90,21 +79,21 @@ export default function Login() {
 
             <button
               type="submit"
-              className="auth-button"
+              className="btn-pill-primary w-full !py-4"
             >
-              Authorize
+              Initialize Session
             </button>
           </form>
 
-          <div className="text-center pt-2">
+          <div className="text-center pt-4">
             <p className="text-[10px] md:text-xs font-bold text-rui-gray-muted uppercase tracking-widest">
-              No account?{" "}
-              <Link to="/register" className="text-rui-blue hover:underline font-bold">Create One</Link>
+              No security clearance?{" "}
+              <Link to="/register" className="text-rui-blue hover:underline font-bold">Register Now</Link>
             </p>
           </div>
-        </motion.div>
+        </div>
         
-        <p className="mt-8 md:mt-12 text-[9px] md:text-[10px] font-bold text-rui-gray-muted uppercase tracking-[0.4em]">Encryption Active</p>
+        <p className="mt-8 md:mt-12 text-[9px] md:text-[10px] font-bold text-rui-gray-muted uppercase tracking-[0.4em]">Protocol Version 2.4.0</p>
       </motion.div>
     </div>
   );

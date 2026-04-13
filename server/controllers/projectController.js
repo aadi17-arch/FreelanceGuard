@@ -44,3 +44,16 @@ export const getAllProjects = async (req, res) => {
 
   }
 }
+// get->displays use specific project list
+export const getMyProject = async (req, res) => {
+  try {
+    const projects = await prisma.project.findMany({
+      where: { clientId: req.user.id },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json(projects);
+  }
+  catch (error) {
+    return res.status(500).json({ message: "Error Fetching Your Projects" });
+  }
+}

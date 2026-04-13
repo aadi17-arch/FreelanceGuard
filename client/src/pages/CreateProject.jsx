@@ -30,13 +30,8 @@ export default function CreateProject() {
 
     try {
       await axios.post(
-        "http://localhost:5001/api/projects/create",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        "/projects/create",
+        formData
       );
       navigate("/dashboard");
     } catch (err) {
