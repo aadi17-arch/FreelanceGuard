@@ -1,8 +1,8 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 
-// Unified API Base URL for Mobile & Local Access
-const API_URL = "http://192.168.1.12:5001/api";
+// Dynamic API Base URL configuration
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001/api";
 axios.defaults.baseURL = API_URL;
 
 const AuthContext = createContext();
