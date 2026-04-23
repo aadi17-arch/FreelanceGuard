@@ -42,8 +42,8 @@ export default function DashboardLayout({ children }) {
            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-rui-success/5 blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
         </div>
 
-        {/* Top Header */}
-        <header className="px-6 md:px-10 py-6 md:py-8 flex justify-between items-center z-10 border-b border-rui-gray-border/10 lg:border-none">
+        {/* Top Header: Sticky with glassmorphism */}
+        <header className="sticky top-0 z-50 bg-[#fcfdfe]/80 backdrop-blur-md px-6 md:px-10 py-5 flex justify-between items-center border-b border-rui-gray-border/5">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsSidebarOpen(true)}
