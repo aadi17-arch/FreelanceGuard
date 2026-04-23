@@ -99,7 +99,7 @@ export default function Dashboard() {
       <motion.section variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
           { label: "Active Contracts", value: stats.activeProjects, icon: <FileText size={16} />, color: "text-rui-blue", bg: "bg-rui-blue/5" },
-          { label: "Escrow Protection", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck size={16} />, color: "text-[#1D9E75]", bg: "bg-[#E1F5EE]" },
+          { label: "Escrow Protection", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck size={16} />, color: "text-rui-success", bg: "bg-rui-success/10" },
           { label: "Pending Releases", value: stats.pendingMilestones, icon: <Clock size={16} />, color: "text-rui-warning", bg: "bg-rui-warning/5" },
         ].map((stat, i) => (
           <div key={i} className="bg-white border border-rui-gray-border/50 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
@@ -129,7 +129,7 @@ export default function Dashboard() {
                {[1, 2, 3].map((item) => (
                  <div key={item} className="p-6 flex items-center justify-between hover:bg-rui-light/30 transition-colors group">
                     <div className="flex items-center gap-4">
-                       <div className="w-10 h-10 rounded-xl bg-rui-light flex items-center justify-center text-rui-gray-muted group-hover:bg-[#E1F5EE] group-hover:text-[#1D9E75] transition-all">
+                       <div className="w-10 h-10 rounded-xl bg-rui-light flex items-center justify-center text-rui-gray-muted group-hover:bg-rui-success/10 group-hover:text-rui-success transition-all">
                           <CheckCircle2 size={16} />
                        </div>
                        <div>
@@ -146,19 +146,19 @@ export default function Dashboard() {
          {/* Sidebar Stats */}
          <motion.div variants={itemVariants} className="space-y-6">
             <h3 className="label-caps !text-rui-dark px-2">System Clearance</h3>
-            <div className="bg-[#E1F5EE]/30 border border-[#1D9E75]/20 rounded-2xl p-6 space-y-6">
+            <div className="bg-rui-success/5 border border-rui-success/20 rounded-2xl p-6 space-y-6">
                <div className="flex items-center gap-3">
-                  <ShieldCheck className="text-[#1D9E75]" size={18} />
-                  <span className="text-[11px] font-black uppercase tracking-wider text-[#1D9E75]">Identity Layer Verified</span>
+                  <ShieldCheck className="text-rui-success" size={18} />
+                  <span className="text-[11px] font-black uppercase tracking-wider text-rui-success">Identity Layer Verified</span>
                </div>
-               <p className="text-[11px] text-[#1D9E75]/80 leading-relaxed font-medium">
+               <p className="text-[11px] text-rui-success/80 leading-relaxed font-medium">
                   Your node is fully synchronized with the escrow network. All financial operations are protected under Protocol 7.2.
                </p>
                <div className="pt-2">
-                  <div className="w-full h-1 bg-[#1D9E75]/10 rounded-full overflow-hidden">
-                     <div className="h-full bg-[#1D9E75] w-[85%]"></div>
+                  <div className="w-full h-1 bg-rui-success/10 rounded-full overflow-hidden">
+                     <div className="h-full bg-rui-success w-[85%]"></div>
                   </div>
-                  <p className="text-[9px] font-black text-[#1D9E75] mt-2 uppercase tracking-widest">Trust Rating: 9.8/10</p>
+                  <p className="text-[9px] font-black text-rui-success mt-2 uppercase tracking-widest">Trust Rating: 9.8/10</p>
                </div>
             </div>
          </motion.div>

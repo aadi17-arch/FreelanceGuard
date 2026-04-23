@@ -31,13 +31,14 @@ export default function Home() {
         variants={itemVariants}
         className="w-full section-container py-6 md:py-10 flex flex-row justify-between items-center"
       >
-        <div className="text-lg md:text-xl font-bold tracking-tight uppercase">
-          Freelance<span className="text-rui-blue">Guard</span>
+        <div className="text-lg md:text-xl font-black tracking-tighter uppercase flex items-center gap-2">
+          <div className="w-5 h-5 bg-rui-success rounded-sm"></div>
+          Freelance<span className="text-rui-success">Guard</span>
         </div>
         <div className="flex items-center space-x-4 md:space-x-8 text-[10px] md:text-xs font-bold uppercase tracking-widest">
           <Link to="/login" className="hover:opacity-70 transition-opacity">Log in</Link>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link to="/register" className="bg-rui-dark text-white px-6 py-2 md:px-10 md:py-4 rounded-full shadow-lg shadow-black/10">Join now</Link>
+            <Link to="/register" className="bg-rui-success text-white px-6 py-2 md:px-10 md:py-4 rounded-full shadow-lg shadow-rui-success/20">Join now</Link>
           </motion.div>
         </div>
       </motion.nav>
@@ -47,7 +48,7 @@ export default function Home() {
         <div className="space-y-4 md:space-y-6">
           <motion.p 
             variants={itemVariants}
-            className="text-[10px] md:text-xs font-bold tracking-[0.3em] text-rui-blue uppercase px-4"
+            className="text-[10px] md:text-xs font-black tracking-[0.4em] text-rui-success uppercase px-4"
           >
             The Global Operating System for Freelancers
           </motion.p>
@@ -56,7 +57,7 @@ export default function Home() {
             className="display-mega uppercase"
           >
             Work with<br />
-            <span className="text-rui-blue">Unfair</span> Advantage
+            <span className="text-rui-success">Unfair</span> Advantage
           </motion.h1>
           <motion.p 
             variants={itemVariants}
@@ -70,7 +71,7 @@ export default function Home() {
           variants={itemVariants}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 px-6"
         >
-          <Link to="/register" className="btn-pill-primary w-full sm:w-auto min-w-[200px] md:min-w-[280px]">
+          <Link to="/register" className="w-full sm:w-auto min-w-[200px] md:min-w-[280px] py-4 bg-rui-success text-white rounded-lg text-xs font-black uppercase tracking-widest hover:scale-[1.02] transition-all shadow-xl shadow-rui-success/20 flex items-center justify-center">
             Start protecting for free
           </Link>
           <button className="btn-pill-secondary w-full sm:w-auto min-w-[200px] md:min-w-[280px]">

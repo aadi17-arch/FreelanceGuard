@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import { 
   LayoutDashboard, 
@@ -35,7 +36,7 @@ export default function Sidebar({ onClose }) {
       <div className="px-6 mb-6 flex justify-between items-center">
         <div>
           <h1 className="text-[14px] font-black tracking-tight text-rui-dark leading-none">
-            Freelance<span className="text-[#1D9E75]">Guard</span>
+            Freelance<span className="text-rui-success">Guard</span>
           </h1>
           <p className="text-[8px] font-bold text-rui-gray-muted uppercase tracking-tighter mt-1 opacity-80">
             Escrow • Milestones
@@ -51,7 +52,7 @@ export default function Sidebar({ onClose }) {
         <Link 
           to={user?.role === "CLIENT" ? "/create-project" : "/marketplace"}
           onClick={onClose}
-          className="w-full h-10 bg-rui-dark hover:bg-[#1D9E75] text-white rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-black/5 group"
+          className="w-full h-10 bg-rui-dark hover:bg-rui-success text-white rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-black/5 group"
         >
           {user?.role === "CLIENT" ? (
             <>
@@ -91,11 +92,11 @@ export default function Sidebar({ onClose }) {
                     {isActive && (
                       <motion.div 
                         layoutId="activeIndicator"
-                        className="absolute left-0 top-0 w-[2.5px] h-full bg-[#1D9E75]" 
+                        className="absolute left-0 top-0 w-[2.5px] h-full bg-rui-success" 
                       />
                     )}
                     
-                    <div className={`${isActive ? "text-[#1D9E75]" : "group-hover:text-rui-dark"} transition-transform duration-300 group-hover:scale-110`}>
+                    <div className={`${isActive ? "text-rui-success" : "group-hover:text-rui-dark"} transition-transform duration-300 group-hover:scale-110`}>
                       {item.icon}
                     </div>
                     <span className={`text-[11px] font-bold tracking-tight transition-all duration-300 ${isActive ? "translate-x-1" : "group-hover:translate-x-0.5"}`}>
@@ -112,7 +113,7 @@ export default function Sidebar({ onClose }) {
       {/* Profile Node */}
       <div className="mt-auto px-5 border-t border-rui-gray-border/20 pt-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#E1F5EE] text-[#1D9E75] flex items-center justify-center text-[10px] font-black border border-[#1D9E75]/10">
+          <div className="w-8 h-8 rounded-full bg-rui-success/10 text-rui-success flex items-center justify-center text-[10px] font-black border border-rui-success/10">
             {user?.name?.[0]}
           </div>
           <div className="flex-grow min-w-0">

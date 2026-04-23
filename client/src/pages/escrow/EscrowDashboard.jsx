@@ -66,20 +66,20 @@ export default function EscrowDashboard() {
       {/* Header Section: Balanced & Scaled */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 border-b border-rui-gray-border/10 pb-6">
         <div className="space-y-2">
-          <div className="flex items-center gap-2 text-[#1D9E75]">
+          <div className="flex items-center gap-2 text-rui-success">
             <Lock size={12} strokeWidth={3} />
-            <p className="label-caps !text-[#1D9E75] !text-[9px]">Escrow Protection</p>
+            <p className="label-caps !text-rui-success !text-[9px]">Escrow Protection</p>
           </div>
           <h1>Financials</h1>
         </div>
         <div className="flex items-center gap-4 p-4 bg-white border border-rui-gray-border/50 rounded-xl shadow-sm">
            <div className="space-y-0.5 text-right">
              <p className="label-caps !text-[8px]">Wallet Balance</p>
-             <p className="text-2xl font-financial text-[#1D9E75] leading-none">
+             <p className="text-2xl font-financial text-rui-success leading-none">
                 ${user?.walletBalance?.toLocaleString() || "0.00"}
              </p>
            </div>
-           <div className="w-9 h-9 rounded-lg bg-[#E1F5EE] flex items-center justify-center text-[#1D9E75]">
+           <div className="w-9 h-9 rounded-lg bg-rui-success/10 flex items-center justify-center text-rui-success">
              <ShieldCheck size={18} />
            </div>
         </div>
@@ -87,8 +87,8 @@ export default function EscrowDashboard() {
 
       {loading ? (
         <div className="h-64 flex flex-col items-center justify-center space-y-3">
-          <div className="w-8 h-8 border-3 border-[#1D9E75]/20 border-t-[#1D9E75] rounded-full animate-spin"></div>
-          <p className="label-caps !text-[#1D9E75] !text-[9px]">Synchronizing States...</p>
+          <div className="w-8 h-8 border-3 border-rui-success/20 border-t-rui-success rounded-full animate-spin"></div>
+          <p className="label-caps !text-rui-success !text-[9px]">Synchronizing States...</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
