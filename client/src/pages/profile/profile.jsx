@@ -48,7 +48,7 @@ export default function Profile() {
           <div className="space-y-1">
             <h1>{user?.name}</h1>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-[9px] font-black uppercase tracking-widest text-[#1D9E75] bg-[#E1F5EE] px-3 py-0.5 rounded-md border border-[#1D9E75]/10">
+              <span className="text-[9px] font-black uppercase tracking-widest text-[#1D9E75] bg-[#E1F5EE] px-3 py-0.5 rounded-md border border-[#1D9E75]/10 animate-pulse-subtle">
                 Verified Node
               </span>
               <span className="label-caps !text-[9px] opacity-40">Account: {user?.id?.slice(-8).toUpperCase() || "PENDING"}</span>
