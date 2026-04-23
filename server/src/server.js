@@ -34,6 +34,8 @@ app.get('/', (req, res) => {
   res.send('FreelanceGuard API is running...');
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
+}).on('error', (err) => {
+  console.error('FATAL: Server failed to start:', err);
 });
