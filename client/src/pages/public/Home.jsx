@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Vault, Activity, Globe } from "lucide-react";
+import { Vault, Activity, Globe, ShieldCheck, Zap, Lock, ChevronRight, CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function Home() {
   const containerVariants = {
@@ -16,128 +16,225 @@ export default function Home() {
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
     }
   };
 
   return (
-    <motion.div 
-      initial="hidden"
-      animate="visible"
-      className="min-h-screen bg-white text-rui-dark flex flex-col items-center overflow-x-hidden"
-    >
-      {/* Navigation Bar - NO ICON */}
+    <div className="min-h-screen bg-white text-rui-dark flex flex-col items-center overflow-x-hidden font-body">
+      {/* 1. Navigation */}
       <motion.nav 
-        variants={itemVariants}
-        className="w-full section-container py-6 md:py-10 flex flex-row justify-between items-center"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="w-full section-container py-8 flex flex-row justify-between items-center z-50"
       >
-        <div className="text-lg md:text-xl font-black tracking-tighter uppercase flex items-center gap-2">
+        <div className="text-xl font-black tracking-tighter uppercase flex items-center gap-2">
           <div className="w-5 h-5 bg-rui-success rounded-sm"></div>
           Freelance<span className="text-rui-success">Guard</span>
         </div>
-        <div className="flex items-center space-x-4 md:space-x-8 text-[10px] md:text-xs font-bold uppercase tracking-widest">
-          <Link to="/login" className="hover:opacity-70 transition-opacity">Log in</Link>
+        <div className="flex items-center space-x-8 text-[10px] font-black uppercase tracking-widest">
+          <Link to="/login" className="hover:text-rui-success transition-colors">Login</Link>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link to="/register" className="bg-rui-success text-white px-6 py-2 md:px-10 md:py-4 rounded-full shadow-lg shadow-rui-success/20">Join now</Link>
+            <Link to="/register" className="bg-rui-dark text-white px-8 py-3 rounded-lg shadow-xl shadow-black/10 hover:bg-rui-success transition-colors">Join Protocol</Link>
           </motion.div>
         </div>
       </motion.nav>
 
-      {/* Hero Section */}
-      <section className="section-container text-center pt-12 md:pt-24 pb-16 md:pb-24 space-y-8 md:space-y-12">
-        <div className="space-y-4 md:space-y-6">
-          <motion.p 
-            variants={itemVariants}
-            className="text-[10px] md:text-xs font-black tracking-[0.4em] text-rui-success uppercase px-4"
+      {/* 2. Hero Section */}
+      <section className="section-container pt-20 pb-32 flex flex-col items-center text-center relative">
+        {/* Background Decorative Blur */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-rui-success/5 blur-[120px] -z-10 rounded-full"></div>
+
+        <div className="space-y-6 mb-12">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 bg-rui-success/10 border border-rui-success/20 rounded-full"
           >
-            The Global Operating System for Freelancers
-          </motion.p>
+            <ShieldCheck size={14} className="text-rui-success" />
+            <span className="text-[10px] font-black text-rui-success uppercase tracking-[0.2em]">v2.0 Network Active</span>
+          </motion.div>
+          
           <motion.h1 
-            variants={itemVariants}
-            className="display-mega uppercase"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.95] uppercase"
           >
-            Work with<br />
-            <span className="text-rui-success">Unfair</span> Advantage
+            Work with <br />
+            <span className="text-rui-success italic">Unfair</span> Advantage
           </motion.h1>
+          
           <motion.p 
-            variants={itemVariants}
-            className="text-base md:text-xl text-rui-gray-muted max-w-2xl mx-auto font-medium px-4 leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-lg md:text-xl text-rui-gray-muted max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Secure your payments, automate your legal contracts, and manage your global clients in one unified interface.
+            The global operating system for freelancers. Secure payments, automated legal layers, and institutional-grade escrow protection.
           </motion.p>
         </div>
 
         <motion.div 
-          variants={itemVariants}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 px-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="flex flex-col sm:flex-row items-center gap-4 mb-20"
         >
-          <Link to="/register" className="w-full sm:w-auto min-w-[200px] md:min-w-[280px] py-4 bg-rui-success text-white rounded-lg text-xs font-black uppercase tracking-widest hover:scale-[1.02] transition-all shadow-xl shadow-rui-success/20 flex items-center justify-center">
-            Start protecting for free
+          <Link to="/register" className="w-full sm:w-auto px-10 py-4 bg-rui-success text-white rounded-xl text-xs font-black uppercase tracking-widest hover:scale-[1.02] transition-all shadow-2xl shadow-rui-success/30 flex items-center gap-3">
+            Start protecting for free <ArrowRight size={16} />
           </Link>
-          <button className="btn-pill-secondary w-full sm:w-auto min-w-[200px] md:min-w-[280px]">
-             View demo
+          <button className="w-full sm:w-auto px-10 py-4 bg-white border border-rui-gray-border text-rui-dark rounded-xl text-xs font-black uppercase tracking-widest hover:bg-rui-light transition-all">
+            View Live Demo
           </button>
+        </motion.div>
+
+        {/* Hero Visual Mockup */}
+        <motion.div 
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 1 }}
+          className="w-full max-w-5xl rounded-[32px] border border-rui-gray-border/20 shadow-[0_50px_100px_rgba(0,0,0,0.1)] overflow-hidden bg-white"
+        >
+          <img 
+            src="/dashboard_mockup_1776968809870.png" 
+            alt="FreelanceGuard Dashboard" 
+            className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-1000"
+          />
         </motion.div>
       </section>
 
-      {/* Features Grid - Clean & Prof Icons */}
-      <motion.section 
-        variants={containerVariants}
-        className="w-full bg-rui-light py-20 md:py-32"
-      >
-        <div className="section-container">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
-            {[
-              { 
-                title: "Smart Vault", 
-                desc: "Secure escrow payments that release only when both parties are 100% satisfied.", 
-                icon: <Vault size={28} strokeWidth={1.2} />,
-                bg: "bg-rui-dark text-white"
-              },
-              { 
-                title: "Legal Layer", 
-                desc: "Automated, legally-binding contracts generated in seconds and tailored for your region.", 
-                icon: <Activity size={28} strokeWidth={1.2} />,
-                bg: "bg-rui-blue text-white"
-              },
-              { 
-                title: "Direct Rails", 
-                desc: "Direct banking integration for instant payouts in 30+ currencies with zero fees.", 
-                icon: <Globe size={28} strokeWidth={1.2} />,
-                bg: "bg-rui-success text-white"
-              }
-            ].map((feature, i) => (
-              <motion.div 
-                key={i} 
-                variants={itemVariants}
-                className="rui-card-organic flex flex-col items-center lg:items-start text-center lg:text-left space-y-6"
-              >
-                <div className={`p-6 ${feature.bg} rounded-[28px] shadow-2xl shadow-black/5 inline-block`}>
-                  {feature.icon}
-                </div>
-                <div className="space-y-3">
-                  <h3 className="text-xl md:text-2xl font-bold tracking-tight">{feature.title}</h3>
-                  <p className="text-sm md:text-base text-rui-gray-muted font-medium leading-relaxed">
-                    {feature.desc}
-                  </p>
-                </div>
-              </motion.div>
+      {/* 3. Trusted By / Social Proof */}
+      <section className="w-full border-y border-rui-gray-border/30 py-12 bg-rui-light/30">
+        <div className="section-container flex flex-col md:flex-row items-center justify-between gap-10 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-rui-gray-muted">Trusted by innovators at</p>
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center">
+            {['FORBES', 'WIRED', 'TECHCRUNCH', 'VERGE', 'FORTUNE'].map(logo => (
+              <span key={logo} className="text-xl font-black tracking-tighter">{logo}</span>
             ))}
           </div>
         </div>
-      </motion.section>
-      
-      <motion.footer 
-        variants={itemVariants}
-        className="w-full section-container py-12 md:py-20 text-rui-gray-muted text-[10px] md:text-xs font-bold tracking-widest uppercase flex flex-col md:flex-row justify-between items-center gap-8 border-t border-rui-gray-border mt-auto"
-      >
-        <span>&copy; 2026 FreelanceGuard Tech</span>
-        <div className="flex space-x-6 md:space-x-12">
-          <a href="#" className="hover:text-rui-dark transition-colors">Privacy</a>
-          <a href="#" className="hover:text-rui-dark transition-colors" >Terms</a>
-          <a href="#" className="hover:text-rui-dark transition-colors">Security</a>
+      </section>
+
+      {/* 4. How it Works */}
+      <section className="w-full py-32 section-container">
+        <div className="text-center space-y-4 mb-24">
+          <p className="label-caps !text-rui-success">The Protocol</p>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase">Three Steps to Safety</h2>
         </div>
-      </motion.footer>
-    </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 relative">
+          {/* Connecting Line */}
+          <div className="hidden md:block absolute top-24 left-0 w-full h-[1px] bg-rui-gray-border/50 -z-10"></div>
+
+          {[
+            { step: "01", title: "Initialize Contract", desc: "Define your milestones and legal terms in seconds using our automated legal layer.", icon: <FileText className="text-rui-success" /> },
+            { step: "02", title: "Lock Capital", desc: "Funds are moved into institutional-grade escrow. Protected and visible to both parties.", icon: <Lock className="text-rui-success" /> },
+            { step: "03", title: "Execute Payout", desc: "Upon milestone approval, capital is released instantly to your verified wallet.", icon: <Zap className="text-rui-success" /> }
+          ].map((item, i) => (
+            <motion.div key={i} whileHover={{ y: -10 }} className="space-y-6 text-center md:text-left bg-white p-8 rounded-3xl border border-rui-gray-border/20 shadow-sm hover:shadow-xl transition-all">
+              <div className="w-16 h-16 rounded-2xl bg-rui-success/10 flex items-center justify-center mx-auto md:mx-0">
+                <div className="text-xl font-black text-rui-success">{item.step}</div>
+              </div>
+              <h3 className="text-2xl font-black tracking-tight">{item.title}</h3>
+              <p className="text-rui-gray-muted font-medium leading-relaxed">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* 5. Features Grid */}
+      <section className="w-full py-32 bg-rui-dark text-white">
+        <div className="section-container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <div className="space-y-10">
+              <div className="space-y-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-rui-success">Institutional Grade</p>
+                <h2 className="text-5xl md:text-6xl font-black tracking-tighter uppercase leading-[0.95]">Total Financial<br />Protection</h2>
+              </div>
+              
+              <div className="space-y-8">
+                {[
+                  { title: "Smart Escrow Vaults", desc: "Funds are held in individual secure nodes, never mixed, always protected." },
+                  { title: "Zero-Latency Settlement", desc: "Once approved, capital moves across the network in under 2 seconds." },
+                  { title: "Legal Signal Enforcement", desc: "Our contracts are legally binding across 140+ jurisdictions globally." }
+                ].map((feat, i) => (
+                  <div key={i} className="flex gap-5">
+                    <div className="mt-1"><CheckCircle2 className="text-rui-success" size={20} /></div>
+                    <div className="space-y-1">
+                      <h4 className="text-lg font-black uppercase tracking-tight">{feat.title}</h4>
+                      <p className="text-gray-400 text-sm font-medium">{feat.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute inset-0 bg-rui-success/20 blur-[100px] rounded-full"></div>
+              <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 p-10 rounded-[40px] space-y-8">
+                <div className="flex justify-between items-center border-b border-white/10 pb-6">
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-rui-success">Escrow Node #4920</p>
+                    <p className="text-2xl font-black font-financial">$48,290.00</p>
+                  </div>
+                  <div className="px-4 py-1.5 bg-rui-success rounded-full text-[9px] font-black uppercase tracking-widest">Locked</div>
+                </div>
+                <div className="space-y-4">
+                   <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-gray-500">
+                      <span>Syncing Protocol</span>
+                      <span>98%</span>
+                   </div>
+                   <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div className="h-full bg-rui-success w-[98%]"></div>
+                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Call to Action */}
+      <section className="w-full py-40 text-center section-container">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          className="bg-rui-light/50 border border-rui-gray-border/50 p-20 rounded-[48px] space-y-10"
+        >
+          <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none">Ready for the<br /><span className="text-rui-success">Future of Work?</span></h2>
+          <p className="text-lg text-rui-gray-muted max-w-xl mx-auto font-medium">Join 10,000+ top-tier freelancers who protect their business with FreelanceGuard.</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Link to="/register" className="px-12 py-5 bg-rui-dark text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-success transition-all shadow-2xl">
+              Initialize Account
+            </Link>
+            <Link to="/login" className="px-12 py-5 bg-white border border-rui-gray-border text-rui-dark rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-light transition-all">
+              Sign In
+            </Link>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* 7. Footer */}
+      <footer className="w-full section-container py-20 border-t border-rui-gray-border/50 flex flex-col md:flex-row justify-between items-center gap-10">
+        <div className="text-lg font-black tracking-tighter uppercase flex items-center gap-2">
+          <div className="w-4 h-4 bg-rui-success rounded-sm"></div>
+          Freelance<span className="text-rui-success">Guard</span>
+        </div>
+        <div className="flex gap-10 text-[10px] font-black uppercase tracking-[0.2em] text-rui-gray-muted">
+           <a href="#" className="hover:text-rui-success transition-colors">Twitter</a>
+           <a href="#" className="hover:text-rui-success transition-colors">GitHub</a>
+           <a href="#" className="hover:text-rui-success transition-colors">Discord</a>
+        </div>
+        <p className="text-[10px] font-black text-rui-gray-muted uppercase tracking-[0.2em]">&copy; 2026 Protocol Layer. All rights protected.</p>
+      </footer>
+    </div>
   );
+}
+
+// Add missing icon from lucide-react
+function FileText({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+  )
 }
