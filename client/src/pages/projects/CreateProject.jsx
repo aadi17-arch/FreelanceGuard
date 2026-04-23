@@ -57,9 +57,9 @@ export default function CreateProject() {
     >
       {/* Header: Balanced */}
       <motion.header variants={itemVariants} className="space-y-3">
-        <div className="flex items-center gap-2 text-[#1D9E75]">
+        <div className="flex items-center gap-2 text-rui-success">
           <ShieldCheck size={12} strokeWidth={3} />
-          <p className="label-caps !text-[#1D9E75] !text-[9px]">New Project Protocol</p>
+          <p className="label-caps !text-rui-success !text-[9px]">Project Initialization</p>
         </div>
         <h1>Post a Project</h1>
         <p className="text-xs md:text-sm text-gray-500 font-medium max-w-lg">
@@ -80,7 +80,7 @@ export default function CreateProject() {
           {/* Title Section */}
           <div className="p-8 md:p-10 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#E1F5EE] text-[#1D9E75] flex items-center justify-center">
+              <div className="w-9 h-9 rounded-xl bg-rui-success/10 text-rui-success flex items-center justify-center">
                 <PenTool size={16} />
               </div>
               <label className="label-caps !text-[10px]">Project Designation</label>

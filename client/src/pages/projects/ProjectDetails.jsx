@@ -46,8 +46,8 @@ export default function ProjectDetails() {
 
   if (loading) return (
     <div className="h-64 flex flex-col items-center justify-center space-y-3">
-      <div className="w-8 h-8 border-3 border-[#1D9E75]/20 border-t-[#1D9E75] rounded-full animate-spin"></div>
-      <p className="label-caps !text-[#1D9E75] !text-[9px]">Decrypting Project Data...</p>
+      <div className="w-8 h-8 border-3 border-rui-success/20 border-t-rui-success rounded-full animate-spin"></div>
+      <p className="label-caps !text-rui-success !text-[9px]">Loading Project Data...</p>
     </div>
   );
 
@@ -61,9 +61,9 @@ export default function ProjectDetails() {
         </Link>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-[#1D9E75]">
+            <div className="flex items-center gap-2 text-rui-success">
               <ShieldCheck size={12} strokeWidth={3} />
-              <p className="label-caps !text-[#1D9E75] !text-[9px]">Verified Opportunity</p>
+              <p className="label-caps !text-rui-success !text-[9px]">Verified Opportunity</p>
             </div>
             <h1>{project?.title}</h1>
           </div>

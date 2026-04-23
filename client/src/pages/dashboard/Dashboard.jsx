@@ -149,7 +149,7 @@ export default function Dashboard() {
             <div className="bg-rui-success/5 border border-rui-success/20 rounded-2xl p-6 space-y-6">
                <div className="flex items-center gap-3">
                   <ShieldCheck className="text-rui-success" size={18} />
-                  <span className="text-[11px] font-black uppercase tracking-wider text-rui-success">Verified Account Status</span>
+                  <span className="text-[11px] font-black tracking-wider text-rui-success">Verified Account Status</span>
                </div>
                <p className="text-[11px] text-rui-success/80 leading-relaxed font-medium">
                   Your identity has been verified. You have full access to escrow services and contract management tools.
@@ -158,7 +158,7 @@ export default function Dashboard() {
                   <div className="w-full h-1 bg-rui-success/10 rounded-full overflow-hidden">
                      <div className="h-full bg-rui-success w-[85%]"></div>
                   </div>
-                  <p className="text-[9px] font-black text-rui-success mt-2 uppercase tracking-widest">Trust Score: 9.8</p>
+                  <p className="text-[9px] font-black text-rui-success mt-2 tracking-widest">Trust Score: 9.8</p>
                </div>
             </div>
          </motion.div>

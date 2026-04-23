@@ -48,21 +48,21 @@ export default function Market() {
     <motion.div initial="hidden" animate="visible" variants={containerVariants} className="space-y-10 pb-20">
       {/* Header Section: Scaled & Balanced */}
       <motion.header variants={itemVariants} className="space-y-3">
-        <div className="flex items-center gap-2 text-[#1D9E75]">
+        <div className="flex items-center gap-2 text-rui-success">
           <Globe size={12} strokeWidth={3} />
-          <p className="label-caps !text-[#1D9E75] !text-[9px]">Project Marketplace</p>
+          <p className="label-caps !text-rui-success !text-[9px]">Project Marketplace</p>
         </div>
         <h1>Browse Projects</h1>
         <p className="text-xs md:text-sm text-gray-500 max-w-xl font-medium">
           Secure your next contract with guaranteed milestone payments through our
-          <span className="text-[#1D9E75] font-bold"> Secure Escrow</span> system.
+          <span className="text-rui-success font-bold"> Secure Escrow</span> system.
         </p>
       </motion.header>
 
       {loading ? (
         <div className="h-64 flex flex-col items-center justify-center space-y-3">
-          <div className="w-8 h-8 border-3 border-[#1D9E75]/20 border-t-[#1D9E75] rounded-full animate-spin"></div>
-          <p className="label-caps !text-[#1D9E75] !text-[9px]">Synchronizing Market...</p>
+          <div className="w-8 h-8 border-3 border-rui-success/20 border-t-rui-success rounded-full animate-spin"></div>
+          <p className="label-caps !text-rui-success !text-[9px]">Synchronizing Market...</p>
         </div>
       ) : (
         <motion.div variants={containerVariants} className="grid grid-cols-1 gap-6">
@@ -70,23 +70,23 @@ export default function Market() {
             <motion.div
               key={proj.id}
               variants={itemVariants}
-              className="group bg-white border border-rui-gray-border/50 hover:border-[#1D9E75]/20 rounded-xl p-6 md:p-8 transition-all hover:shadow-xl hover:shadow-black/[0.02]"
+              className="group bg-white border border-rui-gray-border/50 hover:border-rui-success/20 rounded-xl p-6 md:p-8 transition-all hover:shadow-xl hover:shadow-black/[0.02]"
             >
               <div className="flex flex-col md:flex-row justify-between gap-8">
                 {/* Left side: Project Details */}
                 <div className="flex-grow space-y-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-[#E1F5EE] flex items-center justify-center text-[#1D9E75] group-hover:bg-rui-dark group-hover:text-white transition-all duration-300">
+                    <div className="w-11 h-11 rounded-xl bg-rui-success/10 flex items-center justify-center text-rui-success group-hover:bg-rui-dark group-hover:text-white transition-all duration-300">
                       <ShieldCheck size={20} />
                     </div>
                     <div className="space-y-0.5">
-                      <h3 className="text-lg md:text-xl font-bold text-rui-dark tracking-tight leading-none group-hover:text-[#1D9E75] transition-colors">{proj.title}</h3>
+                      <h3 className="text-lg md:text-xl font-bold text-rui-dark tracking-tight leading-none group-hover:text-rui-success transition-colors">{proj.title}</h3>
                       <div className="flex items-center gap-3">
                         <span className="text-[9px] font-black uppercase tracking-widest text-rui-gray-muted opacity-60">
                           {proj.client?.name || "Verified Client"}
                         </span>
-                        <div className="w-1 h-1 rounded-full bg-[#1D9E75]"></div>
-                        <span className="text-[9px] font-black uppercase tracking-widest text-[#1D9E75]">Secure Node</span>
+                        <div className="w-1 h-1 rounded-full bg-rui-success"></div>
+                        <span className="text-[9px] font-black tracking-widest text-rui-success">Secure Node</span>
                       </div>
                     </div>
                   </div>
