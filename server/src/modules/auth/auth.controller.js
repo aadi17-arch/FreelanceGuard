@@ -1,10 +1,12 @@
 import jwt from "jsonwebtoken";
-import prisma from "../config/db.js";
+import prisma from "../../config/database.js";
 import bcrypt from "bcryptjs";
 
 export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
+    console.log("Register Attempt:", { name, email, role });
+
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All Fields Required" });
     }
@@ -24,9 +26,17 @@ export const register = async (req, res) => {
         role: role === "FREELANCER" ? "FREELANCER" : "CLIENT"
       }
     });
+    
+    if (!process.env.JWT_SECRET) {
+      console.error("FATAL: JWT_SECRET is missing from environment variables");
+    }
+
     const token = jwt.sign(
-      { id: user.id },
-      process.env.JWT_SECRET,
+      {
+        id: user.id,
+        role: user.role
+      },
+      process.env.JWT_SECRET || "fallback_secret",
       { expiresIn: "7d" }
     );
 
@@ -36,12 +46,13 @@ export const register = async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        role: user.role
       }
     });
   }
   catch (error) {
-    console.error("Register Error:", error);
+    console.error("Register Error Details:", error);
     res.status(500).json({ message: "Server Error" });
   }
 
@@ -49,6 +60,8 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log("Login Attempt:", { email });
+
     if (!email || !password) {
       return res.status(400).json({ message: "All Fields Required" });
     }
@@ -62,9 +75,17 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Wrong Password" });
     }
+    
+    if (!process.env.JWT_SECRET) {
+      console.error("FATAL: JWT_SECRET is missing from environment variables");
+    }
+
     const token = jwt.sign(
-      { id: user.id },
-      process.env.JWT_SECRET,
+      {
+        id: user.id,
+        role: user.role
+      },
+      process.env.JWT_SECRET || "fallback_secret",
       { expiresIn: "7d" }
     );
     res.status(200).json({
@@ -74,12 +95,13 @@ export const login = async (req, res) => {
         id: user.id,
         email: user.email,
         name: user.name,
+        role: user.role
       }
 
     });
   }
   catch (error) {
-    console.error("Login Error:", error);
+    console.error("Login Error Details:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 
@@ -106,7 +128,7 @@ export const getProfile = async (req, res) => {
     return res.status(200).json(user);
   }
   catch (error) {
-    console.error("Profile Error:", error);
+    console.error("Profile Error Details:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 }

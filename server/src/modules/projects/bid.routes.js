@@ -1,6 +1,6 @@
 import express from "express";
-import { createBid, getProjectBids, acceptBid } from "../controllers/bidController.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { createBid, getProjectBids, acceptBid } from "./bid.controller.js";
+import authMiddleware from "../auth/auth.middleware.js";
 
 
 const router = express.Router();

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -31,45 +31,45 @@ export default function Login() {
       >
         {/* Symmetric Brand Header */}
         <div className="mb-8 md:mb-12 text-center space-y-4">
-          <Link to="/" className="text-2xl md:text-3xl font-bold tracking-tight uppercase">
-            Freelance<span className="text-rui-blue">Guard</span>
+          <Link to="/" className="text-2xl md:text-3xl font-black tracking-tight uppercase">
+            Freelance<span className="text-[#1D9E75]">Guard</span>
           </Link>
           <div className="flex items-center justify-center space-x-3">
-             <span className="text-[10px] font-bold text-rui-gray-muted tracking-[0.3em] uppercase">Auth Node</span>
+             <span className="label-caps opacity-60">Professional Authentication</span>
           </div>
         </div>
 
         {/* Geometric Form Container */}
-        <div className="rui-card-organic w-full space-y-8 shadow-2xl shadow-black/[0.02]">
+        <div className="rui-card-organic w-full space-y-8 shadow-2xl shadow-black/[0.02] p-10 md:p-12">
           <div className="text-center space-y-2">
-            <h2 className="text-2xl font-bold tracking-tight text-rui-dark">Verify Residency</h2>
-            <p className="text-xs font-semibold text-rui-gray-muted">Access your encrypted workspace terminal.</p>
+            <h2 className="text-3xl font-bold tracking-tighter text-rui-dark">Login to Account</h2>
+            <p className="body-small opacity-60 uppercase">Access your secure workspace.</p>
           </div>
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-8" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-rui-danger/5 border border-rui-danger/10 text-rui-danger px-4 py-3 rounded-xl text-[10px] font-bold uppercase tracking-wider text-center">
+              <div className="bg-rui-danger/5 border border-rui-danger/10 text-rui-danger px-4 py-3 rounded-xl label-caps !text-center">
                 {error}
               </div>
             )}
-            <div className="space-y-5">
+            <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-rui-gray-muted uppercase tracking-widest block pl-1">Email Terminal</label>
+                <label className="label-caps ml-1">Email Address</label>
                 <input
                   type="email"
                   required
-                  className="w-full bg-rui-light/50 border border-rui-gray-border rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-rui-blue transition-colors"
+                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-[#1D9E75]/30 focus:bg-white transition-all"
                   placeholder="name@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-rui-gray-muted uppercase tracking-widest block pl-1">Access Protocol</label>
+                <label className="label-caps ml-1">Password</label>
                 <input
                   type="password"
                   required
-                  className="w-full bg-rui-light/50 border border-rui-gray-border rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-rui-blue transition-colors"
+                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-[#1D9E75]/30 focus:bg-white transition-all"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -79,21 +79,21 @@ export default function Login() {
 
             <button
               type="submit"
-              className="btn-pill-primary w-full !py-4"
+              className="w-full py-4 bg-rui-dark text-white rounded-xl label-caps !text-white hover:bg-[#1D9E75] transition-all shadow-xl shadow-black/5"
             >
-              Initialize Session
+              Login
             </button>
           </form>
 
           <div className="text-center pt-4">
-            <p className="text-[10px] md:text-xs font-bold text-rui-gray-muted uppercase tracking-widest">
-              No security clearance?{" "}
-              <Link to="/register" className="text-rui-blue hover:underline font-bold">Register Now</Link>
+            <p className="label-caps opacity-60">
+              Don't have an account?{" "}
+              <Link to="/register" className="text-[#1D9E75] hover:underline font-black">Register Now</Link>
             </p>
           </div>
         </div>
         
-        <p className="mt-8 md:mt-12 text-[9px] md:text-[10px] font-bold text-rui-gray-muted uppercase tracking-[0.4em]">Protocol Version 2.4.0</p>
+        <p className="mt-8 md:mt-12 label-caps opacity-20">Secure Data Access • v2.4.0</p>
       </motion.div>
     </div>
   );
