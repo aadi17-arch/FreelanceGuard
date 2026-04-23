@@ -61,8 +61,8 @@ export default function Home() {
             transition={{ delay: 0.1 }}
             className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.95] uppercase"
           >
-            Work with <br />
-            <span className="text-rui-success italic">Unfair</span> Advantage
+            Enhance Your <br />
+            <span className="text-rui-success italic">Business</span> Efficiency
           </motion.h1>
           
           <motion.p 
@@ -71,7 +71,7 @@ export default function Home() {
             transition={{ delay: 0.2 }}
             className="text-lg md:text-xl text-rui-gray-muted max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            The global operating system for freelancers. Secure payments, automated legal layers, and institutional-grade escrow protection.
+            A comprehensive operating system for freelancers. Manage escrow payments, automate legal contracts, and protect your transactions.
           </motion.p>
         </div>
 
@@ -128,9 +128,9 @@ export default function Home() {
           <div className="hidden md:block absolute top-24 left-0 w-full h-[1px] bg-rui-gray-border/50 -z-10"></div>
 
           {[
-            { step: "01", title: "Initialize Contract", desc: "Define your milestones and legal terms in seconds using our automated legal layer.", icon: <FileText className="text-rui-success" /> },
-            { step: "02", title: "Lock Capital", desc: "Funds are moved into institutional-grade escrow. Protected and visible to both parties.", icon: <Lock className="text-rui-success" /> },
-            { step: "03", title: "Execute Payout", desc: "Upon milestone approval, capital is released instantly to your verified wallet.", icon: <Zap className="text-rui-success" /> }
+            { step: "01", title: "Contract Setup", desc: "Draft milestones and compliance terms using our professional legal templates.", icon: <FileText className="text-rui-success" /> },
+            { step: "02", title: "Escrow Deposit", desc: "Funds are securely held in escrow, ensuring payment security for both parties.", icon: <Lock className="text-rui-success" /> },
+            { step: "03", title: "Payment Settlement", desc: "Capital is disbursed immediately upon milestone approval to your verified account.", icon: <Zap className="text-rui-success" /> }
           ].map((item, i) => (
             <motion.div key={i} whileHover={{ y: -10 }} className="space-y-6 text-center md:text-left bg-white p-8 rounded-3xl border border-rui-gray-border/20 shadow-sm hover:shadow-xl transition-all">
               <div className="w-16 h-16 rounded-2xl bg-rui-success/10 flex items-center justify-center mx-auto md:mx-0">
@@ -149,15 +149,15 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div className="space-y-10">
               <div className="space-y-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-rui-success">Institutional Grade</p>
-                <h2 className="text-5xl md:text-6xl font-black tracking-tighter uppercase leading-[0.95]">Total Financial<br />Protection</h2>
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-rui-success">Infrastructure</p>
+                <h2 className="text-5xl md:text-6xl font-black tracking-tighter uppercase leading-[0.95]">Secure Escrow<br />Systems</h2>
               </div>
               
               <div className="space-y-8">
                 {[
-                  { title: "Smart Escrow Vaults", desc: "Funds are held in individual secure nodes, never mixed, always protected." },
-                  { title: "Zero-Latency Settlement", desc: "Once approved, capital moves across the network in under 2 seconds." },
-                  { title: "Legal Signal Enforcement", desc: "Our contracts are legally binding across 140+ jurisdictions globally." }
+                  { title: "Secured Escrow Accounts", desc: "Funds are held in individual secure accounts, audited and protected." },
+                  { title: "Automated Settlements", desc: "Verified approvals trigger immediate capital disbursement across the network." },
+                  { title: "Compliance Framework", desc: "Our contracts meet standard legal requirements in over 140 jurisdictions." }
                 ].map((feat, i) => (
                   <div key={i} className="flex gap-5">
                     <div className="mt-1"><CheckCircle2 className="text-rui-success" size={20} /></div>

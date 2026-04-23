@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }) {
     if (path === "/dashboard") return "Overview";
     if (path === "/marketplace") return "Projects";
     if (path === "/escrow") return "Financials";
-    return "Protocol";
+    return "Management";
   };
 
   return (

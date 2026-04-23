@@ -57,8 +57,8 @@ export default function EscrowDashboard() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={() => handleReleaseFunds(selectedContractId)}
-        title="Execute Capital Release?"
-        message="By confirming, you authorize the immediate transfer of locked funds. This protocol is irreversible."
+        title="Execute Fund Release?"
+        message="By confirming, you authorize the immediate transfer of held funds. This transaction is final and irreversible."
         confirmText="Confirm Release"
         cancelText="Abort"
       />
@@ -68,7 +68,7 @@ export default function EscrowDashboard() {
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-rui-success">
             <Lock size={12} strokeWidth={3} />
-            <p className="label-caps !text-rui-success !text-[9px]">Escrow Protection</p>
+            <p className="label-caps !text-rui-success !text-[9px]">Escrow Management</p>
           </div>
           <h1>Financials</h1>
         </div>

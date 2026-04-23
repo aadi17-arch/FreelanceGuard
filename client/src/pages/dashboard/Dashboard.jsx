@@ -55,9 +55,9 @@ export default function Dashboard() {
         <div className="lg:col-span-2 bg-rui-dark text-white rounded-2xl p-8 relative overflow-hidden group">
            <div className="relative z-10 space-y-6">
               <div className="space-y-2">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1D9E75]">Network Status: Secure</p>
-                <h1 className="text-2xl md:text-3xl font-bold !text-white leading-tight">Welcome back, {user?.name?.split(' ')[0]}</h1>
-                <p className="text-xs md:text-sm text-gray-400 max-w-md">Your active projects and escrow protections are synchronized across the global network.</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rui-success">System Status: Active</p>
+                <h1 className="text-2xl md:text-3xl font-bold !text-white leading-tight">Project Overview: {user?.name}</h1>
+                <p className="text-xs md:text-sm text-gray-400 max-w-md">Access your active contracts and escrow transactions through the secure management interface.</p>
               </div>
               <div className="flex gap-3">
                  <Link to={user?.role === 'CLIENT' ? '/create-project' : '/marketplace'}>
@@ -99,8 +99,8 @@ export default function Dashboard() {
       <motion.section variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
           { label: "Active Contracts", value: stats.activeProjects, icon: <FileText size={16} />, color: "text-rui-blue", bg: "bg-rui-blue/5" },
-          { label: "Escrow Protection", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck size={16} />, color: "text-rui-success", bg: "bg-rui-success/10" },
-          { label: "Pending Releases", value: stats.pendingMilestones, icon: <Clock size={16} />, color: "text-rui-warning", bg: "bg-rui-warning/5" },
+          { label: "Escrow Balance", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck size={16} />, color: "text-rui-success", bg: "bg-rui-success/10" },
+          { label: "Pending Approvals", value: stats.pendingMilestones, icon: <Clock size={16} />, color: "text-rui-warning", bg: "bg-rui-warning/5" },
         ].map((stat, i) => (
           <div key={i} className="bg-white border border-rui-gray-border/50 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
              <div className="flex items-center gap-4">
@@ -145,20 +145,20 @@ export default function Dashboard() {
 
          {/* Sidebar Stats */}
          <motion.div variants={itemVariants} className="space-y-6">
-            <h3 className="label-caps !text-rui-dark px-2">System Clearance</h3>
+            <h3 className="label-caps !text-rui-dark px-2">Compliance Status</h3>
             <div className="bg-rui-success/5 border border-rui-success/20 rounded-2xl p-6 space-y-6">
                <div className="flex items-center gap-3">
                   <ShieldCheck className="text-rui-success" size={18} />
-                  <span className="text-[11px] font-black uppercase tracking-wider text-rui-success">Identity Layer Verified</span>
+                  <span className="text-[11px] font-black uppercase tracking-wider text-rui-success">Verified Account Status</span>
                </div>
                <p className="text-[11px] text-rui-success/80 leading-relaxed font-medium">
-                  Your node is fully synchronized with the escrow network. All financial operations are protected under Protocol 7.2.
+                  Your identity has been verified. You have full access to escrow services and contract management tools.
                </p>
                <div className="pt-2">
                   <div className="w-full h-1 bg-rui-success/10 rounded-full overflow-hidden">
                      <div className="h-full bg-rui-success w-[85%]"></div>
                   </div>
-                  <p className="text-[9px] font-black text-rui-success mt-2 uppercase tracking-widest">Trust Rating: 9.8/10</p>
+                  <p className="text-[9px] font-black text-rui-success mt-2 uppercase tracking-widest">Trust Score: 9.8</p>
                </div>
             </div>
          </motion.div>
