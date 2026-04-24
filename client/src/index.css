@@ -1,16 +1,56 @@
 @import "tailwindcss";
 
+:root {
+  --rui-dark: #0A0F1D;
+  --rui-light: #F8FAFC;
+  --rui-blue: #334155;
+  --rui-success: #1D9E75;
+  --rui-gray-border: #E2E8F0;
+  --rui-gray-muted: #64748B;
+}
+
+:root.dark {
+  --rui-dark: #F1F5F9;
+  --rui-light: #030712; /* Deep Black for Dark Mode */
+  --rui-blue: #94A3B8;
+  --rui-gray-border: #1F2937;
+  --rui-gray-muted: #94A3B8;
+}
+
 @theme {
-  --color-rui-dark: #0A0F1D; /* Even deeper slate for high contrast */
-  --color-rui-light: #F8FAFC;
-  --color-rui-blue: #334155; 
-  --color-rui-success: #1D9E75; /* Deep, Institutional Emerald */
+  --color-rui-dark: var(--rui-dark);
+  --color-rui-light: var(--rui-light);
+  --color-rui-blue: var(--rui-blue);
+  --color-rui-success: var(--rui-success);
   --color-rui-warning: #F59E0B;
   --color-rui-danger: #EF4444;
-  --color-rui-gray-border: #E2E8F0;
-  --color-rui-gray-muted: #64748B;
+  --color-rui-gray-border: var(--rui-gray-border);
+  --color-rui-gray-muted: var(--rui-gray-muted);
   --font-body: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Global Overrides for Dark Mode - No structure loss */
+:root.dark body {
+  background-color: var(--rui-light);
+  color: var(--rui-dark);
+}
+
+:root.dark .bg-white {
+  background-color: #111827; /* Dark Slate for cards */
+  border-color: var(--rui-gray-border) !important;
+}
+
+:root.dark .text-rui-dark {
+  color: var(--rui-dark);
+}
+
+:root.dark .border-rui-gray-border {
+  border-color: var(--rui-gray-border);
+}
+
+:root.dark .bg-rui-light {
+  background-color: #0F172A; /* Darker than cards */
 }
 
 @layer base {

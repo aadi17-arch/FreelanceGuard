@@ -9,11 +9,15 @@ import {
   Landmark, 
   FileText, 
   AlertTriangle,
-  X
+  X,
+  Sun,
+  Moon
 } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Sidebar({ onClose }) {
   const { user } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
   const location = useLocation();
 
   const navItems = [
@@ -111,6 +115,17 @@ export default function Sidebar({ onClose }) {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Theme Toggle */}
+      <div className="px-5 mb-4">
+        <button 
+          onClick={toggleTheme}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-rui-gray-muted hover:bg-rui-light hover:text-rui-dark transition-all border border-transparent hover:border-rui-gray-border/30"
+        >
+          {isDarkMode ? <Sun size={14} className="text-rui-success" /> : <Moon size={14} />}
+          <span className="text-[10px] font-black uppercase tracking-widest">{isDarkMode ? "Day Mode" : "Night Mode"}</span>
+        </button>
       </div>
 
       {/* Profile Node */}

@@ -11,9 +11,12 @@ import Profile from "./pages/profile/profile";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import { Toaster } from "react-hot-toast";
 
+import { ThemeProvider } from "./context/ThemeContext";
+
 function App() {
   return (
-    <Router>
+    <ThemeProvider>
+      <Router>
       <Toaster 
         position="top-right" 
         reverseOrder={false}
@@ -58,7 +61,8 @@ function App() {
         <Route path="/escrow" element={<DashboardLayout><EscrowDashboard /></DashboardLayout>} />
         <Route path="/profile" element={<DashboardLayout><Profile /></DashboardLayout>} />
       </Routes>
-    </Router>
+      </Router>
+    </ThemeProvider>
   );
 }
 export default App;
