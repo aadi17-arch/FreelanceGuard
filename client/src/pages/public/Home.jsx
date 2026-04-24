@@ -29,7 +29,7 @@ export default function Home() {
         className="w-full section-container py-8 flex flex-row justify-between items-center z-50"
       >
         <div className="flex items-center gap-3">
-          <img src="/freelanceguard_logo_1777019435604.png" alt="FreelanceGuard Logo" className="w-8 h-8 object-contain" />
+          <img src="/logo.png" alt="FreelanceGuard Logo" className="w-8 h-8 object-contain" />
           <span className="text-xl font-black tracking-tighter">FreelanceGuard</span>
         </div>
         <div className="flex items-center space-x-8 text-[10px] font-black uppercase tracking-widest">
@@ -219,7 +219,7 @@ export default function Home() {
       {/* 7. Footer */}
       <footer className="w-full section-container py-20 border-t border-rui-gray-border/50 flex flex-col md:flex-row justify-between items-center gap-10">
         <div className="text-lg font-black tracking-tighter flex items-center gap-3">
-          <img src="/freelanceguard_logo_1777019435604.png" alt="Logo" className="w-6 h-6 object-contain brightness-0" />
+          <img src="/logo.png" alt="Logo" className="w-6 h-6 object-contain brightness-0" />
           Freelance<span>Guard</span>
         </div>
         <div className="flex gap-10 text-[10px] font-black uppercase tracking-[0.2em] text-rui-gray-muted">
