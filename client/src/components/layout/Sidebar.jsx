@@ -61,16 +61,16 @@ export default function Sidebar({ onClose }) {
         <Link 
           to={user?.role === "CLIENT" ? "/create-project" : "/marketplace"}
           onClick={onClose}
-          className="w-full h-10 bg-rui-dark hover:bg-rui-success text-white rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-black/5 group"
+          className="w-full h-10 bg-rui-dark hover:bg-rui-success text-rui-light rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-black/5 group"
         >
           {user?.role === "CLIENT" ? (
             <>
-              <LayoutDashboard size={12} className="text-white" />
+              <LayoutDashboard size={12} className="text-rui-light" />
               <span className="text-[10px] font-black uppercase tracking-wider">Post a Project</span>
             </>
           ) : (
             <>
-              <Briefcase size={12} className="text-white" />
+              <Briefcase size={12} className="text-rui-light" />
               <span className="text-[10px] font-black uppercase tracking-wider">Find Work</span>
             </>
           )}

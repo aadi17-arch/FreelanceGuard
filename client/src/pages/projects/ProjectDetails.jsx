@@ -147,7 +147,7 @@ export default function ProjectDetails() {
 
                   <button 
                     type="submit"
-                    className="w-full py-4 bg-rui-dark text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all shadow-xl shadow-black/5"
+                    className="w-full py-4 bg-rui-dark text-rui-light rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all shadow-xl shadow-black/5"
                   >
                     Submit Proposal
                   </button>

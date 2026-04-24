@@ -38,10 +38,10 @@ export default function Profile() {
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 border-b border-rui-gray-border/10 pb-10">
         <div className="flex items-center gap-6">
           <div className="relative group">
-            <div className="w-16 h-16 rounded-2xl bg-rui-dark text-white flex items-center justify-center text-xl font-black shadow-xl shadow-black/10 transition-transform">
+            <div className="w-16 h-16 rounded-2xl bg-rui-dark text-rui-light flex items-center justify-center text-xl font-black shadow-xl shadow-black/10 transition-transform">
               {user?.name?.[0]}
             </div>
-            <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-lg bg-[#1D9E75] border-2 border-white flex items-center justify-center text-white shadow-lg">
+            <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-lg bg-[#1D9E75] border-2 border-white flex items-center justify-center text-rui-light shadow-lg">
               <ShieldCheck size={12} strokeWidth={3} />
             </div>
           </div>
@@ -60,7 +60,7 @@ export default function Profile() {
           <button className="flex-grow md:flex-grow-0 px-6 py-2.5 bg-white border border-rui-gray-border/50 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-rui-light transition-all shadow-sm">
             Edit Profile
           </button>
-          <button className="flex-grow md:flex-grow-0 px-6 py-2.5 bg-rui-dark text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all shadow-xl shadow-black/5">
+          <button className="flex-grow md:flex-grow-0 px-6 py-2.5 bg-rui-dark text-rui-light rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all shadow-xl shadow-black/5">
             Export History
           </button>
         </div>

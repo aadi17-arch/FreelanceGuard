@@ -44,7 +44,7 @@ export default function Home() {
           </button>
           <Link to="/login" className="hover:text-rui-success transition-colors">Login</Link>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link to="/register" className="bg-rui-dark text-white dark:bg-white dark:text-black px-8 py-3 rounded-lg shadow-xl shadow-black/10 hover:bg-rui-success transition-colors">Register</Link>
+            <Link to="/register" className="bg-rui-dark text-rui-light dark:bg-white dark:text-black px-8 py-3 rounded-lg shadow-xl shadow-black/10 hover:bg-rui-success transition-colors">Register</Link>
           </motion.div>
         </div>
       </motion.nav>
@@ -91,7 +91,7 @@ export default function Home() {
           transition={{ delay: 0.3 }}
           className="flex flex-col sm:flex-row items-center gap-4 mb-20"
         >
-          <Link to="/register" className="w-full sm:w-auto px-10 py-4 bg-rui-success text-white rounded-xl text-xs font-bold hover:scale-[1.02] transition-all shadow-2xl shadow-rui-success/30 flex items-center justify-center gap-3">
+          <Link to="/register" className="w-full sm:w-auto px-10 py-4 bg-rui-success text-rui-light rounded-xl text-xs font-bold hover:scale-[1.02] transition-all shadow-2xl shadow-rui-success/30 flex items-center justify-center gap-3">
             Start for free <ArrowRight size={16} />
           </Link>
           <button className="w-full sm:w-auto px-10 py-4 bg-white border border-rui-gray-border text-rui-dark rounded-xl text-xs font-bold hover:bg-rui-light transition-all">
@@ -154,7 +154,7 @@ export default function Home() {
       </section>
 
       {/* 5. Features Grid */}
-      <section className="w-full py-32 bg-[#0A0F1D] dark:bg-black text-white">
+      <section className="w-full py-32 bg-[#0A0F1D] dark:bg-black text-rui-light">
         <div className="section-container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div className="space-y-10">

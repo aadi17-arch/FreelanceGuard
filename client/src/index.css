@@ -82,7 +82,7 @@
   }
 
   .btn-pill-primary {
-    @apply bg-rui-blue text-white px-6 py-2.5 rounded-lg text-xs font-semibold tracking-tight hover:opacity-90 active:scale-[0.98] transition-all;
+    @apply bg-rui-blue text-rui-light px-6 py-2.5 rounded-lg text-xs font-semibold tracking-tight hover:opacity-90 active:scale-[0.98] transition-all;
   }
 
   .btn-pill-secondary {
@@ -95,11 +95,11 @@
   }
 
   .auth-input {
-    @apply w-full px-4 py-3 bg-white dark:bg-[#0A0A0A] border border-rui-gray-border dark:border-white/5 text-rui-dark dark:text-white rounded-lg focus:border-rui-blue focus:ring-1 focus:ring-rui-blue/20 transition-all outline-none font-medium text-sm;
+    @apply w-full px-4 py-3 bg-white dark:bg-[#0A0A0A] border border-rui-gray-border dark:border-white/5 text-rui-dark dark:text-rui-light rounded-lg focus:border-rui-blue focus:ring-1 focus:ring-rui-blue/20 transition-all outline-none font-medium text-sm;
   }
 
   .auth-button {
-    @apply w-full py-4 bg-rui-dark text-white font-bold text-xs uppercase tracking-wider rounded-lg hover:bg-black transition-all shadow-sm active:scale-[0.98];
+    @apply w-full py-4 bg-rui-dark text-rui-light font-bold text-xs uppercase tracking-wider rounded-lg hover:bg-black transition-all shadow-sm active:scale-[0.98];
   }
 
   .font-financial {

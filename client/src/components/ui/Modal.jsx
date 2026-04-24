@@ -56,7 +56,7 @@ export default function Modal({ isOpen, onClose, onConfirm, title, message, conf
                 onConfirm();
                 onClose();
               }}
-              className={`flex-grow py-4 rounded-2xl label-caps !text-white shadow-xl transition-all ${
+              className={`flex-grow py-4 rounded-2xl label-caps !text-rui-light shadow-xl transition-all ${
                 type === 'warning' ? 'bg-rui-danger hover:bg-rui-dark shadow-rui-danger/20' : 'bg-rui-dark hover:bg-[#1D9E75] shadow-black/10'
               }`}
             >
