@@ -34,13 +34,16 @@ export default function Sidebar({ onClose }) {
     <aside className="h-screen w-56 bg-white border-r border-rui-gray-border/40 flex flex-col py-6 z-[60]">
       {/* Brand Header */}
       <div className="px-6 mb-6 flex justify-between items-center">
-        <div>
-          <h1 className="text-[14px] font-black tracking-tight text-rui-dark leading-none">
-            Freelance<span className="text-rui-success">Guard</span>
-          </h1>
-          <p className="text-[8px] font-bold text-rui-gray-muted uppercase tracking-tighter mt-1 opacity-80">
-            Escrow • Milestones
-          </p>
+        <div className="flex items-center gap-2">
+          <img src="/freelanceguard_logo_1777019435604.png" alt="Logo" className="w-5 h-5 object-contain" />
+          <div>
+            <h1 className="text-[14px] font-black tracking-tight text-rui-dark leading-none">
+              FreelanceGuard
+            </h1>
+            <p className="text-[8px] font-bold text-rui-gray-muted uppercase tracking-tighter mt-1 opacity-80">
+              Vault • Protocol
+            </p>
+          </div>
         </div>
         <button onClick={onClose} className="lg:hidden p-1 hover:bg-rui-light rounded-lg">
           <X size={16} className="text-rui-gray-muted" />

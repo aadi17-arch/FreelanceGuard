@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --color-rui-dark: #0F172A; /* Deep Slate for text/primary */
+  --color-rui-dark: #0A0F1D; /* Even deeper slate for high contrast */
   --color-rui-light: #F8FAFC;
-  --color-rui-blue: #334155; /* Slate Blue for secondary */
-  --color-rui-success: #10B981; /* Consistent Vibrant Green */
+  --color-rui-blue: #334155; 
+  --color-rui-success: #00DC82; /* More vibrant Cyber/Emerald Green */
   --color-rui-warning: #F59E0B;
   --color-rui-danger: #EF4444;
   --color-rui-gray-border: #E2E8F0;
