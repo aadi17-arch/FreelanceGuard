@@ -39,7 +39,9 @@ export default function Sidebar({ onClose }) {
       {/* Brand Header */}
       <div className="px-6 mb-6 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <img src="/logo.png" alt="Logo" className="w-5 h-5 object-contain" />
+          <div className="p-1.5 rounded-lg bg-white dark:bg-white/10 border border-rui-gray-border/20 shadow-sm">
+            <img src="/logo.png" alt="Logo" className="w-5 h-5 object-contain" />
+          </div>
           <div>
             <h1 className="text-[14px] font-black tracking-tight text-rui-dark leading-none">
               FreelanceGuard
