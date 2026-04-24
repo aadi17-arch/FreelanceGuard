@@ -42,9 +42,9 @@ export default function Home() {
 
       {/* 2. Hero Section */}
       <section className="section-container pt-20 pb-32 flex flex-col items-center text-center relative">
-        {/* Background Decorative Glows */}
-        <div className="absolute top-0 left-1/4 -translate-x-1/2 w-full max-w-4xl h-96 bg-rui-success/10 blur-[140px] -z-10 rounded-full"></div>
-        <div className="absolute bottom-0 right-1/4 translate-x-1/2 w-full max-w-4xl h-96 bg-rui-success/5 blur-[120px] -z-10 rounded-full"></div>
+        {/* Background Decorative Glows: Subtle & Institutional */}
+        <div className="absolute top-0 left-1/4 -translate-x-1/2 w-full max-w-4xl h-96 bg-rui-success/5 blur-[160px] -z-10 rounded-full"></div>
+        <div className="absolute bottom-0 right-1/4 translate-x-1/2 w-full max-w-4xl h-96 bg-rui-success/[0.03] blur-[140px] -z-10 rounded-full"></div>
 
         <div className="space-y-6 mb-12">
           <motion.div
