@@ -124,7 +124,7 @@ export default function CreateProject() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full sm:w-auto px-10 py-3.5 bg-rui-dark text-rui-light rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/5"
+              className="w-full sm:w-auto px-10 py-3.5 bg-rui-dark text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/5"
             >
               {loading ? "Initializing..." : (
                 <>

@@ -1,47 +1,16 @@
 @import "tailwindcss";
 
-:root {
-  --rui-dark: #0A0F1D;
-  --rui-light: #FFFFFF;
-  --rui-blue: #334155;
-  --rui-success: #1D9E75;
-  --rui-gray-border: #E2E8F0;
-  --rui-gray-muted: #64748B;
-}
-
-:root.dark {
-  --rui-dark: #F8FAFC;
-  --rui-light: #000000;
-  --rui-blue: #94A3B8;
-  --rui-gray-border: #111827;
-  --rui-gray-muted: #94A3B8;
-}
-
 @theme {
-  --color-rui-dark: var(--rui-dark);
-  --color-rui-light: var(--rui-light);
-  --color-rui-blue: var(--rui-blue);
-  --color-rui-success: var(--rui-success);
+  --color-rui-dark: #0A0F1D; /* Even deeper slate for high contrast */
+  --color-rui-light: #F8FAFC;
+  --color-rui-blue: #334155; 
+  --color-rui-success: #1D9E75; /* Deep, Institutional Emerald */
   --color-rui-warning: #F59E0B;
   --color-rui-danger: #EF4444;
-  --color-rui-gray-border: var(--rui-gray-border);
-  --color-rui-gray-muted: var(--rui-gray-muted);
+  --color-rui-gray-border: #E2E8F0;
+  --color-rui-gray-muted: #64748B;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-}
-
-/* Base Styles */
-:root.dark body {
-  background-color: var(--rui-light);
-  color: var(--rui-dark);
-}
-
-:root.dark input, 
-:root.dark select, 
-:root.dark textarea {
-  background-color: #0A0A0A;
-  color: white;
-  border-color: #1A1A1A;
 }
 
 @layer base {
@@ -64,13 +33,13 @@
 
 @layer components {
   .atmospheric-bg {
-    @apply bg-rui-light transition-colors duration-300;
-    background-image: radial-gradient(circle at 0% 0%, rgba(29, 158, 117, 0.05) 0%, transparent 50%),
-                      radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.02) 0%, transparent 50%);
+    background: radial-gradient(circle at 0% 0%, rgba(29, 158, 117, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+                #F9FAFB;
   }
 
   .rui-card-organic {
-    @apply bg-white dark:bg-[#0A0A0A] border border-rui-gray-border rounded-2xl p-8 transition-all hover:shadow-xl;
+    @apply bg-white border border-rui-gray-border/50 rounded-2xl p-8 transition-all hover:shadow-xl hover:shadow-black/[0.02];
   }
 
   .label-caps {
@@ -82,7 +51,7 @@
   }
 
   .btn-pill-primary {
-    @apply bg-rui-blue text-rui-light px-6 py-2.5 rounded-lg text-xs font-semibold tracking-tight hover:opacity-90 active:scale-[0.98] transition-all;
+    @apply bg-rui-blue text-white px-6 py-2.5 rounded-lg text-xs font-semibold tracking-tight hover:opacity-90 active:scale-[0.98] transition-all;
   }
 
   .btn-pill-secondary {
@@ -91,15 +60,15 @@
 
   /* --- AUTH UI (Clean/Boxy) --- */
   .auth-card {
-    @apply bg-white dark:bg-[#0A0A0A] rounded-xl border border-rui-gray-border dark:border-white/5 p-8 md:p-10 shadow-sm;
+    @apply bg-white rounded-xl border border-rui-gray-border p-8 md:p-10 shadow-sm;
   }
 
   .auth-input {
-    @apply w-full px-4 py-3 bg-white dark:bg-[#0A0A0A] border border-rui-gray-border dark:border-white/5 text-rui-dark dark:text-rui-light rounded-lg focus:border-rui-blue focus:ring-1 focus:ring-rui-blue/20 transition-all outline-none font-medium text-sm;
+    @apply w-full px-4 py-3 bg-white border border-rui-gray-border text-rui-dark rounded-lg focus:border-rui-blue focus:ring-1 focus:ring-rui-blue/20 transition-all outline-none font-medium text-sm;
   }
 
   .auth-button {
-    @apply w-full py-4 bg-rui-dark text-rui-light font-bold text-xs uppercase tracking-wider rounded-lg hover:bg-black transition-all shadow-sm active:scale-[0.98];
+    @apply w-full py-4 bg-rui-dark text-white font-bold text-xs uppercase tracking-wider rounded-lg hover:bg-black transition-all shadow-sm active:scale-[0.98];
   }
 
   .font-financial {

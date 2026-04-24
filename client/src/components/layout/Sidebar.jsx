@@ -9,16 +9,17 @@ import {
   Landmark, 
   FileText, 
   AlertTriangle,
-  X,
-  Sun,
-  Moon
+  LogOut,
+  X
 } from "lucide-react";
-import { useTheme } from "../../context/ThemeContext";
 
 export default function Sidebar({ onClose }) {
-  const { user } = useAuth();
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
   const location = useLocation();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "MAIN" },
@@ -35,13 +36,11 @@ export default function Sidebar({ onClose }) {
   const sections = ["MAIN", "FINANCIALS", "LEGAL"];
 
   return (
-    <aside className="h-screen w-56 bg-white dark:bg-[#020617] border-r border-rui-gray-border/40 dark:border-white/5 flex flex-col py-6 z-[60] transition-colors duration-300">
+    <aside className="h-screen w-56 bg-white border-r border-rui-gray-border/40 flex flex-col py-6 z-[60]">
       {/* Brand Header */}
       <div className="px-6 mb-6 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-white dark:bg-white/10 border border-rui-gray-border/20 shadow-sm">
-            <img src="/logo.png" alt="Logo" className="w-5 h-5 object-contain" />
-          </div>
+          <img src="logo.png" alt="Logo" className="w-5 h-5 object-contain" />
           <div>
             <h1 className="text-[14px] font-black tracking-tight text-rui-dark leading-none">
               FreelanceGuard
@@ -61,16 +60,16 @@ export default function Sidebar({ onClose }) {
         <Link 
           to={user?.role === "CLIENT" ? "/create-project" : "/marketplace"}
           onClick={onClose}
-          className="w-full h-10 bg-rui-dark hover:bg-rui-success text-rui-light rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-black/5 group"
+          className="w-full h-10 bg-rui-dark hover:bg-rui-success text-white rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-black/5 group"
         >
           {user?.role === "CLIENT" ? (
             <>
-              <LayoutDashboard size={12} className="text-rui-light" />
+              <LayoutDashboard size={12} className="text-white" />
               <span className="text-[10px] font-black uppercase tracking-wider">Post a Project</span>
             </>
           ) : (
             <>
-              <Briefcase size={12} className="text-rui-light" />
+              <Briefcase size={12} className="text-white" />
               <span className="text-[10px] font-black uppercase tracking-wider">Find Work</span>
             </>
           )}
@@ -94,8 +93,8 @@ export default function Sidebar({ onClose }) {
                     onClick={onClose}
                     className={`flex items-center gap-3 px-6 py-2 transition-all duration-300 group relative ${
                       isActive 
-                        ? "text-rui-dark dark:text-white bg-rui-light/30 dark:bg-white/5" 
-                        : "text-rui-gray-muted hover:text-rui-dark dark:hover:text-white hover:bg-rui-light/20 dark:hover:bg-white/5"
+                        ? "text-rui-dark bg-rui-light/30" 
+                        : "text-rui-gray-muted hover:text-rui-dark hover:bg-rui-light/20"
                     }`}
                   >
                     {isActive && (
@@ -119,31 +118,29 @@ export default function Sidebar({ onClose }) {
         ))}
       </div>
 
-      {/* Theme Toggle */}
-      <div className="px-5 mb-4">
-        <button 
-          onClick={toggleTheme}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-rui-gray-muted hover:bg-rui-light hover:text-rui-dark transition-all border border-transparent hover:border-rui-gray-border/30"
-        >
-          {isDarkMode ? <Sun size={14} className="text-rui-success" /> : <Moon size={14} />}
-          <span className="text-[10px] font-black uppercase tracking-widest">{isDarkMode ? "Day Mode" : "Night Mode"}</span>
-        </button>
-      </div>
-
-      {/* Profile Node */}
-      <div className="mt-auto px-5 border-t border-rui-gray-border/20 pt-4">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-rui-success/10 text-rui-success flex items-center justify-center text-[10px] font-black border border-rui-success/10">
-            {user?.name?.[0]}
+      {/* Profile & Logout Node */}
+      <div className="mt-auto px-5 border-t border-rui-gray-border/20 pt-4 pb-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-full bg-rui-success/10 text-rui-success flex items-center justify-center text-[10px] font-black border border-rui-success/10 shrink-0">
+              {user?.name?.[0]}
+            </div>
+            <div className="flex-grow min-w-0">
+              <p className="text-[11px] font-black text-rui-dark leading-none truncate">
+                {user?.name}
+              </p>
+              <p className="text-[9px] font-bold text-rui-gray-muted mt-0.5 uppercase tracking-tighter opacity-70">
+                {user?.role}
+              </p>
+            </div>
           </div>
-          <div className="flex-grow min-w-0">
-            <p className="text-[11px] font-black text-rui-dark leading-none truncate">
-              {user?.name}
-            </p>
-            <p className="text-[9px] font-bold text-rui-gray-muted mt-0.5 uppercase tracking-tighter opacity-70">
-              {user?.role}
-            </p>
-          </div>
+          <button 
+            onClick={handleLogout}
+            className="p-2 text-rui-gray-muted hover:text-rui-danger hover:bg-rui-danger/5 rounded-lg transition-all"
+            title="Sign Out"
+          >
+            <LogOut size={16} />
+          </button>
         </div>
       </div>
     </aside>

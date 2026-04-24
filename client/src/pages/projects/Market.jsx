@@ -76,7 +76,7 @@ export default function Market() {
                 {/* Left side: Project Details */}
                 <div className="flex-grow space-y-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-rui-success/10 flex items-center justify-center text-rui-success group-hover:bg-rui-dark group-hover:text-rui-light transition-all duration-300">
+                    <div className="w-11 h-11 rounded-xl bg-rui-success/10 flex items-center justify-center text-rui-success group-hover:bg-rui-dark group-hover:text-white transition-all duration-300">
                       <ShieldCheck size={20} />
                     </div>
                     <div className="space-y-0.5">
@@ -103,7 +103,7 @@ export default function Market() {
                    </div>
                    
                    <Link to={`/project/${proj.id}`} className="w-auto md:w-full">
-                    <button className="px-6 md:px-0 md:w-full py-2.5 bg-rui-dark text-rui-light rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/5">
+                    <button className="px-6 md:px-0 md:w-full py-2.5 bg-rui-dark text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/5">
                       View
                       <ChevronRight size={12} />
                     </button>

@@ -151,7 +151,7 @@ export default function EscrowDashboard() {
                         setSelectedContractId(escrow?.id);
                         setIsModalOpen(true);
                       }}
-                      className="w-full py-3 bg-rui-dark text-rui-light rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/5"
+                      className="w-full py-3 bg-rui-dark text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/5"
                     >
                       {releasingId === escrow?.id ? <RefreshCw className="animate-spin" size={12} /> : "Execute Release"}
                       {releasingId !== escrow?.id && <ChevronRight size={12} />}
