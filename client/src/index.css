@@ -11,9 +11,9 @@
 
 :root.dark {
   --rui-dark: #F8FAFC;
-  --rui-light: #020617; /* True OLED Black/Deep Navy */
+  --rui-light: #000000; /* Pure OLED Black */
   --rui-blue: #94A3B8;
-  --rui-gray-border: #1E293B;
+  --rui-gray-border: #111827;
   --rui-gray-muted: #94A3B8;
 }
 
@@ -32,31 +32,33 @@
 
 /* Global Overrides for Dark Mode */
 :root.dark body {
-  background-color: var(--rui-light);
+  background-color: var(--rui-light) !important;
   color: var(--rui-dark);
 }
 
 :root.dark .bg-white {
-  background-color: #0F172A !important; /* Rich Dark Grey for cards */
-  border-color: var(--rui-gray-border) !important;
+  background-color: #0A0A0A !important; /* Extremely dark grey for cards */
+  border-color: #1A1A1A !important;
+}
+
+:root.dark .bg-rui-light {
+  background-color: var(--rui-light) !important;
 }
 
 :root.dark .text-rui-dark {
   color: var(--rui-dark) !important;
 }
 
-:root.dark .text-gray-400, 
-:root.dark .text-gray-500,
-:root.dark .text-gray-600 {
-  color: #94A3B8 !important; /* Brighter muted text for dark mode */
-}
-
 :root.dark .border-rui-gray-border {
-  border-color: var(--rui-gray-border) !important;
+  border-color: #1A1A1A !important;
 }
 
-:root.dark .bg-rui-light {
-  background-color: var(--rui-light) !important;
+:root.dark input, 
+:root.dark select, 
+:root.dark textarea {
+  background-color: #0A0A0A !important;
+  color: white !important;
+  border-color: #1A1A1A !important;
 }
 
 @layer base {
@@ -79,13 +81,13 @@
 
 @layer components {
   .atmospheric-bg {
-    background: radial-gradient(circle at 0% 0%, rgba(29, 158, 117, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
-                #F9FAFB;
+    @apply bg-rui-light;
+    background-image: radial-gradient(circle at 0% 0%, rgba(29, 158, 117, 0.05) 0%, transparent 50%),
+                      radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.02) 0%, transparent 50%);
   }
 
   .rui-card-organic {
-    @apply bg-white border border-rui-gray-border/50 rounded-2xl p-8 transition-all hover:shadow-xl hover:shadow-black/[0.02];
+    @apply bg-white border border-rui-gray-border rounded-2xl p-8 transition-all hover:shadow-xl;
   }
 
   .label-caps {

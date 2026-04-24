@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Vault, Activity, Globe, ShieldCheck, Zap, Lock, ChevronRight, CheckCircle2, ArrowRight } from "lucide-react";
+import { Vault, Activity, Globe, ShieldCheck, Zap, Lock, ChevronRight, CheckCircle2, ArrowRight, Sun, Moon } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Home() {
+  const { isDarkMode, toggleTheme } = useTheme();
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -32,7 +35,13 @@ export default function Home() {
           <img src="logo.png" alt="FreelanceGuard Logo" className="w-8 h-8 object-contain" />
           <span className="text-xl font-black tracking-tighter">FreelanceGuard</span>
         </div>
-        <div className="flex items-center space-x-8 text-[10px] font-black uppercase tracking-widest">
+        <div className="flex items-center space-x-6 text-[10px] font-black uppercase tracking-widest">
+          <button 
+            onClick={toggleTheme}
+            className="p-2 rounded-lg hover:bg-rui-light transition-colors text-rui-dark"
+          >
+            {isDarkMode ? <Sun size={18} className="text-rui-success" /> : <Moon size={18} />}
+          </button>
           <Link to="/login" className="hover:text-rui-success transition-colors">Login</Link>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link to="/register" className="bg-rui-dark text-white px-8 py-3 rounded-lg shadow-xl shadow-black/10 hover:bg-rui-success transition-colors">Register</Link>
