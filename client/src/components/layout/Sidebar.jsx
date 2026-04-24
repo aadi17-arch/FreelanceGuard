@@ -126,20 +126,20 @@ export default function Sidebar({ onClose }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-8 h-8 rounded-full bg-rui-success/10 text-rui-success flex items-center justify-center text-[10px] font-black border border-rui-success/10 shrink-0">
-              {user?.name?.[0]}
+              {user?.name?.[0] || "R"}
             </div>
             <div className="flex-grow min-w-0">
               <p className="text-[11px] font-black text-rui-dark leading-none truncate">
-                {user?.name}
+                {user?.name || "RECOVERY NODE"}
               </p>
               <p className="text-[9px] font-bold text-rui-gray-muted mt-0.5 uppercase tracking-tighter opacity-70">
-                {user?.role}
+                {user?.role || "IDENTIFIED"}
               </p>
             </div>
           </div>
           <button 
             onClick={handleLogout}
-            className="p-2 text-rui-gray-muted hover:text-rui-danger hover:bg-rui-danger/5 rounded-lg transition-all"
+            className="p-2 mr-1 text-rui-gray-muted hover:text-rui-danger hover:bg-rui-danger/5 rounded-lg transition-all"
             title="Sign Out"
           >
             <LogOut size={16} />

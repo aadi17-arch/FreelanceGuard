@@ -9,6 +9,7 @@ import ProjectDetails from "./pages/projects/ProjectDetails";
 import EscrowDashboard from "./pages/escrow/EscrowDashboard";
 import Profile from "./pages/profile/profile";
 import DashboardLayout from "./components/layout/DashboardLayout";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -51,12 +52,12 @@ function App() {
         <Route path="/register" element={<Register />} />
         
         {/* Protected Routes with Sidebar Layout */}
-        <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
-        <Route path="/create-project" element={<DashboardLayout><CreateProject /></DashboardLayout>} />
-        <Route path="/marketplace" element={<DashboardLayout><Market /></DashboardLayout>} />
-        <Route path="/project/:id" element={<DashboardLayout><ProjectDetails /></DashboardLayout>} />
-        <Route path="/escrow" element={<DashboardLayout><EscrowDashboard /></DashboardLayout>} />
-        <Route path="/profile" element={<DashboardLayout><Profile /></DashboardLayout>} />
+        <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><Dashboard /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/create-project" element={<ProtectedRoute><DashboardLayout><CreateProject /></ProtectedRoute></DashboardLayout>} />
+        <Route path="/marketplace" element={<ProtectedRoute><DashboardLayout><Market /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/project/:id" element={<ProtectedRoute><DashboardLayout><ProjectDetails /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
       </Routes>
     </Router>
   );

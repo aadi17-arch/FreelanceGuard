@@ -63,14 +63,14 @@ export default function DashboardLayout({ children }) {
 
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex flex-col text-right mr-2">
-              <p className="text-[11px] font-black text-rui-dark leading-none">{user?.name}</p>
-              <p className="text-[9px] font-bold text-rui-gray-muted uppercase tracking-tighter mt-1">{user?.role}</p>
+              <p className="text-[11px] font-black text-rui-dark leading-none">{user?.name || "RECOVERY NODE"}</p>
+              <p className="text-[9px] font-bold text-rui-gray-muted uppercase tracking-tighter mt-1">{user?.role || "IDENTIFIED"}</p>
             </div>
             <div className="relative">
               <div className="w-9 h-9 rounded-full bg-rui-light border border-rui-gray-border/50 flex items-center justify-center text-[11px] font-black text-rui-dark shadow-sm">
-                {user?.name?.[0]}
+                {user?.name?.[0] || "R"}
               </div>
-              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#1D9E75] border-2 border-white rounded-full"></div>
+              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-rui-success border-2 border-white rounded-full"></div>
             </div>
           </div>
         </header>

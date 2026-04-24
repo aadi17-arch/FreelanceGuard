@@ -32,7 +32,7 @@ export default function Login() {
         {/* Symmetric Brand Header */}
         <div className="mb-8 md:mb-12 text-center space-y-4">
           <Link to="/" className="text-2xl md:text-3xl font-black tracking-tight uppercase">
-            Freelance<span className="text-[#1D9E75]">Guard</span>
+            Freelance<span className="text-rui-success">Guard</span>
           </Link>
           <div className="flex items-center justify-center space-x-3">
              <span className="label-caps opacity-60">Professional Authentication</span>
@@ -58,7 +58,7 @@ export default function Login() {
                 <input
                   type="email"
                   required
-                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-[#1D9E75]/30 focus:bg-white transition-all"
+                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-rui-success/30 focus:bg-white transition-all"
                   placeholder="name@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -69,7 +69,7 @@ export default function Login() {
                 <input
                   type="password"
                   required
-                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-[#1D9E75]/30 focus:bg-white transition-all"
+                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-rui-success/30 focus:bg-white transition-all"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -79,7 +79,7 @@ export default function Login() {
 
             <button
               type="submit"
-              className="w-full py-4 bg-rui-dark text-white rounded-xl label-caps !text-white hover:bg-[#1D9E75] transition-all shadow-xl shadow-black/5"
+              className="w-full py-4 bg-rui-dark text-white rounded-xl label-caps !text-white hover:bg-rui-success transition-all shadow-xl shadow-black/5"
             >
               Login
             </button>
@@ -88,7 +88,7 @@ export default function Login() {
           <div className="text-center pt-4">
             <p className="label-caps opacity-60">
               Don't have an account?{" "}
-              <Link to="/register" className="text-[#1D9E75] hover:underline font-black">Register Now</Link>
+              <Link to="/register" className="text-rui-success hover:underline font-black">Register Now</Link>
             </p>
           </div>
         </div>

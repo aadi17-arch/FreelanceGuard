@@ -41,7 +41,7 @@ export default function Register() {
         {/* Brand Header */}
         <div className="mb-8 md:mb-10 text-center space-y-4">
           <Link to="/" className="text-2xl md:text-3xl font-black tracking-tight uppercase">
-            Freelance<span className="text-[#1D9E75]">Guard</span>
+            Freelance<span className="text-rui-success">Guard</span>
           </Link>
           <div className="flex items-center justify-center space-x-3">
              <span className="label-caps opacity-60">New Account Registration</span>
@@ -69,7 +69,7 @@ export default function Register() {
                     name="name"
                     type="text"
                     required
-                    className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-[#1D9E75]/30 focus:bg-white transition-all"
+                    className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-rui-success/30 focus:bg-white transition-all"
                     placeholder="John Doe"
                     value={formData.name}
                     onChange={handleChange}
@@ -83,7 +83,7 @@ export default function Register() {
                       onClick={() => setFormData({ ...formData, role: "CLIENT" })}
                       className={`py-4 rounded-xl label-caps transition-all ${
                         formData.role === "CLIENT"
-                          ? "bg-[#1D9E75] text-white shadow-xl shadow-[#1D9E75]/20"
+                          ? "bg-rui-success text-white shadow-xl shadow-rui-success/20"
                           : "bg-rui-light text-rui-gray-muted border-2 border-transparent hover:border-rui-gray-border/30"
                       }`}
                     >
@@ -94,7 +94,7 @@ export default function Register() {
                       onClick={() => setFormData({ ...formData, role: "FREELANCER" })}
                       className={`py-4 rounded-xl label-caps transition-all ${
                         formData.role === "FREELANCER"
-                          ? "bg-[#1D9E75] text-white shadow-xl shadow-[#1D9E75]/20"
+                          ? "bg-rui-success text-white shadow-xl shadow-rui-success/20"
                           : "bg-rui-light text-rui-gray-muted border-2 border-transparent hover:border-rui-gray-border/30"
                       }`}
                     >
@@ -110,7 +110,7 @@ export default function Register() {
                   name="email"
                   type="email"
                   required
-                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-[#1D9E75]/30 focus:bg-white transition-all"
+                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-rui-success/30 focus:bg-white transition-all"
                   placeholder="name@company.com"
                   value={formData.email}
                   onChange={handleChange}
@@ -123,7 +123,7 @@ export default function Register() {
                   name="password"
                   type="password"
                   required
-                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-[#1D9E75]/30 focus:bg-white transition-all"
+                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-rui-success/30 focus:bg-white transition-all"
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}
@@ -133,7 +133,7 @@ export default function Register() {
 
             <button
               type="submit"
-              className="w-full py-4 bg-rui-dark text-white rounded-xl label-caps !text-white hover:bg-[#1D9E75] transition-all shadow-xl shadow-black/5"
+              className="w-full py-4 bg-rui-dark text-white rounded-xl label-caps !text-white hover:bg-rui-success transition-all shadow-xl shadow-black/5"
             >
               Create Account
             </button>
@@ -142,7 +142,7 @@ export default function Register() {
           <div className="text-center pt-4">
             <p className="label-caps opacity-60">
               Already have an account?{" "}
-              <Link to="/login" className="text-[#1D9E75] hover:underline font-black">Log In</Link>
+              <Link to="/login" className="text-rui-success hover:underline font-black">Log In</Link>
             </p>
           </div>
         </div>
