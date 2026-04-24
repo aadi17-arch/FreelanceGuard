@@ -68,7 +68,7 @@ export default function ProjectDetails() {
             <h1>{project?.title}</h1>
           </div>
           <div className="bg-white border border-rui-gray-border/50 rounded-xl px-6 py-4 text-right shadow-sm">
-             <p className="label-caps !text-[8px] opacity-60">Escrow Allocation</p>
+             <p className="label-caps !text-[8px] opacity-60">Vault Allocation</p>
              <p className="text-3xl font-financial text-rui-dark">${project?.budget?.toLocaleString()}</p>
           </div>
         </div>

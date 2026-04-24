@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }) {
     const path = location.pathname;
     if (path === "/dashboard") return "Overview";
     if (path === "/marketplace") return "Projects";
-    if (path === "/escrow") return "Financials";
+    if (path === "/escrow") return "Vault";
     return "Management";
   };
 

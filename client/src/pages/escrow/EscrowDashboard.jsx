@@ -68,7 +68,7 @@ export default function EscrowDashboard() {
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-rui-success">
             <Lock size={12} strokeWidth={3} />
-            <p className="label-caps !text-rui-success !text-[9px]">Escrow Management</p>
+            <p className="label-caps !text-rui-success !text-[9px]">Vault Management</p>
           </div>
           <h1>Financials</h1>
         </div>
@@ -88,7 +88,7 @@ export default function EscrowDashboard() {
       {loading ? (
         <div className="h-64 flex flex-col items-center justify-center space-y-3">
           <div className="w-8 h-8 border-3 border-rui-success/20 border-t-rui-success rounded-full animate-spin"></div>
-          <p className="label-caps !text-rui-success !text-[9px]">Synchronizing States...</p>
+          <p className="label-caps !text-rui-success !text-[9px]">Synchronizing Vault...</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

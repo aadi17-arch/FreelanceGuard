@@ -71,7 +71,7 @@ export default function Home() {
             transition={{ delay: 0.2 }}
             className="text-lg md:text-xl text-rui-gray-muted max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            The global operating system for freelancers. Secure payments, automated legal layers, and institutional-grade escrow protection.
+            A comprehensive operating system for freelancers. Manage vault payments, automate legal contracts, and protect your transactions.
           </motion.p>
         </div>
 
@@ -129,7 +129,7 @@ export default function Home() {
 
           {[
             { step: "01", title: "Initialize Contract", desc: "Define your milestones and legal terms in seconds using our automated legal layer.", icon: <FileText className="text-rui-success" /> },
-            { step: "02", title: "Lock Capital", desc: "Funds are moved into institutional-grade escrow. Protected and visible to both parties.", icon: <Lock className="text-rui-success" /> },
+            { step: "02", title: "Lock Capital", desc: "Funds are moved into institutional-grade vault protection. Protected and visible to both parties.", icon: <Lock className="text-rui-success" /> },
             { step: "03", title: "Execute Payout", desc: "Upon milestone approval, capital is released instantly to your verified wallet.", icon: <Zap className="text-rui-success" /> }
           ].map((item, i) => (
             <motion.div key={i} whileHover={{ y: -10 }} className="space-y-6 text-center md:text-left bg-white p-8 rounded-3xl border border-rui-gray-border/20 shadow-sm hover:shadow-xl transition-all">
@@ -150,12 +150,12 @@ export default function Home() {
             <div className="space-y-10">
               <div className="space-y-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.4em] text-rui-success">Institutional Grade</p>
-                <h2 className="text-5xl md:text-6xl font-black tracking-tighter uppercase leading-[0.95]">Total Financial<br />Protection</h2>
+                <h2 className="text-5xl md:text-6xl font-black tracking-tighter leading-[0.95]">Secure Vault<br />Systems</h2>
               </div>
 
               <div className="space-y-8">
                 {[
-                  { title: "Smart Escrow Vaults", desc: "Funds are held in individual secure nodes, never mixed, always protected." },
+                  { title: "Smart Vault Nodes", desc: "Funds are held in individual secure nodes, never mixed, always protected." },
                   { title: "Zero-Latency Settlement", desc: "Once approved, capital moves across the network in under 2 seconds." },
                   { title: "Legal Signal Enforcement", desc: "Our contracts are legally binding across 140+ jurisdictions globally." }
                 ].map((feat, i) => (
@@ -175,7 +175,7 @@ export default function Home() {
               <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 p-10 rounded-[40px] space-y-8">
                 <div className="flex justify-between items-center border-b border-white/10 pb-6">
                   <div className="space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-rui-success">Escrow Node #4920</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-rui-success">Vault Node #4920</p>
                     <p className="text-2xl font-black font-financial">$48,290.00</p>
                   </div>
                   <div className="px-4 py-1.5 bg-rui-success rounded-full text-[9px] font-black uppercase tracking-widest">Locked</div>

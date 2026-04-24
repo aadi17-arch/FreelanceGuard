@@ -99,7 +99,7 @@ export default function Dashboard() {
       <motion.section variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
           { label: "Active Contracts", value: stats.activeProjects, icon: <FileText size={16} />, color: "text-rui-blue", bg: "bg-rui-blue/5" },
-          { label: "Escrow Balance", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck size={16} />, color: "text-rui-success", bg: "bg-rui-success/10" },
+          { label: "Vault Balance", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck size={16} />, color: "text-rui-success", bg: "bg-rui-success/10" },
           { label: "Pending Approvals", value: stats.pendingMilestones, icon: <Clock size={16} />, color: "text-rui-warning", bg: "bg-rui-warning/5" },
         ].map((stat, i) => (
           <div key={i} className="bg-white border border-rui-gray-border/50 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">

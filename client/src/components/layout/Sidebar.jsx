@@ -21,7 +21,7 @@ export default function Sidebar({ onClose }) {
     { name: "Projects", path: "/marketplace", icon: <Briefcase size={14} />, section: "MAIN" },
     { name: "Milestones", path: "/milestones", icon: <Calendar size={14} />, section: "MAIN" },
     
-    { name: "Escrow", path: "/escrow", icon: <Wallet size={14} />, section: "FINANCIALS" },
+    { name: "Vault", path: "/escrow", icon: <Wallet size={14} />, section: "FINANCIALS" },
     { name: "Payments", path: "/payments", icon: <Landmark size={14} />, section: "FINANCIALS" },
     
     { name: "Contracts", path: "/contracts", icon: <FileText size={14} />, section: "LEGAL" },
