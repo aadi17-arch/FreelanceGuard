@@ -35,7 +35,7 @@ export default function Sidebar({ onClose }) {
   const sections = ["MAIN", "FINANCIALS", "LEGAL"];
 
   return (
-    <aside className="h-screen w-56 bg-white border-r border-rui-gray-border/40 flex flex-col py-6 z-[60] transition-colors duration-300">
+    <aside className="h-screen w-56 bg-white dark:bg-[#020617] border-r border-rui-gray-border/40 dark:border-white/5 flex flex-col py-6 z-[60] transition-colors duration-300">
       {/* Brand Header */}
       <div className="px-6 mb-6 flex justify-between items-center">
         <div className="flex items-center gap-2">
@@ -92,8 +92,8 @@ export default function Sidebar({ onClose }) {
                     onClick={onClose}
                     className={`flex items-center gap-3 px-6 py-2 transition-all duration-300 group relative ${
                       isActive 
-                        ? "text-rui-dark bg-rui-light/30" 
-                        : "text-rui-gray-muted hover:text-rui-dark hover:bg-rui-light/20"
+                        ? "text-rui-dark dark:text-white bg-rui-light/30 dark:bg-white/5" 
+                        : "text-rui-gray-muted hover:text-rui-dark dark:hover:text-white hover:bg-rui-light/20 dark:hover:bg-white/5"
                     }`}
                   >
                     {isActive && (

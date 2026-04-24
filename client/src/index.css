@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --rui-dark: #0A0F1D; /* Foreground/Text in Light Mode */
-  --rui-light: #FFFFFF; /* Background in Light Mode */
+  --rui-dark: #0A0F1D;
+  --rui-light: #FFFFFF;
   --rui-blue: #334155;
   --rui-success: #1D9E75;
   --rui-gray-border: #E2E8F0;
@@ -10,8 +10,8 @@
 }
 
 :root.dark {
-  --rui-dark: #FFFFFF; /* Foreground/Text in Dark Mode */
-  --rui-light: #000000; /* Background in Dark Mode */
+  --rui-dark: #F8FAFC;
+  --rui-light: #000000;
   --rui-blue: #94A3B8;
   --rui-gray-border: #111827;
   --rui-gray-muted: #94A3B8;
@@ -30,35 +30,18 @@
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-/* Global Overrides for Dark Mode */
+/* Base Styles */
 :root.dark body {
-  background-color: var(--rui-light) !important;
+  background-color: var(--rui-light);
   color: var(--rui-dark);
-}
-
-:root.dark .bg-white {
-  background-color: #0A0A0A !important; /* Extremely dark grey for cards */
-  border-color: #1A1A1A !important;
-}
-
-:root.dark .bg-rui-light {
-  background-color: var(--rui-light) !important;
-}
-
-:root.dark .text-rui-dark {
-  color: var(--rui-dark) !important;
-}
-
-:root.dark .border-rui-gray-border {
-  border-color: #1A1A1A !important;
 }
 
 :root.dark input, 
 :root.dark select, 
 :root.dark textarea {
-  background-color: #0A0A0A !important;
-  color: white !important;
-  border-color: #1A1A1A !important;
+  background-color: #0A0A0A;
+  color: white;
+  border-color: #1A1A1A;
 }
 
 @layer base {
@@ -108,11 +91,11 @@
 
   /* --- AUTH UI (Clean/Boxy) --- */
   .auth-card {
-    @apply bg-white rounded-xl border border-rui-gray-border p-8 md:p-10 shadow-sm;
+    @apply bg-white dark:bg-[#0A0A0A] rounded-xl border border-rui-gray-border dark:border-white/5 p-8 md:p-10 shadow-sm;
   }
 
   .auth-input {
-    @apply w-full px-4 py-3 bg-white border border-rui-gray-border text-rui-dark rounded-lg focus:border-rui-blue focus:ring-1 focus:ring-rui-blue/20 transition-all outline-none font-medium text-sm;
+    @apply w-full px-4 py-3 bg-white dark:bg-[#0A0A0A] border border-rui-gray-border dark:border-white/5 text-rui-dark dark:text-white rounded-lg focus:border-rui-blue focus:ring-1 focus:ring-rui-blue/20 transition-all outline-none font-medium text-sm;
   }
 
   .auth-button {

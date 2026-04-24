@@ -102,7 +102,7 @@ export default function Dashboard() {
           { label: "Vault Balance", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck size={16} />, color: "text-rui-success", bg: "bg-rui-success/10" },
           { label: "Pending Approvals", value: stats.pendingMilestones, icon: <Clock size={16} />, color: "text-rui-warning", bg: "bg-rui-warning/5" },
         ].map((stat, i) => (
-          <div key={i} className="bg-white border border-rui-gray-border/50 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+          <div key={i} className="bg-white dark:bg-[#0A0A0A] border border-rui-gray-border/50 dark:border-white/5 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
              <div className="flex items-center gap-4">
                 <div className={`p-3 rounded-xl ${stat.bg} ${stat.color}`}>
                    {stat.icon}
@@ -125,7 +125,7 @@ export default function Dashboard() {
                <button className="text-[10px] font-black text-rui-success uppercase tracking-widest hover:underline">View All</button>
             </div>
             
-            <div className="bg-white border border-rui-gray-border/50 rounded-2xl divide-y divide-rui-gray-border/10 shadow-sm">
+            <div className="bg-white dark:bg-[#0A0A0A] border border-rui-gray-border/50 dark:border-white/5 rounded-2xl divide-y divide-rui-gray-border/10 dark:divide-white/5 shadow-sm">
                {[1, 2, 3].map((item) => (
                  <div key={item} className="p-6 flex items-center justify-between hover:bg-rui-light/30 transition-colors group">
                     <div className="flex items-center gap-4">
