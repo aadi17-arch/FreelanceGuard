@@ -147,20 +147,20 @@ export default function ProjectDetails() {
 
                   <button 
                     type="submit"
-                    className="w-full py-4 bg-rui-dark text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all shadow-xl shadow-black/5"
+                    className="w-full py-4 bg-rui-dark text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rui-success transition-all shadow-xl shadow-black/5"
                   >
                     Submit Proposal
                   </button>
                </form>
             </div>
 
-            <div className="bg-[#E1F5EE]/30 border border-[#1D9E75]/10 rounded-2xl p-6 space-y-3">
-               <div className="flex items-center gap-2 text-[#1D9E75]">
+            <div className="bg-rui-success/5 border border-rui-success/10 rounded-2xl p-6 space-y-3">
+               <div className="flex items-center gap-2 text-rui-success">
                   <ShieldCheck size={16} strokeWidth={3} />
                   <span className="text-[9px] font-black uppercase tracking-widest">Payment Guarantee</span>
                </div>
-               <p className="text-[9px] text-[#1D9E75] font-bold uppercase tracking-tighter opacity-80 leading-relaxed">
-                 All payments are secured by FreelanceGuard Escrow. Funds are locked before you begin work.
+               <p className="text-[9px] text-rui-success font-bold tracking-tighter opacity-80 leading-relaxed">
+                 All payments are secured by FreelanceGuard Vault. Funds are locked before you begin work.
                </p>
             </div>
           </aside>

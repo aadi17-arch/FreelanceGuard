@@ -55,7 +55,7 @@ export default function Market() {
         <h1>Browse Projects</h1>
         <p className="text-xs md:text-sm text-gray-500 max-w-xl font-medium">
           Secure your next contract with guaranteed milestone payments through our
-          <span className="text-rui-success font-bold"> Secure Escrow</span> system.
+          <span className="text-rui-success font-bold"> Secure Vault</span> system.
         </p>
       </motion.header>
 

@@ -57,11 +57,11 @@ export default function Dashboard() {
               <div className="space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rui-success">System Status: Active</p>
                 <h1 className="text-2xl md:text-3xl font-bold !text-white leading-tight">Project Overview: {user?.name}</h1>
-                <p className="text-xs md:text-sm text-gray-400 max-w-md">Access your active contracts and escrow transactions through the secure management interface.</p>
+                <p className="text-xs md:text-sm text-gray-400 max-w-md">Access your active contracts and vault transactions through the secure management interface.</p>
               </div>
               <div className="flex gap-3">
                  <Link to={user?.role === 'CLIENT' ? '/create-project' : '/marketplace'}>
-                    <button className="px-6 py-2.5 bg-[#1D9E75] hover:bg-[#1D9E75]/90 text-white rounded-lg text-[10px] font-black uppercase tracking-wider transition-all">
+                    <button className="px-6 py-2.5 bg-rui-success hover:bg-rui-success/90 text-white rounded-lg text-[10px] font-black uppercase tracking-wider transition-all">
                       {user?.role === 'CLIENT' ? 'Post New Project' : 'Find Opportunities'}
                     </button>
                  </Link>
@@ -72,12 +72,12 @@ export default function Dashboard() {
                  </Link>
               </div>
            </div>
-           <div className="absolute top-0 right-0 w-64 h-64 bg-[#1D9E75]/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-[#1D9E75]/20 transition-all duration-700"></div>
+           <div className="absolute top-0 right-0 w-64 h-64 bg-rui-success/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-rui-success/20 transition-all duration-700"></div>
         </div>
 
         <div className="bg-white border border-rui-gray-border/50 rounded-2xl p-8 flex flex-col justify-between shadow-sm">
            <div className="flex justify-between items-start">
-              <div className="p-2 rounded-lg bg-[#E1F5EE] text-[#1D9E75]">
+              <div className="p-2 rounded-lg bg-rui-success/10 text-rui-success">
                  <Wallet size={18} />
               </div>
               <span className="text-[9px] font-black text-rui-success uppercase tracking-widest bg-rui-success/5 px-2 py-1 rounded">Protocol Verified</span>
@@ -122,7 +122,7 @@ export default function Dashboard() {
          <motion.div variants={itemVariants} className="lg:col-span-2 space-y-6">
             <div className="flex justify-between items-center px-2">
                <h3 className="label-caps !text-rui-dark">Live Protocol Feed</h3>
-               <button className="text-[10px] font-black text-[#1D9E75] uppercase tracking-widest hover:underline">View All</button>
+               <button className="text-[10px] font-black text-rui-success uppercase tracking-widest hover:underline">View All</button>
             </div>
             
             <div className="bg-white border border-rui-gray-border/50 rounded-2xl divide-y divide-rui-gray-border/10 shadow-sm">
@@ -152,7 +152,7 @@ export default function Dashboard() {
                   <span className="text-[11px] font-black tracking-wider text-rui-success">Verified Account Status</span>
                </div>
                <p className="text-[11px] text-rui-success/80 leading-relaxed font-medium">
-                  Your identity has been verified. You have full access to escrow services and contract management tools.
+                  Your identity has been verified. You have full access to vault services and contract management tools.
                </p>
                <div className="pt-2">
                   <div className="w-full h-1 bg-rui-success/10 rounded-full overflow-hidden">

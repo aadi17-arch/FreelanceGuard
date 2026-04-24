@@ -98,7 +98,7 @@ export default function EscrowDashboard() {
                 key={escrow?.id}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="group bg-white border border-rui-gray-border/50 rounded-xl p-6 hover:border-[#1D9E75]/20 transition-all hover:shadow-xl hover:shadow-black/[0.02] flex flex-col"
+                className="group bg-white border border-rui-gray-border/50 rounded-xl p-6 hover:border-rui-success/20 transition-all hover:shadow-xl hover:shadow-black/[0.02] flex flex-col"
               >
                 <div className="flex justify-between items-start mb-6">
                   <div className="space-y-0.5">
@@ -108,13 +108,13 @@ export default function EscrowDashboard() {
                     </p>
                   </div>
                   <div className={`px-3 py-1 rounded-md text-[8px] font-black uppercase tracking-widest border ${
-                    escrow?.status === 'COMPLETED' ? 'bg-[#E1F5EE] text-[#1D9E75] border-[#1D9E75]/10' : 'bg-rui-blue/5 text-rui-blue border-rui-blue/20'
+                    escrow?.status === 'COMPLETED' ? 'bg-rui-success/10 text-rui-success border-rui-success/10' : 'bg-rui-blue/5 text-rui-blue border-rui-blue/20'
                   }`}>
                     {escrow?.status || "ACTIVE"}
                   </div>
                 </div>
 
-                <h3 className="text-base font-bold text-rui-dark tracking-tight mb-3 group-hover:text-[#1D9E75] transition-colors line-clamp-1">
+                <h3 className="text-base font-bold text-rui-dark tracking-tight mb-3 group-hover:text-rui-success transition-colors line-clamp-1">
                   {escrow?.project?.title || "Project Protocol"}
                 </h3>
 
@@ -127,7 +127,7 @@ export default function EscrowDashboard() {
                   </div>
                   <div className="space-y-0.5">
                     <p className="label-caps !text-[8px]">Network</p>
-                    <p className="text-[9px] font-black text-[#1D9E75] uppercase tracking-wider">Secured</p>
+                    <p className="text-[9px] font-black text-rui-success uppercase tracking-wider">Secured</p>
                   </div>
                 </div>
 
@@ -139,7 +139,7 @@ export default function EscrowDashboard() {
                     </div>
                     <div className="h-[2px] w-full bg-rui-light rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-[#1D9E75] transition-all duration-1000"
+                        className="h-full bg-rui-success transition-all duration-1000"
                         style={{ width: escrow?.status === 'COMPLETED' ? '100%' : '40%' }}
                       ></div>
                     </div>
