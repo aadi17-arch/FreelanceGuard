@@ -29,7 +29,7 @@ export default function Home() {
         className="w-full section-container py-8 flex flex-row justify-between items-center z-50"
       >
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="FreelanceGuard Logo" className="w-8 h-8 object-contain" />
+          <img src="logo.png" alt="FreelanceGuard Logo" className="w-8 h-8 object-contain" />
           <span className="text-xl font-black tracking-tighter">FreelanceGuard</span>
         </div>
         <div className="flex items-center space-x-8 text-[10px] font-black uppercase tracking-widest">
@@ -83,7 +83,7 @@ export default function Home() {
           className="flex flex-col sm:flex-row items-center gap-4 mb-20"
         >
           <Link to="/register" className="w-full sm:w-auto px-10 py-4 bg-rui-success text-white rounded-xl text-xs font-bold hover:scale-[1.02] transition-all shadow-2xl shadow-rui-success/30 flex items-center justify-center gap-3">
-            Start protecting for free <ArrowRight size={16} />
+            Start for free <ArrowRight size={16} />
           </Link>
           <button className="w-full sm:w-auto px-10 py-4 bg-white border border-rui-gray-border text-rui-dark rounded-xl text-xs font-bold hover:bg-rui-light transition-all">
             View Live Demo
@@ -207,10 +207,10 @@ export default function Home() {
           <p className="text-lg text-rui-gray-muted max-w-xl mx-auto font-medium">Join 10,000+ top-tier freelancers who protect their business with FreelanceGuard.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link to="/register" className="px-12 py-5 bg-rui-dark text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-success transition-all shadow-2xl">
-              Initialize Account
+              Register
             </Link>
             <Link to="/login" className="px-12 py-5 bg-white border border-rui-gray-border text-rui-dark rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-light transition-all">
-              Sign In
+              Login
             </Link>
           </div>
         </motion.div>
@@ -219,8 +219,8 @@ export default function Home() {
       {/* 7. Footer */}
       <footer className="w-full section-container py-20 border-t border-rui-gray-border/50 flex flex-col md:flex-row justify-between items-center gap-10">
         <div className="text-lg font-black tracking-tighter flex items-center gap-3">
-          <img src="/logo.png" alt="Logo" className="w-6 h-6 object-contain brightness-0" />
-          Freelance<span>Guard</span>
+          <img src="logo.png" alt="Logo" className="w-6 h-6 object-contain" />
+          FreelanceGuard
         </div>
         <div className="flex gap-10 text-[10px] font-black uppercase tracking-[0.2em] text-rui-gray-muted">
           <a href="#" className="hover:text-rui-success transition-colors">Twitter</a>
