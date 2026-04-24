@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --rui-dark: #0A0F1D;
-  --rui-light: #F8FAFC;
+  --rui-dark: #0A0F1D; /* Foreground/Text in Light Mode */
+  --rui-light: #FFFFFF; /* Background in Light Mode */
   --rui-blue: #334155;
   --rui-success: #1D9E75;
   --rui-gray-border: #E2E8F0;
@@ -10,8 +10,8 @@
 }
 
 :root.dark {
-  --rui-dark: #F8FAFC;
-  --rui-light: #000000; /* Pure OLED Black */
+  --rui-dark: #FFFFFF; /* Foreground/Text in Dark Mode */
+  --rui-light: #000000; /* Background in Dark Mode */
   --rui-blue: #94A3B8;
   --rui-gray-border: #111827;
   --rui-gray-muted: #94A3B8;
@@ -81,13 +81,13 @@
 
 @layer components {
   .atmospheric-bg {
-    @apply bg-rui-light;
+    @apply bg-rui-light transition-colors duration-300;
     background-image: radial-gradient(circle at 0% 0%, rgba(29, 158, 117, 0.05) 0%, transparent 50%),
                       radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.02) 0%, transparent 50%);
   }
 
   .rui-card-organic {
-    @apply bg-white border border-rui-gray-border rounded-2xl p-8 transition-all hover:shadow-xl;
+    @apply bg-white dark:bg-[#0A0A0A] border border-rui-gray-border rounded-2xl p-8 transition-all hover:shadow-xl;
   }
 
   .label-caps {

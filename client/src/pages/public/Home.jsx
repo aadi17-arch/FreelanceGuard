@@ -24,7 +24,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-rui-dark flex flex-col items-center overflow-x-hidden font-body">
+    <div className="min-h-screen bg-rui-light text-rui-dark flex flex-col items-center overflow-x-hidden font-body transition-colors duration-300">
       {/* 1. Navigation */}
       <motion.nav
         initial={{ y: -20, opacity: 0 }}
@@ -32,8 +32,8 @@ export default function Home() {
         className="w-full section-container py-8 flex flex-row justify-between items-center z-50"
       >
         <div className="flex items-center gap-3">
-          <img src="logo.png" alt="FreelanceGuard Logo" className="w-8 h-8 object-contain" />
-          <span className="text-xl font-black tracking-tighter">FreelanceGuard</span>
+          <img src="/logo.png" alt="FreelanceGuard Logo" className="w-8 h-8 object-contain" />
+          <span className="text-xl font-black tracking-tighter text-rui-dark">FreelanceGuard</span>
         </div>
         <div className="flex items-center space-x-6 text-[10px] font-black uppercase tracking-widest">
           <button 
@@ -44,7 +44,7 @@ export default function Home() {
           </button>
           <Link to="/login" className="hover:text-rui-success transition-colors">Login</Link>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link to="/register" className="bg-rui-dark text-white px-8 py-3 rounded-lg shadow-xl shadow-black/10 hover:bg-rui-success transition-colors">Register</Link>
+            <Link to="/register" className="bg-rui-dark text-white dark:bg-white dark:text-black px-8 py-3 rounded-lg shadow-xl shadow-black/10 hover:bg-rui-success transition-colors">Register</Link>
           </motion.div>
         </div>
       </motion.nav>
@@ -154,7 +154,7 @@ export default function Home() {
       </section>
 
       {/* 5. Features Grid */}
-      <section className="w-full py-32 bg-rui-dark text-white">
+      <section className="w-full py-32 bg-[#0A0F1D] dark:bg-black text-white">
         <div className="section-container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div className="space-y-10">
@@ -215,10 +215,10 @@ export default function Home() {
           <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none">Ready for the<br /><span className="text-rui-success">Future of Work?</span></h2>
           <p className="text-lg text-rui-gray-muted max-w-xl mx-auto font-medium">Join 10,000+ top-tier freelancers who protect their business with FreelanceGuard.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Link to="/register" className="px-12 py-5 bg-rui-dark text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-success transition-all shadow-2xl">
+            <Link to="/register" className="px-12 py-5 bg-rui-dark text-rui-light rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-success transition-all shadow-2xl">
               Register
             </Link>
-            <Link to="/login" className="px-12 py-5 bg-white border border-rui-gray-border text-rui-dark rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-light transition-all">
+            <Link to="/login" className="px-12 py-5 bg-white dark:bg-white/10 border border-rui-gray-border text-rui-dark rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-light transition-all">
               Login
             </Link>
           </div>
@@ -227,8 +227,8 @@ export default function Home() {
 
       {/* 7. Footer */}
       <footer className="w-full section-container py-20 border-t border-rui-gray-border/50 flex flex-col md:flex-row justify-between items-center gap-10">
-        <div className="text-lg font-black tracking-tighter flex items-center gap-3">
-          <img src="logo.png" alt="Logo" className="w-6 h-6 object-contain" />
+        <div className="text-lg font-black tracking-tighter flex items-center gap-3 text-rui-dark">
+          <img src="/logo.png" alt="Logo" className="w-6 h-6 object-contain" />
           FreelanceGuard
         </div>
         <div className="flex gap-10 text-[10px] font-black uppercase tracking-[0.2em] text-rui-gray-muted">
