@@ -35,7 +35,7 @@ export default function Sidebar({ onClose }) {
   const sections = ["MAIN", "FINANCIALS", "LEGAL"];
 
   return (
-    <aside className="h-screen w-56 bg-white border-r border-rui-gray-border/40 flex flex-col py-6 z-[60]">
+    <aside className="h-screen w-56 bg-white border-r border-rui-gray-border/40 flex flex-col py-6 z-[60] transition-colors duration-300">
       {/* Brand Header */}
       <div className="px-6 mb-6 flex justify-between items-center">
         <div className="flex items-center gap-2">

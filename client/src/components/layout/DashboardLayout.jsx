@@ -25,7 +25,7 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-white font-body relative">
+    <div className="flex min-h-screen bg-rui-light font-body relative transition-colors duration-300">
       {/* 1. Sidebar: Desktop (Fixed) & Mobile (Drawer) */}
       <div className={`fixed inset-0 z-[100] lg:hidden transition-opacity duration-300 ${isSidebarOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
         <div className="absolute inset-0 bg-rui-dark/60 backdrop-blur-sm" onClick={() => setIsSidebarOpen(false)}></div>
@@ -36,14 +36,14 @@ export default function DashboardLayout({ children }) {
       </div>
       
       {/* 2. Main content area */}
-      <div className="flex-grow flex flex-col lg:ml-56 min-h-screen bg-[#fcfdfe] relative w-full">
+      <div className="flex-grow flex flex-col lg:ml-56 min-h-screen bg-rui-light relative w-full transition-colors duration-300">
         {/* Subtle Background Glow */}
         <div className="absolute inset-0 pointer-events-none opacity-40 overflow-hidden">
            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-rui-success/5 blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
         </div>
 
         {/* Top Header: Sticky with glassmorphism */}
-        <header className="sticky top-0 z-50 bg-[#fcfdfe]/80 backdrop-blur-md px-6 md:px-10 py-5 flex justify-between items-center border-b border-rui-gray-border/5">
+        <header className="sticky top-0 z-50 bg-rui-light/80 backdrop-blur-md px-6 md:px-10 py-5 flex justify-between items-center border-b border-rui-gray-border/5">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsSidebarOpen(true)}

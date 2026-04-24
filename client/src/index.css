@@ -10,10 +10,10 @@
 }
 
 :root.dark {
-  --rui-dark: #F1F5F9;
-  --rui-light: #030712; /* Deep Black for Dark Mode */
+  --rui-dark: #F8FAFC;
+  --rui-light: #020617; /* True OLED Black/Deep Navy */
   --rui-blue: #94A3B8;
-  --rui-gray-border: #1F2937;
+  --rui-gray-border: #1E293B;
   --rui-gray-muted: #94A3B8;
 }
 
@@ -30,27 +30,33 @@
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-/* Global Overrides for Dark Mode - No structure loss */
+/* Global Overrides for Dark Mode */
 :root.dark body {
   background-color: var(--rui-light);
   color: var(--rui-dark);
 }
 
 :root.dark .bg-white {
-  background-color: #111827; /* Dark Slate for cards */
+  background-color: #0F172A !important; /* Rich Dark Grey for cards */
   border-color: var(--rui-gray-border) !important;
 }
 
 :root.dark .text-rui-dark {
-  color: var(--rui-dark);
+  color: var(--rui-dark) !important;
+}
+
+:root.dark .text-gray-400, 
+:root.dark .text-gray-500,
+:root.dark .text-gray-600 {
+  color: #94A3B8 !important; /* Brighter muted text for dark mode */
 }
 
 :root.dark .border-rui-gray-border {
-  border-color: var(--rui-gray-border);
+  border-color: var(--rui-gray-border) !important;
 }
 
 :root.dark .bg-rui-light {
-  background-color: #0F172A; /* Darker than cards */
+  background-color: var(--rui-light) !important;
 }
 
 @layer base {

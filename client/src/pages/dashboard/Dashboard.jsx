@@ -122,7 +122,7 @@ export default function Dashboard() {
          <motion.div variants={itemVariants} className="lg:col-span-2 space-y-6">
             <div className="flex justify-between items-center px-2">
                <h3 className="label-caps !text-rui-dark">Live Protocol Feed</h3>
-               <button className="text-[10px] font-black text-[#1D9E75] uppercase tracking-widest hover:underline">View All</button>
+               <button className="text-[10px] font-black text-rui-success uppercase tracking-widest hover:underline">View All</button>
             </div>
             
             <div className="bg-white border border-rui-gray-border/50 rounded-2xl divide-y divide-rui-gray-border/10 shadow-sm">
@@ -146,7 +146,7 @@ export default function Dashboard() {
          {/* Sidebar Stats */}
          <motion.div variants={itemVariants} className="space-y-6">
             <h3 className="label-caps !text-rui-dark px-2">Compliance Status</h3>
-            <div className="bg-rui-success/5 border border-rui-success/20 rounded-2xl p-6 space-y-6">
+            <div className="bg-rui-success/5 dark:bg-rui-success/10 border border-rui-success/20 rounded-2xl p-6 space-y-6 transition-colors duration-300">
                <div className="flex items-center gap-3">
                   <ShieldCheck className="text-rui-success" size={18} />
                   <span className="text-[11px] font-black tracking-wider text-rui-success">Verified Account Status</span>
