@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Register() {
@@ -8,146 +10,139 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    role: "CLIENT",
+    role: "FREELANCER",
   });
-  const [error, setError] = useState("");
   const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    const result = await register(formData.name, formData.email, formData.password, formData.role);
-    if (result.success) {
+    try {
+      await register(formData);
+      toast.success("Account created successfully!");
       navigate("/dashboard");
-    } else {
-      setError(result.message);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Registration failed");
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center atmospheric-bg p-4 md:p-8">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-12">
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-lg flex flex-col items-center"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-[420px] space-y-10"
       >
-        {/* Brand Header */}
-        <div className="mb-8 md:mb-10 text-center space-y-4">
-          <Link to="/" className="text-2xl md:text-3xl font-black tracking-tight uppercase">
-            Freelance<span className="text-rui-success">Guard</span>
-          </Link>
-          <div className="flex items-center justify-center space-x-3">
-             <span className="label-caps opacity-60">New Account Registration</span>
+        {/* Logo & Header */}
+        <div className="text-center space-y-6">
+          <div className="flex items-center justify-center gap-2">
+            <div className="w-6 h-6 bg-rui-success rounded flex items-center justify-center">
+              <ShieldCheck size={14} className="text-white" />
+            </div>
+            <span className="text-xl font-bold tracking-tight text-rui-dark">Freelance<span className="text-rui-success font-medium">Guard</span></span>
+          </div>
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold tracking-tight text-rui-dark">Create your account</h1>
+            <p className="text-xs font-medium text-gray-400">Start protecting your projects today</p>
           </div>
         </div>
 
-        {/* Geometric Form Container */}
-        <div className="rui-card-organic w-full space-y-8 shadow-2xl shadow-black/[0.02] p-10 md:p-12">
-          <div className="text-center space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter text-rui-dark">Create Account</h2>
-            <p className="body-small opacity-60 uppercase">Join the secure freelance marketplace.</p>
-          </div>
-
-          <form className="space-y-8" onSubmit={handleSubmit}>
-            {error && (
-              <div className="bg-rui-danger/5 border border-rui-danger/10 text-rui-danger px-4 py-3 rounded-xl label-caps !text-center">
-                {error}
-              </div>
-            )}
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="label-caps ml-1">Legal Name</label>
-                  <input
-                    name="name"
-                    type="text"
-                    required
-                    className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-rui-success/30 focus:bg-white transition-all"
-                    placeholder="John Doe"
-                    value={formData.name}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="label-caps ml-1">Account Role</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, role: "CLIENT" })}
-                      className={`py-4 rounded-xl label-caps transition-all ${
-                        formData.role === "CLIENT"
-                          ? "bg-rui-success text-white shadow-xl shadow-rui-success/20"
-                          : "bg-rui-light text-rui-gray-muted border-2 border-transparent hover:border-rui-gray-border/30"
-                      }`}
-                    >
-                      Client
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, role: "FREELANCER" })}
-                      className={`py-4 rounded-xl label-caps transition-all ${
-                        formData.role === "FREELANCER"
-                          ? "bg-rui-success text-white shadow-xl shadow-rui-success/20"
-                          : "bg-rui-light text-rui-gray-muted border-2 border-transparent hover:border-rui-gray-border/30"
-                      }`}
-                    >
-                      Freelancer
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="label-caps ml-1">Email Address</label>
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-rui-success/30 focus:bg-white transition-all"
-                  placeholder="name@company.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="label-caps ml-1">Password</label>
-                <input
-                  name="password"
-                  type="password"
-                  required
-                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-rui-success/30 focus:bg-white transition-all"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-              </div>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Full Name</label>
+              <input
+                type="text"
+                placeholder="Alex Kim"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full py-3 bg-transparent border-b border-gray-100 text-sm font-medium focus:border-rui-success outline-none transition-all placeholder:text-gray-200"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Email</label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full py-3 bg-transparent border-b border-gray-100 text-sm font-medium focus:border-rui-success outline-none transition-all placeholder:text-gray-200"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Password</label>
+              <input
+                type="password"
+                placeholder="Min. 8 characters"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className="w-full py-3 bg-transparent border-b border-gray-100 text-sm font-medium focus:border-rui-success outline-none transition-all placeholder:text-gray-200"
+                required
+              />
             </div>
 
-            <button
-              type="submit"
-              className="w-full py-4 bg-rui-dark text-white rounded-xl label-caps !text-white hover:bg-rui-success transition-all shadow-xl shadow-black/5"
-            >
-              Create Account
-            </button>
-          </form>
+            {/* Role Toggle */}
+            <div className="space-y-3">
+              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">I am a...</label>
+              <div className="flex bg-gray-50 rounded-lg p-1 relative cursor-pointer select-none">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: "FREELANCER" })}
+                  className={`flex-1 py-2 text-[10px] font-black uppercase tracking-[0.2em] z-10 transition-colors duration-200 relative ${formData.role === "FREELANCER" ? "text-rui-success" : "text-gray-400 hover:text-gray-600"}`}
+                >
+                  {formData.role === "FREELANCER" && (
+                    <motion.div 
+                      layoutId="activeRole"
+                      className="absolute inset-0 bg-rui-success/10 border border-rui-success/20 rounded-md z-[-1]"
+                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                    />
+                  )}
+                  Freelancer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: "CLIENT" })}
+                  className={`flex-1 py-2 text-[10px] font-black uppercase tracking-[0.2em] z-10 transition-colors duration-200 relative ${formData.role === "CLIENT" ? "text-rui-success" : "text-gray-400 hover:text-gray-600"}`}
+                >
+                  {formData.role === "CLIENT" && (
+                    <motion.div 
+                      layoutId="activeRole"
+                      className="absolute inset-0 bg-rui-success/10 border border-rui-success/20 rounded-md z-[-1]"
+                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                    />
+                  )}
+                  Client
+                </button>
+              </div>
+            </div>
+          </div>
 
-          <div className="text-center pt-4">
-            <p className="label-caps opacity-60">
-              Already have an account?{" "}
-              <Link to="/login" className="text-rui-success hover:underline font-black">Log In</Link>
+          <div className="space-y-4">
+            <motion.button
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              type="submit"
+              className="w-full py-4 bg-rui-success text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-lg hover:bg-rui-success/90 transition-all shadow-lg shadow-rui-success/20"
+            >
+              Create account
+            </motion.button>
+            <p className="text-[10px] text-center text-gray-400 font-medium leading-relaxed">
+              By signing up you agree to our <Link to="#" className="text-gray-600 hover:underline">Terms</Link> and <Link to="#" className="text-gray-600 hover:underline">Privacy Policy</Link>.
             </p>
           </div>
-        </div>
-        
-        <p className="mt-8 md:mt-12 label-caps opacity-20">Verified User Network • Secure Access</p>
+        </form>
+
+        {/* Footer */}
+        <p className="text-center text-[11px] font-bold text-gray-400">
+          Already have an account?{" "}
+          <Link to="/login" className="text-rui-success hover:underline">
+            Sign in
+          </Link>
+        </p>
       </motion.div>
     </div>
   );

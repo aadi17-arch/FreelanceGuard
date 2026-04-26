@@ -1,14 +1,29 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { motion } from "framer-motion";
-import { Globe, Search, Filter, ShieldCheck, ChevronRight, User } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Plus, 
+  Search, 
+  Filter, 
+  MoreHorizontal, 
+  ChevronRight, 
+  Circle,
+  Clock,
+  CheckCircle2,
+  AlertCircle
+} from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Market() {
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("All");
+
+  const navigate = useNavigate();
+
+  const tabs = ["All", "Active", "In Progress", "Review", "Completed"];
 
   useEffect(() => {
     const fetchAllProject = async () => {
@@ -26,119 +41,173 @@ export default function Market() {
     fetchAllProject();
   }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
+  const getStatusColor = (status) => {
+    switch (status?.toUpperCase()) {
+      case 'ACTIVE':
+      case 'OPEN':
+        return 'bg-rui-success/10 text-rui-success border-rui-success/20';
+      case 'IN PROGRESS':
+        return 'bg-rui-blue/10 text-rui-blue border-rui-blue/20';
+      case 'REVIEW':
+        return 'bg-rui-warning/10 text-rui-warning border-rui-warning/20';
+      case 'COMPLETED':
+        return 'bg-gray-100 text-gray-500 border-gray-200';
+      default:
+        return 'bg-gray-100 text-gray-500 border-gray-200';
     }
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: {
-      opacity: 1, y: 0, transition: {
-        duration: 0.4,
-        ease: "easeOut"
-      }
+  const getProgressColor = (status) => {
+    switch (status?.toUpperCase()) {
+      case 'IN PROGRESS': return 'bg-rui-blue';
+      case 'REVIEW': return 'bg-rui-warning';
+      case 'COMPLETED': return 'bg-rui-success';
+      default: return 'bg-rui-success';
     }
   };
+
+  const filteredProjects = projects.filter(p => {
+    if (activeTab === "All") return true;
+    if (activeTab === "Active") return p.status === "OPEN" || p.status === "ACTIVE";
+    return p.status?.toUpperCase() === activeTab.toUpperCase();
+  });
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={containerVariants} className="space-y-10 pb-20">
-      {/* Header Section: Scaled & Balanced */}
-      <motion.header variants={itemVariants} className="space-y-3">
-        <div className="flex items-center gap-2 text-rui-success">
-          <Globe size={12} strokeWidth={3} />
-          <p className="label-caps !text-rui-success !text-[9px]">Project Marketplace</p>
+    <div className="space-y-6 pb-20">
+      {/* Top Header Section */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold tracking-tight text-rui-dark leading-none">Projects</h1>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+            {projects.length} total projects
+          </p>
         </div>
-        <h1>Browse Projects</h1>
-        <p className="text-xs md:text-sm text-gray-500 max-w-xl font-medium">
-          Secure your next contract with guaranteed milestone payments through our
-          <span className="text-rui-success font-bold"> Secure Vault</span> system.
-        </p>
-      </motion.header>
+        
+        <Link to="/create-project">
+          <button className="flex items-center gap-2 px-4 py-2.5 bg-rui-success text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rui-success/90 transition-all shadow-lg shadow-rui-success/20 active:scale-95">
+            <Plus size={14} strokeWidth={3} />
+            New project
+          </button>
+        </Link>
+      </div>
+
+      {/* 2. Horizontal Status Tabs - Scrollable on Mobile */}
+      <div className="mb-10 -mx-6 px-6 md:mx-0 md:px-0">
+        <div className="flex items-center gap-8 overflow-x-auto no-scrollbar border-b border-gray-50 pb-px">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`pb-4 text-[11px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all relative ${
+                activeTab === tab.id ? "text-rui-success" : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              {tab.label}
+              {activeTab === tab.id && (
+                <motion.div 
+                  layoutId="activeTabMarker"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-rui-success"
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {loading ? (
         <div className="h-64 flex flex-col items-center justify-center space-y-3">
           <div className="w-8 h-8 border-3 border-rui-success/20 border-t-rui-success rounded-full animate-spin"></div>
-          <p className="label-caps !text-rui-success !text-[9px]">Synchronizing Market...</p>
+          <p className="label-caps !text-rui-success !text-[9px]">Syncing Projects...</p>
         </div>
       ) : (
-        <motion.div variants={containerVariants} className="grid grid-cols-1 gap-6">
-          {projects.map((proj) => (
-            <motion.div
-              key={proj.id}
-              variants={itemVariants}
-              className="group bg-white border border-rui-gray-border/50 hover:border-rui-success/20 rounded-xl p-6 md:p-8 transition-all hover:shadow-xl hover:shadow-black/[0.02]"
-            >
-              <div className="flex flex-col md:flex-row justify-between gap-8">
-                {/* Left side: Project Details */}
-                <div className="flex-grow space-y-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-rui-success/10 flex items-center justify-center text-rui-success group-hover:bg-rui-dark group-hover:text-white transition-all duration-300">
-                      <ShieldCheck size={20} />
-                    </div>
-                    <div className="space-y-0.5">
-                      <h3 className="text-lg md:text-xl font-bold text-rui-dark tracking-tight leading-none group-hover:text-rui-success transition-colors">{proj.title}</h3>
-                      <div className="flex items-center gap-3">
-                        <span className="text-[9px] font-black uppercase tracking-widest text-rui-gray-muted opacity-60">
+        <div className="w-full overflow-hidden relative">
+          {/* Mobile Swipe Hint */}
+          <div className="md:hidden flex items-center gap-2 mb-2 text-[8px] font-black uppercase tracking-widest text-gray-400 opacity-60">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            Swipe to view full data
+          </div>
+          
+          <div className="overflow-x-auto no-scrollbar">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="">
+                  <th className="px-2 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Project</th>
+                  <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Client</th>
+                  <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Status</th>
+                  <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 text-right">Amount</th>
+                  <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Progress</th>
+                  <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Created</th>
+                </tr>
+              </thead>
+              <tbody className="">
+                {filteredProjects.map((proj) => (
+                  <tr 
+                    key={proj.id} 
+                    className="hover:bg-gray-50/50 transition-colors group cursor-pointer"
+                    onClick={() => navigate(`/project/${proj.id}`)}
+                  >
+                    <td className="px-2 py-4.5">
+                      <p className="text-sm font-bold text-rui-dark group-hover:text-rui-success transition-colors">
+                        {proj.title}
+                      </p>
+                    </td>
+                    <td className="px-6 py-4.5">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                          <Circle size={8} fill="currentColor" />
+                        </div>
+                        <span className="text-xs font-semibold text-gray-600">
                           {proj.client?.name || "Verified Client"}
                         </span>
-                        <div className="w-1 h-1 rounded-full bg-rui-success"></div>
-                        <span className="text-[9px] font-black tracking-widest text-rui-success">Secure Node</span>
                       </div>
-                    </div>
-                  </div>
-                  <p className="text-xs md:text-sm text-gray-500 font-medium leading-relaxed max-w-2xl line-clamp-2">
-                    {proj.description}
-                  </p>
+                    </td>
+                    <td className="px-6 py-4.5">
+                      <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border ${getStatusColor(proj.status)}`}>
+                        {proj.status === 'OPEN' ? 'Active' : proj.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4.5 text-right">
+                      <p className="text-sm font-financial font-bold text-rui-dark">
+                        ${proj.budget?.toLocaleString() || "0"}
+                      </p>
+                    </td>
+                    <td className="px-6 py-4.5">
+                      <div className="flex items-center gap-4 min-w-[120px]">
+                        <div className="flex-grow h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: proj.status === 'COMPLETED' ? "100%" : proj.status === 'IN PROGRESS' ? "60%" : "20%" }}
+                            className={`h-full ${getProgressColor(proj.status)}`}
+                          />
+                        </div>
+                        <span className="text-[10px] font-bold text-gray-400 whitespace-nowrap">
+                          {proj.status === 'COMPLETED' ? "3/3" : proj.status === 'IN PROGRESS' ? "2/3" : "1/3"}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                      {new Date(proj.createdAt).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            
+            {filteredProjects.length === 0 && (
+              <div className="py-20 text-center space-y-4">
+                <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto text-gray-300">
+                  <Clock size={32} />
                 </div>
-
-                {/* Right side: Budget & Action */}
-                <div className="flex flex-row md:flex-col justify-between items-center md:items-end md:w-44 shrink-0 gap-4">
-                   <div className="text-left md:text-right space-y-0.5">
-                      <p className="text-2xl font-financial text-rui-dark leading-none">${proj.budget?.toLocaleString() || "0"}</p>
-                      <p className="label-caps !text-[8px]">Allocation</p>
-                   </div>
-                   
-                   <Link to={`/project/${proj.id}`} className="w-auto md:w-full">
-                    <button className="px-6 md:px-0 md:w-full py-2.5 bg-rui-dark text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/5">
-                      View
-                      <ChevronRight size={12} />
-                    </button>
-                   </Link>
-                </div>
+                <p className="label-caps !text-gray-400 !text-[10px]">No projects found in this sector</p>
               </div>
-
-              {/* Project Metadata Footer */}
-              <div className="mt-6 pt-6 border-t border-rui-gray-border/10 flex flex-wrap gap-6 items-center">
-                 <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-rui-light text-rui-gray-muted">
-                      <User size={12} />
-                    </div>
-                    <span className="text-[9px] font-bold text-rui-gray-muted uppercase tracking-wider">Identity Confirmed</span>
-                 </div>
-                 <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-rui-light text-rui-gray-muted">
-                      <Filter size={12} />
-                    </div>
-                    <span className="text-[9px] font-bold text-rui-gray-muted uppercase tracking-wider">{proj.category || "General"}</span>
-                 </div>
-                 <div className="ml-auto">
-                    <div className={`px-3 py-1 rounded-md text-[8px] font-black uppercase tracking-[0.2em] border ${
-                      proj.status === 'OPEN' 
-                        ? 'bg-[#E1F5EE] text-[#1D9E75] border-[#1D9E75]/10' 
-                        : 'bg-rui-blue/5 text-rui-blue border-rui-blue/10'
-                    }`}>
-                      {proj.status === 'OPEN' ? 'Accepting Bids' : proj.status}
-                    </div>
-                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+            )}
+          </div>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 }

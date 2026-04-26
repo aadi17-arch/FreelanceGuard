@@ -121,7 +121,7 @@ export default function KYC() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         {/* Form Area */}
         <div className="lg:col-span-3 space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-8 bg-white border border-rui-gray-border/50 rounded-2xl p-8 shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-8 bg-white border border-rui-gray-border/50 rounded-2xl p-6 md:p-8 shadow-sm">
             
             {/* Doc Type Selector */}
             <div className="space-y-4">
@@ -152,7 +152,7 @@ export default function KYC() {
             <div className="space-y-4">
               <label className="label-caps !text-[10px]">2. Upload Document Scan</label>
               <div 
-                className={`relative border-2 border-dashed rounded-2xl p-10 transition-all text-center cursor-pointer ${
+                className={`relative border-2 border-dashed rounded-2xl p-6 md:p-10 transition-all text-center cursor-pointer ${
                   file ? "border-rui-success/50 bg-rui-success/5" : "border-rui-gray-border/50 hover:border-rui-dark/30 hover:bg-rui-light/30"
                 }`}
                 onClick={() => document.getElementById('file-upload').click()}

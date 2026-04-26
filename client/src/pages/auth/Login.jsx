@@ -1,99 +1,97 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { ShieldCheck } from "lucide-react";
+
 import { motion } from "framer-motion";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    const result = await login(email, password);
-    if (result.success) {
+    try {
+      await login(email, password);
+      toast.success("Welcome back!");
       navigate("/dashboard");
-    } else {
-      setError(result.message);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center atmospheric-bg p-4 md:p-8">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-12">
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md flex flex-col items-center"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-[400px] space-y-10"
       >
-        {/* Symmetric Brand Header */}
-        <div className="mb-8 md:mb-12 text-center space-y-4">
-          <Link to="/" className="text-2xl md:text-3xl font-black tracking-tight uppercase">
-            Freelance<span className="text-rui-success">Guard</span>
-          </Link>
-          <div className="flex items-center justify-center space-x-3">
-             <span className="label-caps opacity-60">Professional Authentication</span>
-          </div>
-        </div>
-
-        {/* Geometric Form Container */}
-        <div className="rui-card-organic w-full space-y-8 shadow-2xl shadow-black/[0.02] p-10 md:p-12">
-          <div className="text-center space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter text-rui-dark">Login to Account</h2>
-            <p className="body-small opacity-60 uppercase">Access your secure workspace.</p>
-          </div>
-
-          <form className="space-y-8" onSubmit={handleSubmit}>
-            {error && (
-              <div className="bg-rui-danger/5 border border-rui-danger/10 text-rui-danger px-4 py-3 rounded-xl label-caps !text-center">
-                {error}
-              </div>
-            )}
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <label className="label-caps ml-1">Email Address</label>
-                <input
-                  type="email"
-                  required
-                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-rui-success/30 focus:bg-white transition-all"
-                  placeholder="name@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="label-caps ml-1">Password</label>
-                <input
-                  type="password"
-                  required
-                  className="w-full bg-rui-light/50 border-2 border-transparent rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-rui-success/30 focus:bg-white transition-all"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+        {/* Logo & Header */}
+        <div className="text-center space-y-6">
+          <div className="flex items-center justify-center gap-2">
+            <div className="w-6 h-6 bg-rui-success rounded flex items-center justify-center">
+              <ShieldCheck size={14} className="text-white" />
             </div>
-
-            <button
-              type="submit"
-              className="w-full py-4 bg-rui-dark text-white rounded-xl label-caps !text-white hover:bg-rui-success transition-all shadow-xl shadow-black/5"
-            >
-              Login
-            </button>
-          </form>
-
-          <div className="text-center pt-4">
-            <p className="label-caps opacity-60">
-              Don't have an account?{" "}
-              <Link to="/register" className="text-rui-success hover:underline font-black">Register Now</Link>
-            </p>
+            <span className="text-xl font-bold tracking-tight text-rui-dark">Freelance<span className="text-rui-success font-medium">Guard</span></span>
+          </div>
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold tracking-tight text-rui-dark">Welcome back</h1>
+            <p className="text-xs font-medium text-gray-400">Sign in to your account</p>
           </div>
         </div>
-        
-        <p className="mt-8 md:mt-12 label-caps opacity-20">Secure Data Access • v2.4.0</p>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Email</label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full py-3 bg-transparent border-b border-gray-100 text-sm font-medium focus:border-rui-success outline-none transition-all placeholder:text-gray-200"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Password</label>
+                <Link to="#" className="text-[9px] font-bold text-gray-300 hover:text-rui-success transition-colors">Forgot password?</Link>
+              </div>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full py-3 bg-transparent border-b border-gray-100 text-sm font-medium focus:border-rui-success outline-none transition-all placeholder:text-gray-200"
+                required
+              />
+            </div>
+          </div>
+
+          <motion.button
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+            type="submit"
+            className="w-full py-4 bg-rui-success text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-lg hover:bg-rui-success/90 transition-all shadow-lg shadow-rui-success/20"
+          >
+            Sign in
+          </motion.button>
+        </form>
+
+        {/* Footer */}
+        <p className="text-center text-[11px] font-bold text-gray-400">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-rui-success hover:underline">
+            Sign up free
+          </Link>
+        </p>
       </motion.div>
     </div>
   );
