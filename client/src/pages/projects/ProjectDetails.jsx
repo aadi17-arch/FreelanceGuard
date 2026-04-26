@@ -32,7 +32,7 @@ export default function ProjectDetails() {
   const handleBidSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/bids/create", {
+      await axios.post("/bids/createBid", {
         projectId: id,
         proposal,
         amount: parseFloat(amount)

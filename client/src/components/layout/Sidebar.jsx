@@ -39,17 +39,17 @@ export default function Sidebar({ onClose }) {
   const sections = ["MAIN", "FINANCIALS", "LEGAL"];
 
   return (
-    <aside className="h-screen w-56 bg-white border-r border-rui-gray-border/40 flex flex-col py-6 z-[60]">
+    <aside className="h-screen w-[200px] bg-[var(--color-background-primary)] border-r border-[var(--color-border-tertiary)] flex flex-col py-5 z-[60]">
       {/* Brand Header */}
-      <div className="px-6 mb-6 flex justify-between items-center">
+      <div className="px-5 mb-3 pb-6 border-b border-[var(--color-border-tertiary)] flex justify-between items-center">
         <div className="flex items-center gap-2">
           <img src="logo.png" alt="Logo" className="w-5 h-5 object-contain" />
           <div>
-            <h1 className="text-[14px] font-black tracking-tight text-rui-dark leading-none">
-              FreelanceGuard
+            <h1 className="text-[15px] font-semibold text-[var(--color-text-primary)] leading-none tracking-[-0.3px]">
+              Freelance<span className="text-rui-success">Guard</span>
             </h1>
-            <p className="text-[8px] font-bold text-rui-gray-muted uppercase tracking-tighter mt-1 opacity-80">
-              Vault • Protocol
+            <p className="text-[10px] text-[var(--color-text-tertiary)] mt-1.5">
+              Escrow · Milestones
             </p>
           </div>
         </div>
@@ -82,11 +82,11 @@ export default function Sidebar({ onClose }) {
       {/* Navigation Groups */}
       <div className="flex-grow space-y-6 overflow-y-auto scrollbar-hide">
         {sections.map(section => (
-          <div key={section} className="space-y-2">
-            <h3 className="px-6 text-[9px] font-black text-rui-gray-muted uppercase tracking-[0.2em] opacity-40">
+          <div key={section} className="mb-2">
+            <h3 className="text-[10px] font-medium text-[var(--color-text-tertiary)] px-5 py-3 tracking-[0.8px] uppercase">
               {section}
             </h3>
-            <div className="space-y-0.5">
+            <ul className="space-y-0.5 flex flex-col">
               {navItems.filter(item => item.section === section).map(item => {
                 const isActive = location.pathname === item.path;
                 return (
@@ -94,52 +94,43 @@ export default function Sidebar({ onClose }) {
                     key={item.path} 
                     to={item.path}
                     onClick={onClose}
-                    className={`flex items-center gap-3 px-6 py-2 transition-all duration-300 group relative ${
+                    className={`flex items-center gap-3 px-5 py-[9px] text-[13px] transition-all rounded-none ${
                       isActive 
-                        ? "text-rui-dark bg-rui-light/30" 
-                        : "text-rui-gray-muted hover:text-rui-dark hover:bg-rui-light/20"
+                        ? "bg-[var(--color-background-secondary)] text-[var(--color-text-primary)] font-medium border-r-2 border-rui-success" 
+                        : "text-[var(--color-text-secondary)] hover:bg-[var(--color-background-secondary)] hover:text-[var(--color-text-primary)]"
                     }`}
                   >
-                    {isActive && (
-                      <motion.div 
-                        layoutId="activeIndicator"
-                        className="absolute left-0 top-0 w-[2.5px] h-full bg-rui-success" 
-                      />
-                    )}
-                    
-                    <div className={`${isActive ? "text-rui-success" : "group-hover:text-rui-dark"} transition-transform duration-300 group-hover:scale-110`}>
+                    <div className={`opacity-70 flex-shrink-0 ${isActive ? 'text-rui-success opacity-100' : ''}`}>
                       {item.icon}
                     </div>
-                    <span className={`text-[11px] font-bold tracking-tight transition-all duration-300 ${isActive ? "translate-x-1" : "group-hover:translate-x-0.5"}`}>
-                      {item.name}
-                    </span>
+                    <span>{item.name}</span>
                   </Link>
                 );
               })}
-            </div>
+            </ul>
           </div>
         ))}
       </div>
 
-      {/* Profile & Logout Node */}
-      <div className="mt-auto px-5 border-t border-rui-gray-border/20 pt-4 pb-2">
-        <div className="flex items-center justify-between">
+      {/* Bottom Profile Section */}
+      <div className="mt-auto px-4 pb-2">
+        <div className="flex items-center justify-between p-2.5 bg-[var(--color-background-secondary)] rounded-[var(--border-radius-md)]">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-rui-success/10 text-rui-success flex items-center justify-center text-[10px] font-black border border-rui-success/10 shrink-0">
-              {user?.name?.[0] || "R"}
+            <div className="w-7 h-7 rounded-full bg-rui-success/10 text-rui-success flex items-center justify-center text-[10px] font-medium border border-rui-success/10 shrink-0">
+              {user?.name?.[0] || "A"}
             </div>
             <div className="flex-grow min-w-0">
-              <p className="text-[11px] font-black text-rui-dark leading-none truncate">
-                {user?.name || "RECOVERY NODE"}
+              <p className="text-[12px] font-medium text-[var(--color-text-primary)] leading-none truncate">
+                {user?.name || "Alex Kim"}
               </p>
-              <p className="text-[9px] font-bold text-rui-gray-muted mt-0.5 uppercase tracking-tighter opacity-70">
-                {user?.role || "IDENTIFIED"}
+              <p className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">
+                {user?.role || "Freelancer"}
               </p>
             </div>
           </div>
           <button 
             onClick={handleLogout}
-            className="p-2 mr-1 text-rui-gray-muted hover:text-rui-danger hover:bg-rui-danger/5 rounded-lg transition-all"
+            className="p-1.5 text-[var(--color-text-secondary)] hover:text-rui-danger transition-all"
             title="Sign Out"
           >
             <LogOut size={16} />

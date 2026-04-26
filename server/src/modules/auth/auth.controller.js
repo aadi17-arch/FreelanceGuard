@@ -119,7 +119,8 @@ export const getProfile = async (req, res) => {
         role: true,
         walletBalance: true,
         heldAmount: true,
-        createdAt: true
+        createdAt: true,
+        kyc: true
       }
     });
     if (!user) {

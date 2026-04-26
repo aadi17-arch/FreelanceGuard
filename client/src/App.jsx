@@ -8,6 +8,7 @@ import Market from "./pages/projects/Market";
 import ProjectDetails from "./pages/projects/ProjectDetails";
 import EscrowDashboard from "./pages/escrow/EscrowDashboard";
 import Profile from "./pages/profile/profile";
+import KYC from "./pages/kyc/KYC";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
@@ -53,11 +54,12 @@ function App() {
         
         {/* Protected Routes with Sidebar Layout */}
         <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><Dashboard /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/create-project" element={<ProtectedRoute><DashboardLayout><CreateProject /></ProtectedRoute></DashboardLayout>} />
+        <Route path="/create-project" element={<ProtectedRoute><DashboardLayout><CreateProject /></DashboardLayout></ProtectedRoute>} />
         <Route path="/marketplace" element={<ProtectedRoute><DashboardLayout><Market /></DashboardLayout></ProtectedRoute>} />
         <Route path="/project/:id" element={<ProtectedRoute><DashboardLayout><ProjectDetails /></DashboardLayout></ProtectedRoute>} />
         <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></DashboardLayout></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/kyc" element={<ProtectedRoute><DashboardLayout><KYC /></DashboardLayout></ProtectedRoute>} />
       </Routes>
     </Router>
   );

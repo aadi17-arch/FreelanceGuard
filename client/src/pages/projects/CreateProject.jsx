@@ -15,6 +15,7 @@ export default function CreateProject() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    budget: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -114,6 +115,28 @@ export default function CreateProject() {
               onChange={handleChange}
             />
           </div>
+ 
+           {/* Budget Section */}
+           <div className="p-8 md:p-10 space-y-4">
+             <div className="flex items-center gap-3">
+               <div className="w-9 h-9 rounded-xl bg-rui-success/10 text-rui-success flex items-center justify-center">
+                 <Package size={16} />
+               </div>
+               <label className="label-caps !text-[10px]">Vault Allocation (USD)</label>
+             </div>
+             <div className="flex items-center gap-4">
+               <span className="text-2xl font-bold text-rui-gray-muted">$</span>
+               <input
+                 type="number"
+                 name="budget"
+                 required
+                 className="w-full text-xl md:text-2xl font-bold bg-transparent border-none focus:ring-0 placeholder:text-rui-gray-border/30 text-rui-dark tracking-tight"
+                 placeholder="0.00"
+                 value={formData.budget}
+                 onChange={handleChange}
+               />
+             </div>
+           </div>
 
           {/* Action Section */}
           <div className="p-8 md:p-10 bg-rui-light/30 flex flex-col sm:flex-row items-center justify-between gap-6">

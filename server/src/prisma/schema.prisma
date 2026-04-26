@@ -20,6 +20,8 @@ model User {
   contracts     Contract[] @relation("FreelancerContracts")
   disputes      Dispute[]  @relation("RaisedBy")
   projects      Project[]  @relation("ClientProjects")
+  kyc KYC?
+
 }
 
 model Project {
@@ -27,6 +29,7 @@ model Project {
   title       String
   description String
   clientId    String
+  budget      Float         @default(0)
   status      ProjectStatus @default(OPEN)
   createdAt   DateTime      @default(now())
   bids        Bid[]
@@ -98,6 +101,18 @@ model Bid {
   project      Project   @relation(fields: [projectId], references: [id])
 }
 
+model KYC {
+  id            String        @id @default(uuid())
+  userId        String @unique
+  user          User          @relation(fields: [userId], references: [id])
+  documentType  DocumentType
+  documentUrl   String
+  status        KYCStatus
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  verifiedAt    DateTime?
+}
+
 enum Role {
   CLIENT
   FREELANCER
@@ -136,5 +151,18 @@ enum PaymentType {
 enum BidStatus {
   PENDING
   ACCEPTED
+  REJECTED
+}
+
+enum DocumentType {
+  PASSPORT
+  ID_CARD
+  DRIVER_LICENSE
+  VOTER_ID
+  COLLEGE_ID
+}
+enum KYCStatus {
+  PENDING
+  APPROVED
   REJECTED
 }

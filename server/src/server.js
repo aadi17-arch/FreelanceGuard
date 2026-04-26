@@ -5,6 +5,7 @@ import authRoutes from "./modules/auth/auth.routes.js";
 import projectRoutes from "./modules/projects/project.routes.js";
 import bidRoutes from "./modules/projects/bid.routes.js";
 import escrowRoutes from "./modules/escrow/escrow.routes.js"
+import kycRoutes from "./modules/kyc/kyc.routes.js";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/bids", bidRoutes);
 app.use("/api/escrow", escrowRoutes);
+app.use("/api/kyc", kycRoutes);
 
 
 app.get('/', (req, res) => {

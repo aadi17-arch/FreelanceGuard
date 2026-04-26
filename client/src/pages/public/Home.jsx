@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Vault, Activity, Globe, ShieldCheck, Zap, Lock, ChevronRight, CheckCircle2, ArrowRight } from "lucide-react";
+import { Vault, Activity, Globe, ShieldCheck, Zap, Lock, ChevronRight, CheckCircle2, ArrowRight, UserCheck } from "lucide-react";
 
 export default function Home() {
   const containerVariants = {
@@ -21,7 +21,36 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-rui-dark flex flex-col items-center overflow-x-hidden font-body">
+    <div className="min-h-screen bg-[#F0F2F5] text-rui-dark flex flex-col items-center overflow-x-hidden font-body relative">
+      {/* Premium Background Decor - Enhanced Visibility */}
+      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        {/* The Grid Pattern - More distinct */}
+        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(#000 1.5px, transparent 1.5px)', backgroundSize: '60px 60px' }}></div>
+        
+        {/* Animated Mesh Gradients - Vibrant but Professional */}
+        <motion.div 
+          animate={{ 
+            x: [0, 200, 0], 
+            y: [0, 100, 0],
+            rotate: [0, 90, 0]
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-rui-success/20 rounded-full blur-[140px]"
+        />
+        <motion.div 
+          animate={{ 
+            x: [0, -150, 0], 
+            y: [0, 200, 0],
+            rotate: [0, -45, 0]
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[-20%] left-[-10%] w-[700px] h-[700px] bg-rui-success/10 rounded-full blur-[120px]"
+        />
+
+        {/* Noise Overlay - More visible grain */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }}></div>
+      </div>
+
       {/* 1. Navigation */}
       <motion.nav
         initial={{ y: -20, opacity: 0 }}
@@ -40,13 +69,14 @@ export default function Home() {
         </div>
       </motion.nav>
 
-      {/* 2. Hero Section */}
-      <section className="section-container pt-20 pb-32 flex flex-col items-center text-center relative">
-        {/* Background Decorative Glows: Subtle & Institutional */}
-        <div className="absolute top-0 left-1/4 -translate-x-1/2 w-full max-w-4xl h-96 bg-rui-success/5 blur-[160px] -z-10 rounded-full"></div>
-        <div className="absolute bottom-0 right-1/4 translate-x-1/2 w-full max-w-4xl h-96 bg-rui-success/[0.03] blur-[140px] -z-10 rounded-full"></div>
+      {/* 2. Hero Section - Full Screen focused */}
+      <section className="section-container min-h-[95vh] flex flex-col items-center justify-center text-center py-20 relative overflow-hidden">
+        {/* Subtle Background Glows */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-rui-success/5 rounded-full blur-[120px] -z-10" />
+        <div className="absolute top-0 left-1/4 -translate-x-1/2 w-full max-w-4xl h-96 bg-rui-success/5 blur-[160px] -z-10 rounded-full" />
+        <div className="absolute bottom-0 right-1/4 translate-x-1/2 w-full max-w-4xl h-96 bg-rui-success/[0.03] blur-[140px] -z-10 rounded-full" />
 
-        <div className="space-y-6 mb-12">
+        <div className="space-y-6 mb-12 flex flex-col items-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -89,23 +119,35 @@ export default function Home() {
             View Live Demo
           </button>
         </motion.div>
-
-        {/* Hero Visual Mockup */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="w-full max-w-5xl rounded-[32px] border border-rui-gray-border/20 shadow-[0_50px_100px_rgba(0,0,0,0.1)] overflow-hidden bg-white"
-        >
-          <img
-            src="/dashboard_mockup_1776968809870.png"
-            alt="FreelanceGuard Dashboard"
-            className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-1000"
-          />
-        </motion.div>
       </section>
 
-      {/* 3. Trusted By / Social Proof */}
+      {/* 3. Core Protocol Features */}
+      <section className="section-container pb-32">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl mx-auto">
+          {[
+            { title: "Secure Vaults", desc: "Automated escrow systems that hold funds securely until milestones are verified.", icon: ShieldCheck },
+            { title: "Identity KYC", desc: "Institutional-grade identity verification to ensure trust between freelancers and clients.", icon: UserCheck },
+            { title: "Milestone Logic", desc: "Customizable release conditions based on project deliverables and approval cycles.", icon: Zap }
+          ].map((feature, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 + (i * 0.1) }}
+              className="p-8 rounded-3xl border border-rui-gray-border/30 bg-white/50 backdrop-blur-sm hover:border-rui-success/50 transition-all group"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-rui-success/10 flex items-center justify-center text-rui-success mb-6 group-hover:scale-110 transition-transform">
+                <feature.icon size={24} />
+              </div>
+              <h3 className="text-lg font-black mb-3">{feature.title}</h3>
+              <p className="text-sm text-rui-gray-muted leading-relaxed font-medium">{feature.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. Trusted By */}
       <section className="w-full border-y border-rui-gray-border/30 py-12 bg-rui-light/30">
         <div className="section-container flex flex-col md:flex-row items-center justify-between gap-10 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-rui-gray-muted">Trusted by innovators at</p>
@@ -117,17 +159,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. How it Works */}
+      {/* 5. How it Works */}
       <section className="w-full py-32 section-container">
         <div className="text-center space-y-4 mb-24">
           <p className="label-caps !text-rui-success">The Protocol</p>
           <h2 className="text-4xl md:text-5xl font-black tracking-tighter">Three Steps to Safety</h2>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16 relative">
-          {/* Connecting Line */}
           <div className="hidden md:block absolute top-24 left-0 w-full h-[1px] bg-rui-gray-border/50 -z-10"></div>
-
           {[
             { step: "01", title: "Initialize Contract", desc: "Define your milestones and legal terms in seconds using our automated legal layer.", icon: <FileText className="text-rui-success" /> },
             { step: "02", title: "Lock Capital", desc: "Funds are moved into institutional-grade vault protection. Protected and visible to both parties.", icon: <Lock className="text-rui-success" /> },
@@ -144,7 +183,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. Features Grid */}
+      {/* 6. Features Grid Dark */}
       <section className="w-full py-32 bg-rui-dark text-white">
         <div className="section-container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
@@ -153,7 +192,6 @@ export default function Home() {
                 <p className="text-[10px] font-black uppercase tracking-[0.4em] text-rui-success">Institutional Grade</p>
                 <h2 className="text-5xl md:text-6xl font-black tracking-tighter leading-[0.95]">Secure Vault<br />Systems</h2>
               </div>
-
               <div className="space-y-8">
                 {[
                   { title: "Smart Vault Nodes", desc: "Funds are held in individual secure nodes, never mixed, always protected." },
@@ -170,7 +208,6 @@ export default function Home() {
                 ))}
               </div>
             </div>
-
             <div className="relative">
               <div className="absolute inset-0 bg-rui-success/20 blur-[100px] rounded-full"></div>
               <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 p-10 rounded-[40px] space-y-8">
@@ -196,7 +233,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. Call to Action */}
+      {/* 7. CTA */}
       <section className="w-full py-40 text-center section-container">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -206,17 +243,13 @@ export default function Home() {
           <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none">Ready for the<br /><span className="text-rui-success">Future of Work?</span></h2>
           <p className="text-lg text-rui-gray-muted max-w-xl mx-auto font-medium">Join 10,000+ top-tier freelancers who protect their business with FreelanceGuard.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Link to="/register" className="px-12 py-5 bg-rui-dark text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-success transition-all shadow-2xl">
-              Register
-            </Link>
-            <Link to="/login" className="px-12 py-5 bg-white border border-rui-gray-border text-rui-dark rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-light transition-all">
-              Login
-            </Link>
+            <Link to="/register" className="px-12 py-5 bg-rui-dark text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-success transition-all shadow-2xl">Register</Link>
+            <Link to="/login" className="px-12 py-5 bg-white border border-rui-gray-border text-rui-dark rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rui-light transition-all">Login</Link>
           </div>
         </motion.div>
       </section>
 
-      {/* 7. Footer */}
+      {/* 8. Footer */}
       <footer className="w-full section-container py-20 border-t border-rui-gray-border/50 flex flex-col md:flex-row justify-between items-center gap-10">
         <div className="text-lg font-black tracking-tighter flex items-center gap-3">
           <img src="logo.png" alt="Logo" className="w-6 h-6 object-contain" />

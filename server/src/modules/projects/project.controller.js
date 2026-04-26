@@ -2,7 +2,7 @@ import prisma from "../../config/database.js";
 // create->project
 export const createProject = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, budget } = req.body;
     const clientId = req.user.id;
     if (!title || !description) {
       return res.status(400).json({ message: "All fields required" });
@@ -11,6 +11,7 @@ export const createProject = async (req, res) => {
       data: {
         title,
         description,
+        budget: parseFloat(budget) || 0,
         clientId
       }
     });
@@ -88,4 +89,42 @@ export const getProjectStats = async (req, res) => {
       "breakdown": breakdown
     }
   )
+}
+
+// get->single project by ID
+export const getProjectById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const project = await prisma.project.findUnique({
+      where: { id },
+      include: {
+        client: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        },
+        bids: {
+          include: {
+            freelancer: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.status(200).json(project);
+  } catch (error) {
+    console.error("Error fetching project:", error);
+    return res.status(500).json({ message: "Server Error" });
+  }
 }
