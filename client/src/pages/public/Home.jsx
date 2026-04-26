@@ -195,6 +195,70 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 5. Pricing Section */}
+      <section className="w-full max-w-5xl mx-auto px-6 py-24 md:py-40 border-t border-gray-50" id="pricing">
+        <div className="text-center space-y-4 mb-20">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-rui-dark">Transparent, volume-based pricing</h2>
+          <p className="text-gray-500 font-medium max-w-xl mx-auto">One simple fee to secure your entire project lifecycle. No hidden charges.</p>
+        </div>
+        
+        <div className="max-w-md mx-auto bg-white border border-gray-100 rounded-[32px] p-8 md:p-12 text-center shadow-2xl shadow-gray-200/50 space-y-8">
+          <div className="space-y-2">
+            <p className="text-[10px] font-black text-rui-success uppercase tracking-[0.2em]">Institutional Tier</p>
+            <div className="flex items-baseline justify-center gap-1">
+              <span className="text-5xl font-bold text-rui-dark">1%</span>
+              <span className="text-gray-400 font-medium">per release</span>
+            </div>
+          </div>
+          
+          <ul className="text-left space-y-4 py-8 border-y border-gray-50">
+            {[
+              "Unlimited milestone contracts",
+              "Institutional escrow protection",
+              "Structured dispute resolution",
+              "Legal document vault storage",
+              "Priority network support"
+            ].map((item, i) => (
+              <li key={i} className="flex items-center gap-3 text-sm font-medium text-gray-600">
+                <CheckCircle2 size={16} className="text-rui-success" /> {item}
+              </li>
+            ))}
+          </ul>
+          
+          <Link to="/register" className="block w-full py-4 bg-rui-dark text-white rounded-xl font-bold hover:bg-black transition-all active:scale-[0.98]">
+            Get started now
+          </Link>
+        </div>
+      </section>
+
+      {/* 5.5 Docs/FAQ Section */}
+      <section className="w-full max-w-5xl mx-auto px-6 py-24 md:py-40 border-t border-gray-50" id="docs">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold tracking-tight text-rui-dark">Institutional Security FAQ</h2>
+            <p className="text-gray-500 font-medium leading-relaxed">Everything you need to know about how the FreelanceGuard protocol protects your capital and your work.</p>
+            <div className="pt-4">
+              <button className="inline-flex items-center gap-2 text-rui-success font-bold text-sm hover:gap-3 transition-all">
+                Access full documentation <ArrowRight size={16} />
+              </button>
+            </div>
+          </div>
+          
+          <div className="space-y-10">
+            {[
+              { q: "How secure is the vault?", a: "Funds are held in segregated, institutional-grade escrow nodes. Access requires multi-party milestone verification." },
+              { q: "What happens in a dispute?", a: "Our structured resolution layer allows both parties to upload evidence. An impartial mediator reviews the history to release funds fairly." },
+              { q: "Are contracts legally binding?", a: "Yes. Every project includes a legally-binding digital signature layer, and all documents are hashed and stored in your private vault." }
+            ].map((faq, i) => (
+              <div key={i} className="space-y-3">
+                <h4 className="text-base font-bold text-rui-dark">{faq.q}</h4>
+                <p className="text-sm text-gray-500 leading-relaxed font-medium">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 6. CTA Banner */}
       <section className="w-full px-4 md:px-6 py-20 md:py-32">
         <div className="max-w-7xl mx-auto bg-rui-success rounded-3xl md:rounded-[40px] p-10 md:p-32 text-center text-white space-y-8 md:space-y-12 shadow-2xl shadow-rui-success/20">
