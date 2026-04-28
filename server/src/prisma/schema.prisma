@@ -20,8 +20,8 @@ model User {
   contracts     Contract[] @relation("FreelancerContracts")
   disputes      Dispute[]  @relation("RaisedBy")
   projects      Project[]  @relation("ClientProjects")
+  evidence      Evidence[]
   kyc KYC?
-
 }
 
 model Project {
@@ -82,11 +82,25 @@ model Dispute {
   milestoneId String
   raisedById  String
   reason      String
-  status      String    @default("OPEN")
+  status      String    @default("OPEN") // OPEN, RESOLVED, ARBITRATION
   resolution  String?
   createdAt   DateTime  @default(now())
   milestone   Milestone @relation(fields: [milestoneId], references: [id])
   raisedBy    User      @relation("RaisedBy", fields: [raisedById], references: [id])
+  evidence    Evidence[]
+}
+
+model Evidence {
+  id           String   @id @default(uuid())
+  disputeId    String
+  uploadedById String
+  fileUrl      String
+  fileName     String
+  fileType     String?
+  createdAt    DateTime @default(now())
+
+  dispute      Dispute @relation(fields: [disputeId], references: [id])
+  uploadedBy   User    @relation(fields: [uploadedById], references: [id])
 }
 
 model Bid {
