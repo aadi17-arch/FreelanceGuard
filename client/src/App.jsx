@@ -12,12 +12,14 @@ import KYC from "./pages/kyc/KYC";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
+import DisputeDetails from "./pages/disputes/DisputeDetails";
+import DisputesList from "./pages/disputes/DisputesList";
 
 function App() {
   return (
     <Router>
-      <Toaster 
-        position="top-right" 
+      <Toaster
+        position="top-right"
         reverseOrder={false}
         toastOptions={{
           style: {
@@ -51,7 +53,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
+
         {/* Protected Routes with Sidebar Layout */}
         <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><Dashboard /></DashboardLayout></ProtectedRoute>} />
         <Route path="/create-project" element={<ProtectedRoute><DashboardLayout><CreateProject /></DashboardLayout></ProtectedRoute>} />
@@ -60,6 +62,20 @@ function App() {
         <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></DashboardLayout></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
         <Route path="/kyc" element={<ProtectedRoute><DashboardLayout><KYC /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/dispute/:id" element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <DisputeDetails />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } />
+        <Route path="/disputes" element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <DisputesList />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } />
       </Routes>
     </Router>
   );

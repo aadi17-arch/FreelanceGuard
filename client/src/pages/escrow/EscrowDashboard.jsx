@@ -9,17 +9,24 @@ import {
   Lock,
   ChevronRight,
   Circle,
-  AlertCircle
+  AlertCircle,
+  ShieldAlert,
+  Scale
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Modal from "../../components/ui/Modal";
+import RaiseDisputeModal from "../../components/disputes/RaiseDisputeModal";
+import { useNavigate } from "react-router-dom";
 
 export default function EscrowDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [contracts, setContracts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
   const [selectedContractId, setSelectedContractId] = useState(null);
+  const [selectedMilestone, setSelectedMilestone] = useState(null);
   const [releasingId, setReleasingId] = useState(null);
 
   useEffect(() => {
@@ -66,6 +73,13 @@ export default function EscrowDashboard() {
         message="By confirming, you authorize the immediate transfer of held funds. This transaction is final and irreversible."
         confirmText="Confirm Release"
         cancelText="Abort"
+      />
+
+      <RaiseDisputeModal 
+        isOpen={isDisputeModalOpen}
+        onClose={() => setIsDisputeModalOpen(false)}
+        milestoneId={selectedMilestone?.id}
+        milestoneTitle={selectedMilestone?.title}
       />
 
       {/* Header */}
@@ -115,14 +129,15 @@ export default function EscrowDashboard() {
             </div>
             <div className="overflow-x-auto no-scrollbar">
             <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="">
-                  <th className="px-0 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Project</th>
-                  <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Client</th>
-                  <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 text-right">Held</th>
-                  <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Status</th>
-                </tr>
-              </thead>
+                  <thead>
+                    <tr className="">
+                      <th className="px-0 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Project</th>
+                      <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Counterparty</th>
+                      <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 text-right">Held</th>
+                      <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 text-center">Status</th>
+                      <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 text-right">Protection</th>
+                    </tr>
+                  </thead>
               <tbody className="">
                 {contracts.map((escrow) => (
                   <tr key={escrow.id} className="group hover:bg-gray-50/50 transition-colors">
@@ -139,12 +154,47 @@ export default function EscrowDashboard() {
                         ${escrow.totalAmount?.toLocaleString()}
                       </p>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 text-center">
                       <span className={`px-2.5 py-1 rounded-full text-[8px] font-black uppercase tracking-wider border ${
-                        escrow.status === 'COMPLETED' ? 'bg-gray-100 text-gray-500 border-gray-200' : 'bg-rui-success/10 text-rui-success border-rui-success/20'
+                        escrow.status === 'COMPLETED' ? 'bg-gray-100 text-gray-500 border-gray-200' : 
+                        escrow.status === 'DISPUTED' ? 'bg-amber-100 text-amber-600 border-amber-200 shadow-sm' :
+                        'bg-rui-success/10 text-rui-success border-rui-success/20'
                       }`}>
                         {escrow.status}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex justify-end gap-2">
+                        {/* Contextual Actions */}
+                        {escrow.status === 'ACTIVE' && (
+                          <button 
+                            onClick={() => {
+                              setSelectedMilestone({ id: escrow.id, title: escrow.project?.title });
+                              setIsDisputeModalOpen(true);
+                            }}
+                            className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 text-amber-600 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-amber-500 hover:text-white transition-all group/btn shadow-sm"
+                          >
+                            <ShieldAlert className="w-3 h-3 transition-transform group-hover/btn:scale-110" />
+                            Raise Dispute
+                          </button>
+                        )}
+                        
+                        {escrow.status === 'DISPUTED' && (
+                          <button 
+                            onClick={() => navigate(`/dispute/${escrow.dispute?.id}`)}
+                            className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 text-blue-600 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all group/btn shadow-sm"
+                          >
+                            <Scale className="w-3 h-3 transition-transform group-hover/btn:scale-110" />
+                            View Case
+                          </button>
+                        )}
+
+                        {escrow.status === 'COMPLETED' && (
+                          <span className="text-[9px] font-bold text-gray-300 uppercase tracking-widest px-3 py-1.5">
+                            Protected
+                          </span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

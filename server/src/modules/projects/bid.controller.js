@@ -4,9 +4,23 @@ export const createBid = async (req, res) => {
   try {
     const { projectId, amount, proposal } = req.body;
     const freelancerId = req.user.id;
+
     if (!projectId || !amount || !proposal) {
       return res.status(400).json({ message: "All Fields Required" });
     }
+
+    // New Protection: Check for existing bid
+    const existingBid = await prisma.bid.findFirst({
+      where: {
+        projectId,
+        freelancerId
+      }
+    });
+
+    if (existingBid) {
+      return res.status(400).json({ message: "You have already submitted a proposal for this project." });
+    }
+
     const bid = await prisma.bid.create({
       data: {
         projectId,

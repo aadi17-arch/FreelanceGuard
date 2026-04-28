@@ -6,6 +6,7 @@ import projectRoutes from "./modules/projects/project.routes.js";
 import bidRoutes from "./modules/projects/bid.routes.js";
 import escrowRoutes from "./modules/escrow/escrow.routes.js"
 import kycRoutes from "./modules/kyc/kyc.routes.js";
+import disputeRoutes from "./modules/dispute/dispute.routes.js";
 
 dotenv.config();
 
@@ -30,10 +31,20 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/bids", bidRoutes);
 app.use("/api/escrow", escrowRoutes);
 app.use("/api/kyc", kycRoutes);
+app.use("/api/dispute", disputeRoutes);
 
 
 app.get('/', (req, res) => {
   res.send('FreelanceGuard API is running...');
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error("GLOBAL ERROR:", err);
+  res.status(err.status || 500).json({
+    message: err.message || "An unexpected server error occurred",
+    error: err.name || "InternalError"
+  });
 });
 
 const server = app.listen(port, () => {
