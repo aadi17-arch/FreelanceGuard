@@ -242,12 +242,19 @@ export default function ProjectDetails() {
                     <p className="text-xs text-gray-500 leading-relaxed italic border-l-2 border-rui-gray-border/20 pl-4 mb-4 line-clamp-3">
                       "{bid.proposal}"
                     </p>
-                    <button 
-                      onClick={() => handleHire(bid)}
-                      className="w-full py-2 bg-rui-light text-rui-dark rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-rui-dark hover:text-white transition-all"
-                    >
-                      Hire {bid.freelancer?.name?.split(' ')[0]}
-                    </button>
+                    
+                    {project.status === 'OPEN' ? (
+                      <button 
+                        onClick={() => handleHire(bid)}
+                        className="w-full py-2 bg-rui-light text-rui-dark rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-rui-dark hover:text-white transition-all"
+                      >
+                        Hire {bid.freelancer?.name?.split(' ')[0]}
+                      </button>
+                    ) : (
+                      <div className="w-full py-2 bg-rui-success/5 text-rui-success rounded-lg text-[9px] font-black uppercase tracking-widest text-center border border-rui-success/20">
+                        {project.contracts?.some(c => c.freelancerId === bid.freelancerId) ? 'Contract Awarded' : 'Closed'}
+                      </div>
+                    )}
                   </motion.div>
                 ))}
                 {project?.bids?.length === 0 && (

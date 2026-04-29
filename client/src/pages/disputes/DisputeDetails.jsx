@@ -33,13 +33,18 @@ const DisputeDetails = () => {
     try {
       setLoading(true);
       console.log("FETCHING VAULT ID:", id);
-      const response = await axios.get(`http://localhost:5001/api/dispute/${id}`, {
+      const response = await axios.get(`/dispute/${id}`, {
         withCredentials: true
       });
       console.log("VAULT DATA:", response.data);
+      if (!response.data || !response.data.id) {
+        toast.error("Vault data corrupted or incomplete");
+      }
       setDispute(response.data);
     } catch (error) {
       console.error("Vault sync failure:", error);
+      const errorMsg = error.response?.data?.error || error.response?.data?.message || error.message;
+      toast.error(`Sync Failure: ${errorMsg}`);
     } finally {
       setLoading(false);
     }
@@ -56,7 +61,7 @@ const DisputeDetails = () => {
     formData.append('fileName', evidenceDesc);
 
     try {
-      await axios.post(`http://localhost:5001/api/dispute/evidence/${id}`, formData, {
+      await axios.post(`/dispute/evidence/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true
       });

@@ -123,6 +123,8 @@ export const addEvidence = async (req, res) => {
 export const getDisputeDetails = async (req, res) => {
   try {
     const id = req.params.id;
+    console.log(`--- FETCHING DISPUTE: ${id} ---`);
+    
     const dispute = await prisma.dispute.findUnique({
       where: { id: id },
       include: {
@@ -142,16 +144,23 @@ export const getDisputeDetails = async (req, res) => {
         },
         raisedBy: true
       }
-
     });
+
     if (!dispute) {
-      return res.status(400).json({ message: "Dispute not found" });
+      console.log(`[ERROR] Dispute NOT FOUND for ID: ${id}`);
+      return res.status(404).json({ message: "Dispute not found in vault" });
     }
+
+    console.log(`[SUCCESS] Dispute found. Milestone Amount: ${dispute.milestone?.amount}`);
     res.status(200).json(dispute);
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("[CRITICAL] Dispute Fetch Error:", error);
+    res.status(500).json({ 
+      message: "Server Protocol Failure", 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 }
 

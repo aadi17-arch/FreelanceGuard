@@ -35,6 +35,7 @@ export default function Sidebar({ onClose }) {
     
     { name: "Contracts", path: "/contracts", icon: <FileText size={14} />, section: "LEGAL" },
     { name: "Disputes", path: "/disputes", icon: <AlertTriangle size={14} />, section: "LEGAL" },
+    { name: "Identity", path: "/kyc", icon: <ShieldCheck size={14} />, section: "LEGAL" },
   ];
 
   const sections = ["MAIN", "FINANCIALS", "LEGAL"];

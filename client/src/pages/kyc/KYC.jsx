@@ -10,7 +10,8 @@ import {
   AlertCircle,
   ArrowRight,
   Fingerprint,
-  Lock
+  Lock,
+  Clock
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -64,21 +65,105 @@ export default function KYC() {
 
   if (user?.kyc?.status === "PENDING") {
     return (
-      <div className="flex flex-col items-center justify-center py-20 space-y-8">
-        <div className="relative">
-          <div className="w-24 h-24 rounded-full border-2 border-rui-blue/20 border-t-rui-blue animate-spin"></div>
-          <div className="absolute inset-0 flex items-center justify-center text-rui-blue">
-            <Lock size={32} />
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="max-w-4xl mx-auto space-y-12 py-10"
+      >
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-gray-100 pb-10">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-amber-600">
+              <Clock size={14} strokeWidth={3} className="animate-pulse" />
+              <p className="text-[10px] font-black uppercase tracking-[0.2em]">Verification In Progress</p>
+            </div>
+            <h1 className="text-4xl font-black tracking-tight">Vault Review</h1>
+            <p className="text-sm text-zinc-500 font-medium">Your identity protocol is currently being audited by the compliance node.</p>
+          </div>
+          <div className="bg-amber-50 border border-amber-200 px-6 py-4 rounded-2xl flex items-center gap-4 shadow-sm">
+            <div className="w-10 h-10 bg-amber-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-amber-600/20">
+              <ShieldCheck size={20} />
+            </div>
+            <div>
+              <p className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Est. Completion</p>
+              <p className="text-xs font-bold text-amber-600 uppercase">24-48 Hours</p>
+            </div>
           </div>
         </div>
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold tracking-tight">Verification in Progress</h2>
-          <p className="text-gray-500 max-w-sm mx-auto text-sm">
-            Your identity documents are currently being processed by our compliance node. 
-            Access will be granted within 24-48 hours.
-          </p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-white border border-gray-200 rounded-[32px] p-8 shadow-xl shadow-zinc-900/5 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-amber-500" />
+              <div className="flex justify-between items-center mb-8">
+                <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 flex items-center gap-2">
+                  <FileText size={14} className="text-zinc-900" />
+                  Submitted {user.kyc.documentType}
+                </h3>
+                <span className="text-[10px] font-black text-amber-600 bg-amber-50 px-3 py-1 rounded-full uppercase tracking-widest border border-amber-100">
+                  Awaiting Audit
+                </span>
+              </div>
+              
+              <div className="relative rounded-2xl overflow-hidden border border-gray-100 bg-gray-50 group-hover:border-amber-500 transition-all duration-500">
+                {user.kyc.documentUrl ? (
+                  <img 
+                    src={`http://localhost:5001/${user.kyc.documentUrl.replace(/\\/g, '/')}`} 
+                    alt="KYC Document" 
+                    className="w-full aspect-video object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                  />
+                ) : (
+                  <div className="w-full aspect-video flex items-center justify-center bg-gray-100 text-gray-400 text-[10px] font-black uppercase tracking-widest">
+                    Scan Not Found in Vault
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="text-white space-y-1">
+                    <p className="text-xs font-black uppercase tracking-widest">Encrypted Vault Storage</p>
+                    <p className="text-[10px] text-white/70 font-medium italic">SECURE_HASH: {user.kyc.id.slice(0, 16)}...</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                  <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-1">Submission Date</p>
+                  <p className="text-xs font-bold text-zinc-900">{new Date(user.kyc.createdAt).toLocaleDateString()}</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                  <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-1">Audit Mode</p>
+                  <p className="text-xs font-bold text-zinc-900 uppercase">Standard Manual</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-zinc-900 text-white rounded-[32px] p-8 shadow-2xl shadow-zinc-900/20 space-y-6">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-amber-500">Next Steps</h3>
+              <div className="space-y-6">
+                {[
+                  { step: "01", title: "Compliance Check", status: "Active", desc: "Agent verifying document legibility and security features." },
+                  { step: "02", title: "Database Sync", status: "Queued", desc: "Cross-referencing global sanctions and security lists." },
+                  { step: "03", title: "Gavel Strike", status: "Pending", desc: "Final approval and account limit expansion." }
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-4 group">
+                    <div className="text-lg font-black text-zinc-700 group-hover:text-amber-500 transition-colors">{item.step}</div>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <p className="text-[11px] font-black uppercase tracking-wider">{item.title}</p>
+                        <span className={`text-[8px] font-black px-1.5 py-0.5 rounded ${
+                          item.status === 'Active' ? 'bg-amber-500/20 text-amber-500' : 'bg-zinc-800 text-zinc-500'
+                        }`}>{item.status}</span>
+                      </div>
+                      <p className="text-[10px] text-zinc-500 font-medium leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 

@@ -62,6 +62,13 @@ export default function EscrowDashboard() {
 
   const totalSecured = contracts.reduce((acc, curr) => acc + (curr.totalAmount || 0), 0);
   const activeContracts = contracts.filter(c => c.status !== 'COMPLETED').length;
+  
+  // Dynamic Calculation of Live Stats
+  const inDisputeAmount = contracts
+    .filter(c => c.status === 'DISPUTED')
+    .reduce((acc, curr) => acc + (curr.totalAmount || 0), 0);
+    
+  const openCases = contracts.filter(c => c.status === 'DISPUTED').length;
 
   return (
     <div className="space-y-8 pb-20">
@@ -103,16 +110,18 @@ export default function EscrowDashboard() {
         </div>
         <div className="p-5 md:p-0 bg-white md:bg-transparent rounded-2xl md:rounded-none border md:border-0 border-gray-100 shadow-sm md:shadow-none space-y-2">
           <p className="label-caps !text-[9px] !text-gray-400">Released this month</p>
-          <p className="text-xl font-financial font-bold text-rui-dark">$8,250</p>
+          <p className="text-xl font-financial font-bold text-rui-dark">$0</p>
           <span className="inline-block px-2 py-0.5 rounded-full bg-rui-blue/10 text-rui-blue text-[8px] font-black uppercase tracking-wider">
-            3 transactions
+            0 transactions
           </span>
         </div>
         <div className="p-5 md:p-0 bg-white md:bg-transparent rounded-2xl md:rounded-none border md:border-0 border-gray-100 shadow-sm md:shadow-none space-y-2">
           <p className="label-caps !text-[9px] !text-gray-400">In Dispute</p>
-          <p className="text-xl font-financial font-bold text-rui-dark">$2,000</p>
+          <p className="text-xl font-financial font-bold text-rui-dark">
+            ${inDisputeAmount.toLocaleString()}
+          </p>
           <span className="inline-block px-2 py-0.5 rounded-full bg-rui-warning/10 text-rui-warning text-[8px] font-black uppercase tracking-wider">
-            2 open cases
+            {openCases} open cases
           </span>
         </div>
       </div>

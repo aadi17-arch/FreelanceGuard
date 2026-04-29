@@ -21,11 +21,35 @@ export default function Dashboard() {
     activeProjects: 0,
     totalEscrow: 0,
     pendingMilestones: 0,
+    openDisputes: 0
   });
+  const [recentActivity, setRecentActivity] = useState([]);
 
   useEffect(() => {
-    // Logic to fetch dashboard stats would go here
+    fetchDashboardStats();
   }, []);
+
+  const fetchDashboardStats = async () => {
+    try {
+      const res = await axios.get("/escrow");
+      const contracts = res.data || [];
+      
+      const totalSecured = contracts.reduce((acc, curr) => acc + (curr.totalAmount || 0), 0);
+      const active = contracts.filter(c => c.status !== 'COMPLETED').length;
+      const pending = contracts.filter(c => c.status === 'PENDING').length;
+      const disputed = contracts.filter(c => c.status === 'DISPUTED').length;
+
+      setStats({
+        activeProjects: active,
+        totalEscrow: totalSecured,
+        pendingMilestones: pending,
+        openDisputes: disputed
+      });
+      setRecentActivity(contracts.slice(0, 3));
+    } catch (err) {
+      console.error("Dashboard sync error:", err);
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -100,7 +124,7 @@ export default function Dashboard() {
           { label: "Active Contracts", value: stats.activeProjects, icon: <FileText size={14} />, color: "text-rui-blue", bg: "bg-rui-blue/10" },
           { label: "Vault Balance", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck size={14} />, color: "text-rui-success", bg: "bg-rui-success/10" },
           { label: "Pending Approvals", value: stats.pendingMilestones, icon: <Clock size={14} />, color: "text-rui-warning", bg: "bg-rui-warning/10" },
-          { label: "Open Disputes", value: 0, icon: <AlertTriangle size={14} />, color: "text-rui-danger", bg: "bg-rui-danger/10" },
+          { label: "Open Disputes", value: stats.openDisputes, icon: <AlertTriangle size={14} />, color: "text-rui-danger", bg: "bg-rui-danger/10" },
         ].map((stat, i) => (
           <div key={i} className="bg-[var(--color-background-primary)] border border-[var(--color-border-tertiary)] rounded-[var(--border-radius-lg)] p-[16px] sm:p-[18px]">
              <p className="text-[11px] text-[var(--color-text-secondary)] font-medium uppercase tracking-[0.6px] mb-2">{stat.label}</p>
@@ -119,20 +143,25 @@ export default function Dashboard() {
             </div>
             
             <div className="bg-[var(--color-background-primary)] border border-[var(--color-border-tertiary)] rounded-[var(--border-radius-lg)] shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
-               {[1, 2, 3].map((item, index) => (
-                 <div key={item} className={`p-[16px] flex items-center justify-between hover:bg-[var(--color-background-secondary)] transition-colors group cursor-pointer ${index !== 2 ? 'border-b border-[var(--color-border-tertiary)]' : ''}`}>
+               {recentActivity.length > 0 ? recentActivity.map((item, index) => (
+                 <div key={item.id} className={`p-[16px] flex items-center justify-between hover:bg-[var(--color-background-secondary)] transition-colors group cursor-pointer ${index !== recentActivity.length - 1 ? 'border-b border-[var(--color-border-tertiary)]' : ''}`}>
                     <div className="flex items-center gap-3">
                        <div className="w-8 h-8 rounded-md bg-rui-success/10 flex items-center justify-center text-rui-success shrink-0">
                           <CheckCircle2 size={14} />
                        </div>
                        <div>
-                          <p className="text-[13px] font-medium text-[var(--color-text-primary)]">Milestone Payment Released</p>
-                          <p className="text-[11px] text-[var(--color-text-secondary)] mt-0.5">Project Alpha · <span className="font-mono">2 hours ago</span></p>
+                          <p className="text-[13px] font-medium text-[var(--color-text-primary)]">Protocol Established: {item.project?.title}</p>
+                          <p className="text-[11px] text-[var(--color-text-secondary)] mt-0.5">Contract Active · <span className="font-mono">{new Date(item.createdAt).toLocaleDateString()}</span></p>
                        </div>
                     </div>
                     <ArrowUpRight size={14} className="text-[var(--color-text-tertiary)] group-hover:text-[var(--color-text-primary)] transition-colors" />
                  </div>
-               ))}
+               )) : (
+                <div className="p-12 text-center space-y-2">
+                   <Clock className="w-8 h-8 text-gray-200 mx-auto" />
+                   <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">No recent activity logged</p>
+                </div>
+               )}
             </div>
          </motion.div>
 

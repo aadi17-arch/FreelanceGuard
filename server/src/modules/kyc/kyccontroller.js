@@ -13,23 +13,22 @@ export const submitKYC = async (req, res) => {
     if (existingKYC) {
       return res.status(400).json({ message: "KYC already Submitted" });
     }
-    const user = await prisma.kYC.create({
+    const kycRecord = await prisma.kYC.create({
       data: {
         userId: userID,
         documentType: req.body.documentType,
-        documentUrl: req.file.path,
+        documentUrl: req.file.path.replace(/\\/g, '/'),
         status: "PENDING"
       }
     });
     res.status(201).json({
-      message: "Document uploaded seccessfully",
+      message: "Document uploaded successfully",
       user: {
         userId: userID,
-        documentType: user.documentType,
-        documentUrl: user.documentUrl
+        documentType: kycRecord.documentType,
+        documentUrl: kycRecord.documentUrl
       }
-    }
-    );
+    });
   }
   catch (error) {
     console.error("KYC Submission Error:", error);

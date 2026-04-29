@@ -17,8 +17,9 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { name, email, password, role } = formData;
     try {
-      await register(formData);
+      await register(name, email, password, role);
       toast.success("Account created successfully!");
       navigate("/dashboard");
     } catch (err) {
