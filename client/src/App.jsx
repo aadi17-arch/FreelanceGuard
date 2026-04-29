@@ -14,6 +14,23 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
 import DisputeDetails from "./pages/disputes/DisputeDetails";
 import DisputesList from "./pages/disputes/DisputesList";
+import { Zap, Clock } from "lucide-react";
+
+// Simple Placeholder for upcoming features
+const OperationalPlaceholder = ({ title }) => (
+  <div className="min-h-[400px] flex flex-col items-center justify-center gap-6">
+    <div className="w-16 h-16 bg-zinc-50 rounded-[2.5rem] flex items-center justify-center text-zinc-200 shadow-inner">
+       <Zap size={32} />
+    </div>
+    <div className="text-center space-y-2">
+       <h2 className="text-xl font-black text-zinc-900 uppercase tracking-tight">{title}</h2>
+       <div className="flex items-center justify-center gap-2 text-emerald-500">
+          <Clock size={12} className="animate-pulse" />
+          <p className="text-[10px] font-black uppercase tracking-[0.3em]">Node Synchronization Pending</p>
+       </div>
+    </div>
+  </div>
+);
 
 function App() {
   return (
@@ -34,19 +51,7 @@ function App() {
             border: '1px solid rgba(255,255,255,0.1)',
             backdropFilter: 'blur(10px)',
             boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
-          },
-          success: {
-            iconTheme: {
-              primary: '#1D9E75',
-              secondary: '#ffffff',
-            },
-          },
-          error: {
-            iconTheme: {
-              primary: '#ef4444',
-              secondary: '#ffffff',
-            },
-          },
+          }
         }}
       />
       <Routes>
@@ -54,28 +59,25 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected Routes with Sidebar Layout */}
+        {/* Core Operational Routes */}
         <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><Dashboard /></DashboardLayout></ProtectedRoute>} />
         <Route path="/create-project" element={<ProtectedRoute><DashboardLayout><CreateProject /></DashboardLayout></ProtectedRoute>} />
         <Route path="/marketplace" element={<ProtectedRoute><DashboardLayout><Market /></DashboardLayout></ProtectedRoute>} />
         <Route path="/project/:id" element={<ProtectedRoute><DashboardLayout><ProjectDetails /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
         <Route path="/kyc" element={<ProtectedRoute><DashboardLayout><KYC /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/dispute/:id" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <DisputeDetails />
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
-        <Route path="/disputes" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <DisputesList />
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
+        
+        {/* Dispute & Resolution */}
+        <Route path="/disputes" element={<ProtectedRoute><DashboardLayout><DisputesList /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/dispute/:id" element={<ProtectedRoute><DashboardLayout><DisputeDetails /></DashboardLayout></ProtectedRoute>} />
+
+        {/* Restored Strategic Roadmap Routes (Placeholders) */}
+        <Route path="/contracts" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Active Contracts" /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/proposals" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Bids & Proposals" /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Network Analytics" /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/messages" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Secure Messaging" /></DashboardLayout></ProtectedRoute>} />
+
       </Routes>
     </Router>
   );

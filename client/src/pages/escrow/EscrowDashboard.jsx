@@ -1,256 +1,218 @@
-import { useState, useEffect } from "react";
-import { useAuth } from "../../context/AuthContext";
-import axios from "axios";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, 
+  Wallet, 
+  ArrowUpRight, 
+  Clock, 
+  Plus, 
+  Lock, 
+  Scale, 
   CheckCircle2, 
-  RefreshCw,
-  Lock,
-  ChevronRight,
-  Circle,
-  AlertCircle,
   ShieldAlert,
-  Scale
-} from "lucide-react";
-import toast from "react-hot-toast";
-import Modal from "../../components/ui/Modal";
-import RaiseDisputeModal from "../../components/disputes/RaiseDisputeModal";
-import { useNavigate } from "react-router-dom";
+  ChevronRight,
+  Fingerprint,
+  Zap,
+  ArrowDownCircle
+} from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 
-export default function EscrowDashboard() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const [contracts, setContracts] = useState([]);
+const EscrowDashboard = () => {
+  const [escrows, setEscrows] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
-  const [selectedContractId, setSelectedContractId] = useState(null);
-  const [selectedMilestone, setSelectedMilestone] = useState(null);
-  const [releasingId, setReleasingId] = useState(null);
+  const [statusMessage, setStatusMessage] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchContracts();
+    fetchEscrows();
   }, []);
 
-  const fetchContracts = async () => {
-    setLoading(true);
+  const fetchEscrows = async () => {
     try {
+      setLoading(true);
       const res = await axios.get("/escrow");
-      setContracts(res.data || []);
+      setEscrows(res.data);
     } catch (err) {
-      console.error("Failed to fetch contracts", err);
-      toast.error("Network synchronization failed.");
+      console.error(err);
+      showStatus("Vault synchronization failure.", 'error');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleReleaseFunds = async (contractId) => {
-    if (!contractId) return;
-    setReleasingId(contractId);
-    try {
-      await axios.post(`/escrow/release/${contractId}`);
-      toast.success("Capital Released Successfully");
-      fetchContracts();
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Operation failed");
-    } finally {
-      setReleasingId(null);
-    }
+  const showStatus = (msg, type) => {
+    setStatusMessage({ msg, type });
+    setTimeout(() => setStatusMessage(null), 5000);
   };
 
-  const totalSecured = contracts.reduce((acc, curr) => acc + (curr.totalAmount || 0), 0);
-  const activeContracts = contracts.filter(c => c.status !== 'COMPLETED').length;
-  
-  // Dynamic Calculation of Live Stats
-  const inDisputeAmount = contracts
-    .filter(c => c.status === 'DISPUTED')
-    .reduce((acc, curr) => acc + (curr.totalAmount || 0), 0);
-    
-  const openCases = contracts.filter(c => c.status === 'DISPUTED').length;
+  const totalHeld = escrows.reduce((sum, e) => sum + e.totalAmount, 0);
+  const activeContracts = escrows.filter(e => e.status === 'ACTIVE').length;
+  const disputedContracts = escrows.filter(e => e.status === 'DISPUTED').length;
+
+  if (loading) return (
+    <div className="min-h-[400px] flex flex-col items-center justify-center gap-4">
+      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }}>
+        <Lock className="w-6 h-6 text-emerald-500" />
+      </motion.div>
+      <p className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-400">Authenticating Vault...</p>
+    </div>
+  );
 
   return (
-    <div className="space-y-8 pb-20">
-      <Modal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={() => handleReleaseFunds(selectedContractId)}
-        title="Execute Fund Release?"
-        message="By confirming, you authorize the immediate transfer of held funds. This transaction is final and irreversible."
-        confirmText="Confirm Release"
-        cancelText="Abort"
-      />
+    <div className="space-y-6 lg:space-y-12 pb-20">
+      {/* 1. Status Alert - Scaled */}
+      <AnimatePresence>
+        {statusMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className={`px-4 py-3 rounded-xl border flex items-center gap-3 shadow-sm ${
+              statusMessage.type === 'success' ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-amber-50 border-amber-100 text-amber-700'
+            }`}
+          >
+            <Fingerprint className="w-3.5 h-3.5 shrink-0" />
+            <span className="text-[9px] font-black uppercase tracking-wider">{statusMessage.msg}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <RaiseDisputeModal 
-        isOpen={isDisputeModalOpen}
-        onClose={() => setIsDisputeModalOpen(false)}
-        milestoneId={selectedMilestone?.id}
-        milestoneTitle={selectedMilestone?.title}
-      />
-
-      {/* Header */}
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight text-rui-dark leading-none">Vault</h1>
-        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
-          All funds held securely per project
-        </p>
-      </div>
-
-      {/* Top Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 pb-6">
-        <div className="p-5 md:p-0 bg-white md:bg-transparent rounded-2xl md:rounded-none border md:border-0 border-gray-100 shadow-sm md:shadow-none space-y-2">
-          <p className="label-caps !text-[9px] !text-gray-400">Total Secured</p>
-          <p className="text-xl font-financial font-bold text-rui-dark">
-            ${totalSecured.toLocaleString()}
-          </p>
-          <span className="inline-block px-2 py-0.5 rounded-full bg-rui-success/10 text-rui-success text-[8px] font-black uppercase tracking-wider">
-            {activeContracts} active holds
-          </span>
+      {/* 2. Scaled Header */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-4 px-1">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-emerald-500">
+             <ShieldCheck size={10} strokeWidth={3} />
+             <p className="text-[7px] font-black uppercase tracking-[0.3em]">Protected Capital</p>
+          </div>
+          <h1 className="text-xl lg:text-4xl font-black tracking-tighter text-zinc-900 uppercase leading-none">Financial Vault</h1>
         </div>
-        <div className="p-5 md:p-0 bg-white md:bg-transparent rounded-2xl md:rounded-none border md:border-0 border-gray-100 shadow-sm md:shadow-none space-y-2">
-          <p className="label-caps !text-[9px] !text-gray-400">Released this month</p>
-          <p className="text-xl font-financial font-bold text-rui-dark">$0</p>
-          <span className="inline-block px-2 py-0.5 rounded-full bg-rui-blue/10 text-rui-blue text-[8px] font-black uppercase tracking-wider">
-            0 transactions
-          </span>
-        </div>
-        <div className="p-5 md:p-0 bg-white md:bg-transparent rounded-2xl md:rounded-none border md:border-0 border-gray-100 shadow-sm md:shadow-none space-y-2">
-          <p className="label-caps !text-[9px] !text-gray-400">In Dispute</p>
-          <p className="text-xl font-financial font-bold text-rui-dark">
-            ${inDisputeAmount.toLocaleString()}
-          </p>
-          <span className="inline-block px-2 py-0.5 rounded-full bg-rui-warning/10 text-rui-warning text-[8px] font-black uppercase tracking-wider">
-            {openCases} open cases
-          </span>
+        
+        <div className="flex items-center gap-2 w-full lg:w-auto">
+           <Link to="/marketplace" className="flex-grow lg:flex-none">
+              <button className="w-full px-5 py-2.5 bg-zinc-900 text-white rounded-xl text-[9px] font-black uppercase tracking-widest active:scale-95 flex items-center justify-center gap-2">
+                 <ArrowUpRight size={12} /> Deposit
+              </button>
+           </Link>
+           <button className="px-3 py-2.5 bg-zinc-100 text-zinc-300 rounded-xl cursor-not-allowed">
+              <ArrowDownCircle size={14} />
+           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
-        {/* Main Table Area */}
-        <div className="lg:col-span-8 space-y-5">
-          <p className="label-caps !text-[10px] !text-rui-dark">Vault holdings</p>
-          <div className="w-full overflow-hidden relative bg-white md:bg-transparent rounded-2xl md:rounded-none border md:border-0 border-gray-100 p-4 md:p-0">
-            {/* Mobile Swipe Hint */}
-            <div className="md:hidden flex items-center gap-2 mb-2 text-[8px] font-black uppercase tracking-widest text-gray-400 opacity-60">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-              Swipe to view full data
+      {/* 3. Scaled Portfolio Summary */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6">
+        <div className="lg:col-span-3 bg-zinc-900 rounded-[1.5rem] lg:rounded-[2.5rem] p-6 lg:p-12 text-white relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+          <div className="relative z-10 space-y-6 lg:space-y-10">
+            <div className="flex justify-between items-start">
+               <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-xl border border-white/10">
+                  <Wallet size={16} className="text-emerald-400" />
+               </div>
+               <p className="text-[8px] font-black uppercase tracking-[0.4em] text-white/30">Secured Archive</p>
             </div>
-            <div className="overflow-x-auto no-scrollbar">
-            <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="">
-                      <th className="px-0 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Project</th>
-                      <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Counterparty</th>
-                      <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 text-right">Held</th>
-                      <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 text-center">Status</th>
-                      <th className="px-6 py-3 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 text-right">Protection</th>
-                    </tr>
-                  </thead>
-              <tbody className="">
-                {contracts.map((escrow) => (
-                  <tr key={escrow.id} className="group hover:bg-gray-50/50 transition-colors">
-                    <td className="px-0 py-4">
-                      <p className="text-sm font-bold text-rui-dark group-hover:text-rui-success transition-colors">
-                        {escrow.project?.title || "Secure Contract"}
-                      </p>
-                    </td>
-                    <td className="px-6 py-4">
-                      <p className="text-xs font-semibold text-gray-600">{escrow.project?.client?.name || "Client"}</p>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <p className="text-sm font-financial font-bold text-rui-success">
-                        ${escrow.totalAmount?.toLocaleString()}
-                      </p>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <span className={`px-2.5 py-1 rounded-full text-[8px] font-black uppercase tracking-wider border ${
-                        escrow.status === 'COMPLETED' ? 'bg-gray-100 text-gray-500 border-gray-200' : 
-                        escrow.status === 'DISPUTED' ? 'bg-amber-100 text-amber-600 border-amber-200 shadow-sm' :
-                        'bg-rui-success/10 text-rui-success border-rui-success/20'
-                      }`}>
-                        {escrow.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex justify-end gap-2">
-                        {/* Contextual Actions */}
-                        {escrow.status === 'ACTIVE' && (
-                          <button 
-                            onClick={() => {
-                              setSelectedMilestone({ id: escrow.id, title: escrow.project?.title });
-                              setIsDisputeModalOpen(true);
-                            }}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 text-amber-600 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-amber-500 hover:text-white transition-all group/btn shadow-sm"
-                          >
-                            <ShieldAlert className="w-3 h-3 transition-transform group-hover/btn:scale-110" />
-                            Raise Dispute
-                          </button>
-                        )}
-                        
-                        {escrow.status === 'DISPUTED' && (
-                          <button 
-                            onClick={() => navigate(`/dispute/${escrow.dispute?.id}`)}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 text-blue-600 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all group/btn shadow-sm"
-                          >
-                            <Scale className="w-3 h-3 transition-transform group-hover/btn:scale-110" />
-                            View Case
-                          </button>
-                        )}
+            <div>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-400/70 mb-1">Escrow Value</p>
+              <h2 className="text-3xl lg:text-7xl font-black tracking-tighter font-mono">${totalHeld.toLocaleString()}</h2>
+            </div>
+          </div>
+        </div>
 
-                        {escrow.status === 'COMPLETED' && (
-                          <span className="text-[9px] font-bold text-gray-300 uppercase tracking-widest px-3 py-1.5">
-                            Protected
-                          </span>
-                        )}
+        <div className="bg-white border border-zinc-100 rounded-[1.5rem] p-6 flex flex-col justify-between shadow-sm">
+          <div className="space-y-4">
+            <p className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-400">Node Status</p>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest">
+                <span className="text-zinc-300">Active</span>
+                <span className="text-zinc-900">{activeContracts}</span>
+              </div>
+              <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest">
+                <span className="text-zinc-300">Dispute</span>
+                <span className="text-rose-500">{disputedContracts}</span>
+              </div>
+              <div className="h-1 w-full bg-zinc-50 rounded-full overflow-hidden">
+                <motion.div initial={{ width: 0 }} animate={{ width: "85%" }} className="h-full bg-emerald-500 rounded-full" />
+              </div>
+            </div>
+          </div>
+          <div className="mt-6 pt-4 border-t border-zinc-50">
+             <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                <p className="text-[8px] font-black text-zinc-300 uppercase tracking-widest">Vault Encrypted</p>
+             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Scaled Asset Ledger */}
+      <div className="space-y-4">
+        <h3 className="text-xs font-black text-zinc-900 uppercase tracking-widest px-2">Asset Ledger</h3>
+        <div className="bg-white border border-zinc-100 rounded-[1.5rem] overflow-hidden shadow-sm">
+          <div className="hidden md:block">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-zinc-50/50">
+                  <th className="px-8 py-6 text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">Asset</th>
+                  <th className="px-8 py-6 text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">Counterparty</th>
+                  <th className="px-8 py-6 text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">Value</th>
+                  <th className="px-8 py-6 text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 text-center">Status</th>
+                  <th className="px-8 py-6 text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 text-right">Audit</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-50">
+                {escrows.map((escrow) => (
+                  <tr key={escrow.id} className="group hover:bg-zinc-50/50 transition-colors">
+                    <td className="px-8 py-6">
+                      <p className="text-[12px] font-black text-zinc-900 uppercase tracking-tight">{escrow.project?.title}</p>
+                      <p className="text-[8px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">ID: {escrow.id.slice(0, 8)}</p>
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center text-[9px] font-black text-zinc-400">
+                          {escrow.freelancer?.name?.[0]}
+                        </div>
+                        <p className="text-[11px] font-black text-zinc-900 uppercase tracking-tight">{escrow.freelancer?.name}</p>
                       </div>
+                    </td>
+                    <td className="px-8 py-6 font-black text-[12px] text-zinc-900 font-mono tracking-tighter">
+                      ${escrow.totalAmount.toLocaleString()}
+                    </td>
+                    <td className="px-8 py-6 text-center">
+                       <span className={`px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border ${
+                         escrow.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-zinc-50 text-zinc-400'
+                       }`}>
+                         {escrow.status}
+                       </span>
+                    </td>
+                    <td className="px-8 py-6 text-right">
+                       <ChevronRight size={14} className="ml-auto text-zinc-200" />
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
 
-        {/* Sidebar Allocation Area */}
-        <div className="lg:col-span-4 space-y-6">
-          <div className="space-y-5">
-            <p className="label-caps !text-[10px] !text-rui-dark">Fund allocation</p>
-            <div className="space-y-6">
-              {contracts.slice(0, 3).map((escrow, i) => (
-                <div key={escrow.id} className="space-y-2.5">
-                  <div className="flex justify-between items-end">
-                    <div className="flex items-center gap-2.5">
-                      <div className={`w-1.5 h-1.5 rounded-full ${i === 0 ? 'bg-rui-success' : i === 1 ? 'bg-rui-warning' : 'bg-rui-blue'}`} />
-                      <div>
-                        <p className="text-[10px] font-bold text-rui-dark leading-none">{escrow.project?.title}</p>
-                        <p className="text-[8px] font-bold text-gray-400 uppercase tracking-widest mt-1">
-                          {Math.round((escrow.totalAmount / totalSecured) * 100)}% of total
-                        </p>
-                      </div>
-                    </div>
-                    <p className="text-[10px] font-financial font-bold text-rui-dark">${escrow.totalAmount?.toLocaleString()}</p>
+          <div className="md:hidden divide-y divide-zinc-50">
+             {escrows.map((escrow) => (
+               <div key={escrow.id} className="p-4 space-y-3 active:bg-zinc-50 transition-colors">
+                  <div className="flex justify-between items-center">
+                     <h4 className="text-[11px] font-black text-zinc-900 uppercase tracking-tight">{escrow.project?.title}</h4>
+                     <span className={`px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase border ${escrow.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-600' : 'bg-zinc-50 text-zinc-400'}`}>
+                        {escrow.status}
+                     </span>
                   </div>
-                  <div className="h-1 bg-gray-50 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full ${i === 0 ? 'bg-rui-success' : i === 1 ? 'bg-rui-warning' : 'bg-rui-blue'}`} 
-                      style={{ width: `${(escrow.totalAmount / totalSecured) * 100}%` }}
-                    />
+                  <div className="flex justify-between items-center pt-1">
+                     <p className="text-[12px] font-black text-zinc-900 font-mono tracking-tighter">${escrow.totalAmount.toLocaleString()}</p>
+                     <button className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Audit →</button>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-rui-success/5 border border-rui-success/10 rounded-2xl p-6 space-y-3">
-            <p className="label-caps !text-[8px] !text-rui-success">Total secured in vault</p>
-            <p className="text-3xl font-financial font-bold text-rui-success tracking-tight">
-              ${totalSecured.toLocaleString()}
-            </p>
+               </div>
+             ))}
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default EscrowDashboard;

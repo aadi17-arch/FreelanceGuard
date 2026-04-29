@@ -2,13 +2,17 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Package,
   FileText,
   PenTool,
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
+  DollarSign,
+  ArrowLeft,
+  Fingerprint,
+  Zap
 } from "lucide-react";
 
 export default function CreateProject() {
@@ -17,21 +21,26 @@ export default function CreateProject() {
     description: "",
     budget: "",
   });
-  const [error, setError] = useState("");
+  const [statusMessage, setStatusMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const showStatus = (msg, type) => {
+    setStatusMessage({ msg, type });
+    setTimeout(() => setStatusMessage(null), 5000);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
       await axios.post("/projects/create", formData);
-      navigate("/dashboard");
+      showStatus("Project node established successfully.", 'success');
+      setTimeout(() => navigate("/dashboard"), 1500);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to initialize project");
+      showStatus(err.response?.data?.message || "Node initialization failed.", 'error');
     } finally {
       setLoading(false);
     }
@@ -41,124 +50,154 @@ export default function CreateProject() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
-    }
-  };
-
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      className="space-y-10 pb-20"
-    >
-      {/* Header: Balanced */}
-      <motion.header variants={itemVariants} className="space-y-3">
-        <div className="flex items-center gap-2 text-rui-success">
-          <ShieldCheck size={12} strokeWidth={3} />
-          <p className="label-caps !text-rui-success !text-[9px]">Project Initialization</p>
-        </div>
-        <h1>Post a Project</h1>
-        <p className="text-xs md:text-sm text-gray-500 font-medium max-w-lg">
-          Define your requirements to initiate a secure escrow contract on the network.
-        </p>
-      </motion.header>
+    <div className="max-w-4xl mx-auto space-y-8 lg:space-y-10 pb-20 px-4 lg:px-0">
+      {/* 1. Navigation & Status */}
+      <header className="space-y-6">
+        <Link to="/dashboard" className="inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-900 transition-colors group">
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="text-[9px] font-black uppercase tracking-[0.2em]">Dashboard</span>
+        </Link>
 
-      {/* Main Form: Professional & Normalized */}
-      <motion.div variants={itemVariants} className="bg-white border border-rui-gray-border/50 rounded-2xl overflow-hidden shadow-sm">
-        <form onSubmit={handleSubmit} className="divide-y divide-rui-gray-border/10">
-
-          {error && (
-            <div className="p-4 bg-rui-danger/5 text-rui-danger text-[9px] font-black uppercase tracking-widest text-center border-b border-rui-danger/10">
-              {error}
-            </div>
+        <AnimatePresence>
+          {statusMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`p-4 rounded-xl border flex items-center gap-3 shadow-lg ${
+                statusMessage.type === 'success' ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-rose-50 border-rose-100 text-rose-700'
+              }`}
+            >
+              <Fingerprint className="w-4 h-4" />
+              <span className="text-[10px] font-black uppercase tracking-wider">{statusMessage.msg}</span>
+            </motion.div>
           )}
+        </AnimatePresence>
 
-          {/* Title Section */}
-          <div className="p-8 md:p-10 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-rui-success/10 text-rui-success flex items-center justify-center">
-                <PenTool size={16} />
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-emerald-500">
+             <Zap size={14} fill="currentColor" />
+             <p className="text-[9px] font-black uppercase tracking-[0.3em]">Project Architecture Node</p>
+          </div>
+          <h1 className="text-2xl lg:text-3xl font-black tracking-tighter text-zinc-900 uppercase leading-none">Initialize Project</h1>
+          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] leading-loose max-w-lg">
+             Configure your mission requirements to initiate a secure escrow contract.
+          </p>
+        </div>
+      </header>
+
+      {/* 2. Compact Architect Form */}
+      <div className="bg-white border border-zinc-100 rounded-[2rem] shadow-sm overflow-hidden">
+        <form onSubmit={handleSubmit} className="divide-y divide-zinc-50">
+          
+          {/* Section 1: Identification & Allocation */}
+          <div className="p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-zinc-900 text-white flex items-center justify-center shadow-lg">
+                  <PenTool size={14} />
+                </div>
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">Mission Designation</label>
               </div>
-              <label className="label-caps !text-[10px]">Project Designation</label>
+              <input
+                type="text"
+                name="title"
+                required
+                className="w-full text-lg lg:text-xl font-black bg-transparent border-none focus:ring-0 placeholder:text-zinc-200 text-zinc-900 tracking-tight px-0"
+                placeholder="e.g. Protocol Development V2"
+                value={formData.title}
+                onChange={handleChange}
+              />
             </div>
-            <input
-              type="text"
-              name="title"
-              required
-              className="w-full text-xl md:text-2xl font-bold bg-transparent border-none focus:ring-0 placeholder:text-rui-gray-border/30 text-rui-dark tracking-tight"
-              placeholder="e.g. Website Development"
-              value={formData.title}
-              onChange={handleChange}
-            />
+
+            <div className="space-y-4 bg-zinc-50/50 p-6 rounded-2xl border border-zinc-50 lg:border-none lg:bg-transparent lg:p-0">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                  <DollarSign size={14} />
+                </div>
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">Vault Allocation</label>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-black text-zinc-300">$</span>
+                <input
+                  type="number"
+                  name="budget"
+                  required
+                  className="w-full text-lg lg:text-xl font-black bg-transparent border-none focus:ring-0 placeholder:text-zinc-200 text-zinc-900 tracking-tight"
+                  placeholder="0.00"
+                  value={formData.budget}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Description Section */}
-          <div className="p-8 md:p-10 space-y-4">
+          {/* Section 2: Scope of Operations */}
+          <div className="p-6 lg:p-8 space-y-6">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-rui-light text-rui-gray-muted flex items-center justify-center">
-                <FileText size={16} />
+              <div className="w-8 h-8 rounded-lg bg-zinc-100 text-zinc-400 flex items-center justify-center">
+                <FileText size={14} />
               </div>
-              <label className="label-caps !text-[10px]">Scope of Work</label>
+              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">Scope & Deliverables</label>
             </div>
             <textarea
               name="description"
               required
-              rows={8}
-              className="w-full text-sm md:text-base font-medium bg-transparent border-none focus:ring-0 placeholder:text-rui-gray-border/30 text-rui-dark resize-none leading-relaxed"
-              placeholder="Outline the technical requirements, deliverables, and timeline..."
+              rows={6}
+              className="w-full text-[13px] font-medium bg-transparent border-none focus:ring-0 placeholder:text-zinc-200 text-zinc-600 resize-none leading-relaxed px-0"
+              placeholder="Outline the technical requirements, operational milestones, and timeline..."
               value={formData.description}
               onChange={handleChange}
             />
           </div>
 
-          {/* Budget Section */}
-          <div className="p-8 md:p-10 space-y-4">
+          {/* Section 3: Finalization */}
+          <div className="p-6 lg:p-8 bg-zinc-50/30 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-rui-success/10 text-rui-success flex items-center justify-center">
-                <Package size={16} />
-              </div>
-              <label className="label-caps !text-[10px]">Vault Allocation (USD)</label>
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">System Status: Node Ready</span>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-2xl font-bold text-rui-gray-muted">$</span>
-              <input
-                type="number"
-                name="budget"
-                required
-                className="w-full text-xl md:text-2xl font-bold bg-transparent border-none focus:ring-0 placeholder:text-rui-gray-border/30 text-rui-dark tracking-tight"
-                placeholder="0.00"
-                value={formData.budget}
-                onChange={handleChange}
-              />
+            
+            <div className="flex items-center gap-4 w-full sm:w-auto">
+               <button 
+                 type="button"
+                 onClick={() => navigate('/dashboard')}
+                 className="flex-grow sm:flex-none px-6 py-3 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors"
+               >
+                 Cancel
+               </button>
+               <button
+                 type="submit"
+                 disabled={loading}
+                 className="flex-grow sm:flex-none px-10 py-3.5 bg-zinc-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-zinc-900/10 active:scale-95 flex items-center justify-center gap-3"
+               >
+                 {loading ? "Initializing..." : (
+                   <>
+                     Establish Node
+                     <ChevronRight size={14} strokeWidth={3} />
+                   </>
+                 )}
+               </button>
             </div>
-          </div>
-
-          {/* Action Section */}
-          <div className="p-8 md:p-10 bg-rui-light/30 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-[#1D9E75] animate-pulse"></div>
-              <span className="text-[9px] font-black uppercase tracking-widest text-[#1D9E75]">Status: System Ready</span>
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full sm:w-auto px-10 py-3.5 bg-rui-dark text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#1D9E75] transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/5"
-            >
-              {loading ? "Initializing..." : (
-                <>
-                  Post Project
-                  <ChevronRight size={14} />
-                </>
-              )}
-            </button>
           </div>
         </form>
-      </motion.div>
-    </motion.div>
+      </div>
+
+      {/* Security Context */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+         {[
+           { title: "Escrow Protocol", desc: "Funds are locked in a neutral node until verification." },
+           { title: "Legal Synchrony", desc: "Digital contract is signed upon project initiation." }
+         ].map((item, i) => (
+           <div key={i} className="bg-zinc-50/50 border border-zinc-100 p-5 rounded-2xl space-y-2">
+              <div className="flex items-center gap-2 text-zinc-900">
+                 <ShieldCheck size={12} className="text-emerald-500" />
+                 <p className="text-[10px] font-black uppercase tracking-tight">{item.title}</p>
+              </div>
+              <p className="text-[9px] text-zinc-400 font-medium leading-relaxed uppercase tracking-widest">{item.desc}</p>
+           </div>
+         ))}
+      </div>
+    </div>
   );
 }

@@ -5,13 +5,18 @@ import {
   ShieldCheck,
   LayoutDashboard, 
   Briefcase, 
-  Calendar, 
   Wallet, 
-  Landmark, 
   FileText, 
   AlertTriangle,
   LogOut,
-  X
+  X,
+  PlusCircle,
+  Search,
+  User,
+  MessageSquare,
+  ClipboardList,
+  BarChart3,
+  GanttChartSquare
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
@@ -25,125 +30,91 @@ export default function Sidebar({ onClose }) {
     navigate("/");
   };
 
+  // Restored full operational suite for strategic growth
   const navItems = [
-    { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "MAIN" },
-    { name: "Projects", path: "/marketplace", icon: <Briefcase size={14} />, section: "MAIN" },
-    { name: "Milestones", path: "/milestones", icon: <Calendar size={14} />, section: "MAIN" },
+    { name: "Overview", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "WORK" },
+    { name: "Global Market", path: "/marketplace", icon: <Search size={14} />, section: "WORK" },
+    { name: "My Contracts", path: "/contracts", icon: <GanttChartSquare size={14} />, section: "WORK" },
+    { name: "Bids & Proposals", path: "/proposals", icon: <ClipboardList size={14} />, section: "WORK" },
     
-    { name: "Vault", path: "/escrow", icon: <Wallet size={14} />, section: "FINANCIALS" },
-    { name: "Payments", path: "/payments", icon: <Landmark size={14} />, section: "FINANCIALS" },
+    { name: "Financial Vault", path: "/escrow", icon: <Wallet size={14} />, section: "FINANCES" },
+    { name: "Analytics", path: "/analytics", icon: <BarChart3 size={14} />, section: "FINANCES" },
     
-    { name: "Contracts", path: "/contracts", icon: <FileText size={14} />, section: "LEGAL" },
-    { name: "Disputes", path: "/disputes", icon: <AlertTriangle size={14} />, section: "LEGAL" },
-    { name: "Identity", path: "/kyc", icon: <ShieldCheck size={14} />, section: "LEGAL" },
+    { name: "Messages", path: "/messages", icon: <MessageSquare size={14} />, section: "SECURITY" },
+    { name: "Active Cases", path: "/disputes", icon: <AlertTriangle size={14} />, section: "SECURITY" },
+    { name: "My Profile", path: "/profile", icon: <User size={14} />, section: "SECURITY" },
+    { name: "Identity Proof", path: "/kyc", icon: <ShieldCheck size={14} />, section: "SECURITY" },
   ];
 
-  const sections = ["MAIN", "FINANCIALS", "LEGAL"];
+  const sections = ["WORK", "FINANCES", "SECURITY"];
 
   return (
-    <aside className="h-screen w-[220px] bg-background-primary border-r border-border-tertiary flex flex-col py-5 z-[60] relative">
-      {/* Close Button - Detached for better alignment */}
+    <aside className="h-screen w-[210px] bg-white border-r border-zinc-100 flex flex-col py-6 z-[60] relative">
+      {/* Mobile Close */}
       <motion.button 
         whileTap={{ scale: 0.9 }}
         onClick={onClose} 
-        className="lg:hidden absolute top-4 right-4 p-2 hover:bg-gray-50 rounded-full transition-colors z-[70]"
+        className="lg:hidden absolute top-4 right-4 p-2 hover:bg-zinc-50 rounded-full transition-colors z-[70]"
       >
-        <X size={18} className="text-gray-400" />
+        <X size={18} className="text-zinc-400" />
       </motion.button>
 
-      {/* Brand Header */}
-      <motion.div 
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="px-5 mb-3 pb-6 border-b border-border-tertiary"
-      >
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 bg-rui-success rounded flex items-center justify-center">
-            <ShieldCheck size={12} className="text-white" />
+      {/* Brand */}
+      <div className="px-6 mb-8">
+        <Link to="/dashboard" onClick={onClose} className="flex items-center gap-3 group">
+          <div className="w-6 h-6 bg-emerald-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:rotate-12 transition-transform">
+            <ShieldCheck size={14} className="text-white" />
           </div>
-          <div>
-            <h1 className="text-[14px] font-bold text-text-primary leading-none tracking-tight">
-              Freelance<span className="text-rui-success font-medium">Guard</span>
-            </h1>
-            <p className="text-[9px] font-bold text-text-tertiary uppercase tracking-widest mt-1.5 opacity-60">
-              Vault · Milestones
-            </p>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Primary Action Button: Role-Aware */}
-      <div className="px-4 mb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Link 
-            to={user?.role === "CLIENT" ? "/create-project" : "/marketplace"}
-            onClick={onClose}
-            className="w-full h-10 bg-rui-dark hover:bg-rui-success text-white rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-black/5 group"
-          >
-            {user?.role === "CLIENT" ? (
-              <>
-                <LayoutDashboard size={12} className="text-white" />
-                <span className="text-[10px] font-black uppercase tracking-wider">Post a Project</span>
-              </>
-            ) : (
-              <>
-                <Briefcase size={12} className="text-white" />
-                <span className="text-[10px] font-black uppercase tracking-wider">Find Work</span>
-              </>
-            )}
-          </Link>
-        </motion.div>
+          <span className="text-[13px] font-black text-zinc-900 tracking-tight">FreelanceGuard</span>
+        </Link>
       </div>
 
-      {/* Navigation Groups */}
-      <div className="flex-grow space-y-6 overflow-y-auto scrollbar-hide">
-        {sections.map((section, sIdx) => (
-          <div key={section} className="mb-2">
-            <motion.h3 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.4 }}
-              transition={{ delay: 0.2 + (sIdx * 0.1) }}
-              className="text-[9px] font-black text-text-tertiary px-5 py-3 tracking-[0.2em] uppercase"
-            >
+      {/* Primary Action */}
+      <div className="px-4 mb-8">
+        <Link 
+          to={user?.role === "CLIENT" ? "/create-project" : "/marketplace"}
+          onClick={onClose}
+          className="w-full h-11 bg-zinc-900 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center gap-2 transition-all duration-300 shadow-xl shadow-black/5"
+        >
+          <PlusCircle size={14} />
+          <span className="text-[10px] font-black uppercase tracking-widest">
+            {user?.role === "CLIENT" ? "New Project" : "Find Work"}
+          </span>
+        </Link>
+      </div>
+
+      {/* Navigation Groups: Full Suite */}
+      <div className="flex-grow space-y-6 overflow-y-auto no-scrollbar pb-10">
+        {sections.map((section) => (
+          <div key={section}>
+            <h3 className="text-[8px] font-black text-zinc-300 px-6 mb-2 tracking-[0.25em] uppercase">
               {section}
-            </motion.h3>
-            <ul className="space-y-0.5 flex flex-col">
-              {navItems.filter(item => item.section === section).map((item, iIdx) => {
+            </h3>
+            <ul className="space-y-0.5">
+              {navItems.filter(item => item.section === section).map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
-                  <motion.div
+                  <Link 
                     key={item.path}
-                    initial={{ opacity: 0, x: -15 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ 
-                      delay: 0.2 + (sIdx * 0.1) + (iIdx * 0.05),
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 30
-                    }}
-                    whileTap={{ x: 8, scale: 0.96 }}
+                    to={item.path}
+                    onClick={onClose}
+                    className={`flex items-center gap-3 px-6 py-2.5 text-[11px] transition-all relative group ${
+                      isActive 
+                        ? "text-zinc-900 font-bold" 
+                        : "text-zinc-400 hover:text-zinc-600"
+                    }`}
                   >
-                    <Link 
-                      to={item.path}
-                      onClick={onClose}
-                      className={`flex items-center gap-3 px-5 py-[10px] text-[12px] transition-all rounded-none ${
-                        isActive 
-                          ? "bg-background-secondary text-text-primary font-bold border-r-2 border-rui-success" 
-                          : "text-text-secondary hover:bg-background-secondary hover:text-text-primary"
-                      }`}
-                    >
-                      <div className={`opacity-60 flex-shrink-0 ${isActive ? 'text-rui-success opacity-100' : ''}`}>
-                        {item.icon}
-                      </div>
-                      <span className="font-medium tracking-tight">{item.name}</span>
-                    </Link>
-                  </motion.div>
+                    {isActive && (
+                      <motion.div 
+                        layoutId="activeTab"
+                        className="absolute left-0 w-1 h-4 bg-emerald-500 rounded-r-full"
+                      />
+                    )}
+                    <div className={`${isActive ? 'text-emerald-500' : 'opacity-40 group-hover:opacity-100'}`}>
+                      {item.icon}
+                    </div>
+                    <span className="tracking-tight whitespace-nowrap">{item.name}</span>
+                  </Link>
                 );
               })}
             </ul>
@@ -151,30 +122,33 @@ export default function Sidebar({ onClose }) {
         ))}
       </div>
 
-      {/* Bottom Profile Section */}
-      <div className="mt-auto px-4 pb-2">
-        <div className="flex items-center justify-between p-2.5 bg-background-secondary rounded-lg">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-7 h-7 rounded-full bg-rui-success/10 text-rui-success flex items-center justify-center text-[10px] font-medium border border-rui-success/10 shrink-0">
-              {user?.name?.[0] || "A"}
+      {/* Profile: Unified Access */}
+      <div className="mt-auto px-4">
+        <Link 
+          to="/profile"
+          onClick={onClose}
+          className="flex items-center justify-between p-3 bg-zinc-50 rounded-2xl border border-zinc-100 hover:bg-zinc-100 transition-all group"
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-8 h-8 rounded-xl bg-white border border-zinc-100 flex items-center justify-center text-[11px] font-black text-emerald-500 shrink-0 shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-all">
+              {user?.name?.[0] || "U"}
             </div>
             <div className="flex-grow min-w-0">
-              <p className="text-[12px] font-medium text-text-primary leading-none truncate">
-                {user?.name || "Alex Kim"}
+              <p className="text-[11px] font-black text-zinc-900 truncate uppercase tracking-tight leading-none">
+                {user?.name || "User"}
               </p>
-              <p className="text-[10px] text-text-secondary mt-0.5 truncate">
-                {user?.role || "Freelancer"}
+              <p className="text-[8px] font-bold text-zinc-400 uppercase tracking-widest mt-1.5">
+                {user?.role}
               </p>
             </div>
           </div>
           <button 
-            onClick={handleLogout}
-            className="p-1.5 text-text-secondary hover:text-rui-danger transition-all"
-            title="Sign Out"
+            onClick={(e) => { e.preventDefault(); handleLogout(); }}
+            className="p-1.5 text-zinc-300 hover:text-rose-500 transition-colors"
           >
-            <LogOut size={16} />
+            <LogOut size={14} />
           </button>
-        </div>
+        </Link>
       </div>
     </aside>
   );

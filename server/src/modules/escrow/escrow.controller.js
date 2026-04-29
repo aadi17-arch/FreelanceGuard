@@ -14,8 +14,17 @@ export const getUserContracts = async (req, res) => {
     const contracts = await prisma.contract.findMany({
       where: filter,
       include: {
-        project: true,
-        freelancer: true
+        project: {
+          include: {
+            client: { select: { name: true } }
+          }
+        },
+        freelancer: true,
+        milestones: {
+          include: {
+            disputes: true
+          }
+        }
       }
     });
     res.status(200).json(contracts);

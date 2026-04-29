@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import { useAuth } from "../../context/AuthContext";
-import { useLocation, useNavigate } from "react-router-dom";
-import { LogOut, Menu, X } from "lucide-react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { LogOut, Menu, X, Bell, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function DashboardLayout({ children }) {
@@ -18,12 +18,27 @@ export default function DashboardLayout({ children }) {
 
   const getPageTitle = () => {
     const path = location.pathname;
-    if (path === "/dashboard" || path === "/marketplace" || path === "/escrow") return null;
-    return "Management";
+    const titles = {
+      "/dashboard": "Operational Overview",
+      "/marketplace": "Global Marketplace",
+      "/escrow": "Financial Vault",
+      "/profile": "My Profile",
+      "/kyc": "Identity Verification",
+      "/contracts": "Active Contracts",
+      "/proposals": "Bids & Proposals",
+      "/analytics": "Network Analytics",
+      "/messages": "Secure Messaging",
+      "/disputes": "Resolution Center"
+    };
+    
+    if (titles[path]) return titles[path];
+    if (path.startsWith("/project/")) return "Project Details";
+    if (path.startsWith("/dispute/")) return "Resolution Center";
+    return "Management Node";
   };
 
   return (
-    <div className="flex min-h-screen bg-white font-body relative">
+    <div className="flex min-h-screen bg-white relative">
       {/* 1. Sidebar: Desktop (Fixed) & Mobile (Drawer) */}
       <AnimatePresence mode="wait">
         {isSidebarOpen && (
@@ -34,7 +49,7 @@ export default function DashboardLayout({ children }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsSidebarOpen(false)}
-              className="absolute inset-0 bg-rui-dark/40 backdrop-blur-[2px]"
+              className="absolute inset-0 bg-zinc-900/40 backdrop-blur-[2px]"
             />
             
             {/* Drawer */}
@@ -51,49 +66,58 @@ export default function DashboardLayout({ children }) {
         )}
       </AnimatePresence>
 
-      {/* Desktop Sidebar (Always visible on large screens) */}
+      {/* Desktop Sidebar */}
       <div className="hidden lg:block fixed top-0 left-0 h-screen z-[110]">
         <Sidebar />
       </div>
       
-      {/* 2. Main content area */}
-      <div className="flex-grow flex flex-col lg:ml-[220px] min-h-screen relative w-full">
-        {/* Subtle Background Glow - Removed for cleaner look */}
-
-        {/* Top Header: Clean, borderless feel */}
-        <header className="sticky top-0 z-50 bg-background-tertiary/80 backdrop-blur-md px-5 py-4 md:px-8 md:py-7 flex justify-between items-center">
-          <div className="flex items-center gap-4">
+      {/* 2. Main Content Area */}
+      <div className="flex-grow flex flex-col lg:ml-[210px] min-h-screen relative w-full overflow-x-hidden">
+        
+        {/* Scaled Global Header */}
+        <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md px-4 py-3 lg:px-8 lg:py-5 flex justify-between items-center border-b border-zinc-50">
+          <div className="flex items-center gap-4 min-w-0">
             <button 
               onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-1.5 hover:bg-background-secondary rounded-lg transition-colors"
+              className="lg:hidden p-2 hover:bg-zinc-50 rounded-xl transition-colors"
             >
-              <Menu size={18} className="text-text-primary" />
+              <Menu size={18} className="text-zinc-900" />
             </button>
-            {getPageTitle() && (
-              <div className="space-y-0.5">
-                <h2 className="text-[20px] font-semibold text-text-primary tracking-tight leading-none">{getPageTitle()}</h2>
-                <div className="hidden md:flex items-center gap-1.5 text-[13px] text-text-secondary mt-1.5">
-                  <span>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', year: 'numeric' })}</span>
-                  <span className="opacity-40">·</span>
-                  <span>All projects</span>
-                </div>
-              </div>
-            )}
+            <div className="space-y-0.5 truncate">
+               <h2 className="text-[10px] lg:text-[14px] font-black text-zinc-900 uppercase tracking-widest leading-none truncate">
+                 {getPageTitle()}
+               </h2>
+               <div className="hidden md:flex items-center gap-2 text-[9px] text-zinc-300 font-bold uppercase tracking-widest mt-1">
+                 <span>{new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</span>
+                 <span className="opacity-30">·</span>
+                 <span>Network Status: Online</span>
+               </div>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="w-[34px] h-[34px] rounded-md border border-border-tertiary bg-background-primary flex items-center justify-center cursor-pointer relative hidden sm:flex hover:bg-background-secondary transition-colors">
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1a5 5 0 015 5v3l1.5 2H1.5L3 9V6a5 5 0 015-5zM6.5 14a1.5 1.5 0 003 0" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" className="text-text-secondary"/></svg>
-              <div className="w-1.5 h-1.5 bg-rui-success rounded-full absolute top-1.5 right-1.5"></div>
+          {/* Upper Right Action Hub */}
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="hidden sm:flex w-9 h-9 rounded-xl border border-zinc-100 bg-zinc-50 items-center justify-center cursor-pointer relative hover:bg-zinc-100 transition-colors">
+              <Bell size={16} className="text-zinc-400" />
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full absolute top-2 right-2 border-2 border-zinc-50"></div>
             </div>
-            <div className="w-[34px] h-[34px] rounded-full bg-rui-success/10 border border-border-tertiary flex items-center justify-center text-[12px] font-medium text-rui-success shadow-sm">
-              {user?.name?.[0] || "A"}
-            </div>
+            
+            <Link 
+              to="/profile" 
+              className="flex items-center gap-2 p-1 pl-2 pr-1 rounded-2xl border border-zinc-100 hover:bg-zinc-50 transition-all group"
+            >
+               <span className="hidden md:block text-[8px] font-black text-zinc-400 uppercase tracking-widest group-hover:text-zinc-900 transition-colors">
+                 My Account
+               </span>
+               <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-xl bg-zinc-900 text-emerald-500 flex items-center justify-center text-[10px] lg:text-[11px] font-black shadow-lg shadow-zinc-900/10 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                 {user?.name?.[0] || "A"}
+               </div>
+            </Link>
           </div>
         </header>
 
         {/* Dynamic Page Content */}
-        <main className="px-8 pb-20 z-10 w-full overflow-x-hidden">
+        <main className="px-4 py-6 lg:px-12 lg:py-10 z-10 w-full overflow-x-hidden">
           <div className="max-w-[1400px] mx-auto">
             {children}
           </div>

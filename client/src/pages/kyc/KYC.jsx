@@ -11,9 +11,9 @@ import {
   ArrowRight,
   Fingerprint,
   Lock,
-  Clock
+  Clock,
+  Camera
 } from "lucide-react";
-import toast from "react-hot-toast";
 
 export default function KYC() {
   const { user, refreshUser } = useAuth();
@@ -21,6 +21,7 @@ export default function KYC() {
   const [file, setFile] = useState(null);
   const [documentType, setDocumentType] = useState("PASSPORT");
   const [preview, setPreview] = useState(null);
+  const [statusMessage, setStatusMessage] = useState(null);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -31,13 +32,19 @@ export default function KYC() {
         setPreview(reader.result);
       };
       reader.readAsDataURL(selectedFile);
+      showStatus("Scan Captured Successfully.", 'success');
     }
+  };
+
+  const showStatus = (msg, type) => {
+    setStatusMessage({ msg, type });
+    setTimeout(() => setStatusMessage(null), 5000);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) {
-      toast.error("Please select a document image");
+      showStatus("Please capture a document scan.", 'error');
       return;
     }
 
@@ -48,10 +55,10 @@ export default function KYC() {
 
     try {
       await axios.post("/kyc/submit", formData);
-      toast.success("Verification Protocol Initiated");
-      refreshUser(); // Update UI with pending status
+      showStatus("Verification Protocol Initiated.", 'success');
+      setTimeout(() => refreshUser(), 1500);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Transmission failed");
+      showStatus(err.response?.data?.message || "Transmission failed.", 'error');
     } finally {
       setLoading(false);
     }
@@ -63,204 +70,186 @@ export default function KYC() {
     { id: "DRIVER_LICENSE", label: "Driver's License", icon: <FileText size={16} /> },
   ];
 
+  // --- PENDING STATE ---
   if (user?.kyc?.status === "PENDING") {
     return (
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="max-w-4xl mx-auto space-y-12 py-10"
-      >
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-gray-100 pb-10">
+      <div className="max-w-5xl mx-auto space-y-8 py-10 px-4 lg:px-0">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-amber-600">
+            <div className="flex items-center gap-2 text-amber-500">
               <Clock size={14} strokeWidth={3} className="animate-pulse" />
-              <p className="text-[10px] font-black uppercase tracking-[0.2em]">Verification In Progress</p>
+              <p className="text-[8px] font-black uppercase tracking-[0.2em]">Protocol Pending Audit</p>
             </div>
-            <h1 className="text-4xl font-black tracking-tight">Vault Review</h1>
-            <p className="text-sm text-zinc-500 font-medium">Your identity protocol is currently being audited by the compliance node.</p>
+            <h1 className="text-2xl lg:text-3xl font-black tracking-tighter text-zinc-900 uppercase">Vault Review</h1>
           </div>
-          <div className="bg-amber-50 border border-amber-200 px-6 py-4 rounded-2xl flex items-center gap-4 shadow-sm">
-            <div className="w-10 h-10 bg-amber-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-amber-600/20">
-              <ShieldCheck size={20} />
-            </div>
-            <div>
-              <p className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Est. Completion</p>
-              <p className="text-xs font-bold text-amber-600 uppercase">24-48 Hours</p>
-            </div>
+          <div className="bg-amber-50 border border-amber-100 px-6 py-4 rounded-2xl flex items-center gap-4 shadow-sm">
+             <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white shadow-lg">
+                <ShieldCheck size={18} />
+             </div>
+             <div>
+                <p className="text-[9px] font-black text-amber-800 uppercase tracking-widest leading-none">Target Window</p>
+                <p className="text-[11px] font-black text-amber-600 uppercase tracking-tight mt-1">24-48 Hours</p>
+             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white border border-gray-200 rounded-[32px] p-8 shadow-xl shadow-zinc-900/5 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-amber-500" />
-              <div className="flex justify-between items-center mb-8">
-                <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 flex items-center gap-2">
-                  <FileText size={14} className="text-zinc-900" />
-                  Submitted {user.kyc.documentType}
-                </h3>
-                <span className="text-[10px] font-black text-amber-600 bg-amber-50 px-3 py-1 rounded-full uppercase tracking-widest border border-amber-100">
-                  Awaiting Audit
-                </span>
-              </div>
-              
-              <div className="relative rounded-2xl overflow-hidden border border-gray-100 bg-gray-50 group-hover:border-amber-500 transition-all duration-500">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white border border-zinc-100 rounded-2xl lg:rounded-[2rem] p-6 lg:p-8 shadow-sm relative overflow-hidden group">
+               <div className="absolute top-0 left-0 w-full h-1.5 bg-amber-500" />
+               <div className="flex justify-between items-center mb-8">
+                  <h3 className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Submitted Scan</h3>
+                  <span className="text-[8px] font-black text-amber-600 bg-amber-50 px-3 py-1 rounded-lg uppercase tracking-widest border border-amber-100">
+                    Active Audit
+                  </span>
+               </div>
+               
+               <div className="relative rounded-xl lg:rounded-[1.5rem] overflow-hidden border border-zinc-50 bg-zinc-50 group-hover:border-amber-500 transition-all duration-700">
                 {user.kyc.documentUrl ? (
                   <img 
                     src={`http://localhost:5001/${user.kyc.documentUrl.replace(/\\/g, '/')}`} 
                     alt="KYC Document" 
-                    className="w-full aspect-video object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                    className="w-full aspect-video object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                   />
                 ) : (
-                  <div className="w-full aspect-video flex items-center justify-center bg-gray-100 text-gray-400 text-[10px] font-black uppercase tracking-widest">
-                    Scan Not Found in Vault
+                  <div className="w-full aspect-video flex items-center justify-center text-zinc-300">
+                    <Fingerprint size={32} className="opacity-20" />
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="text-white space-y-1">
-                    <p className="text-xs font-black uppercase tracking-widest">Encrypted Vault Storage</p>
-                    <p className="text-[10px] text-white/70 font-medium italic">SECURE_HASH: {user.kyc.id.slice(0, 16)}...</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                  <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-1">Submission Date</p>
-                  <p className="text-xs font-bold text-zinc-900">{new Date(user.kyc.createdAt).toLocaleDateString()}</p>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                  <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-1">Audit Mode</p>
-                  <p className="text-xs font-bold text-zinc-900 uppercase">Standard Manual</p>
-                </div>
-              </div>
+               </div>
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="bg-zinc-900 text-white rounded-[32px] p-8 shadow-2xl shadow-zinc-900/20 space-y-6">
-              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-amber-500">Next Steps</h3>
-              <div className="space-y-6">
-                {[
-                  { step: "01", title: "Compliance Check", status: "Active", desc: "Agent verifying document legibility and security features." },
-                  { step: "02", title: "Database Sync", status: "Queued", desc: "Cross-referencing global sanctions and security lists." },
-                  { step: "03", title: "Gavel Strike", status: "Pending", desc: "Final approval and account limit expansion." }
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-4 group">
-                    <div className="text-lg font-black text-zinc-700 group-hover:text-amber-500 transition-colors">{item.step}</div>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <p className="text-[11px] font-black uppercase tracking-wider">{item.title}</p>
-                        <span className={`text-[8px] font-black px-1.5 py-0.5 rounded ${
-                          item.status === 'Active' ? 'bg-amber-500/20 text-amber-500' : 'bg-zinc-800 text-zinc-500'
-                        }`}>{item.status}</span>
-                      </div>
-                      <p className="text-[10px] text-zinc-500 font-medium leading-relaxed">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="bg-zinc-900 rounded-2xl lg:rounded-[2rem] p-8 lg:p-10 text-white space-y-8 shadow-xl">
+             <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-500">Audit Status</h3>
+             <div className="space-y-6">
+               {[
+                 { step: "Verification", status: "Active" },
+                 { step: "Sanction Sync", status: "Queued" },
+                 { step: "Vault Entry", status: "Pending" }
+               ].map((item, i) => (
+                 <div key={i} className="flex items-center justify-between group">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">{item.step}</p>
+                    <span className={`text-[8px] font-black px-2 py-0.5 rounded-md uppercase tracking-widest ${
+                      item.status === 'Active' ? 'bg-amber-500 text-white shadow-lg' : 'bg-zinc-800 text-zinc-600'
+                    }`}>{item.status}</span>
+                 </div>
+               ))}
+             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
+  // --- APPROVED STATE ---
   if (user?.kyc?.status === "APPROVED") {
     return (
-      <div className="flex flex-col items-center justify-center py-20 space-y-8">
-        <div className="w-24 h-24 rounded-full bg-rui-success/10 flex items-center justify-center text-rui-success shadow-lg shadow-rui-success/5">
+      <div className="flex flex-col items-center justify-center py-20 px-6 space-y-8">
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="w-24 h-24 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center shadow-xl border border-emerald-100"
+        >
           <CheckCircle2 size={48} strokeWidth={1.5} />
-        </div>
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold tracking-tight text-rui-success">Identity Verified</h2>
-          <p className="text-gray-500 max-w-sm mx-auto text-sm">
-            Your account is fully synchronized with the security network. 
-            You have maximum access to vault and contract services.
+        </motion.div>
+        <div className="text-center space-y-3">
+          <h2 className="text-2xl font-black tracking-tighter text-zinc-900 uppercase">Identity Verified</h2>
+          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest max-w-sm">
+            Security sync complete.
           </p>
         </div>
       </div>
     );
   }
 
+  // --- SUBMISSION STATE ---
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="max-w-3xl mx-auto space-y-10 pb-20"
-    >
-      {/* Header */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 text-rui-success">
-          <Lock size={12} strokeWidth={3} />
-          <p className="label-caps !text-rui-success !text-[9px]">Identity Protocol</p>
+    <div className="max-w-5xl mx-auto space-y-8 lg:space-y-12 pb-10 px-4 lg:px-0">
+      {/* Header & Status */}
+      <div className="space-y-6">
+        <AnimatePresence>
+          {statusMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className={`p-4 rounded-xl border flex items-center gap-3 shadow-lg ${
+                statusMessage.type === 'success' ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-amber-50 border-amber-100 text-amber-700'
+              }`}
+            >
+              <Fingerprint className="w-4 h-4 shrink-0" />
+              <span className="text-[10px] font-black uppercase tracking-wider">{statusMessage.msg}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-emerald-500">
+            <Lock size={12} strokeWidth={3} />
+            <p className="text-[8px] font-black uppercase tracking-[0.3em]">Identity Protocol</p>
+          </div>
+          <h1 className="text-2xl lg:text-3xl font-black tracking-tighter text-zinc-900 uppercase leading-none">Verification</h1>
+          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] leading-loose max-w-lg">
+            Complete your identity protocol to expand vault capabilities.
+          </p>
         </div>
-        <h1>Account Verification</h1>
-        <p className="text-xs md:text-sm text-gray-500 font-medium max-w-lg">
-          Complete your identity verification to unlock institutional-grade vault limits 
-          and professional contract protections.
-        </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-        {/* Form Area */}
-        <div className="lg:col-span-3 space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-8 bg-white border border-rui-gray-border/50 rounded-2xl p-6 md:p-8 shadow-sm">
-            
-            {/* Doc Type Selector */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+        <div className="lg:col-span-3 space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Step 1: Document Selection */}
             <div className="space-y-4">
-              <label className="label-caps !text-[10px]">1. Select Document Type</label>
-              <div className="grid grid-cols-1 gap-3">
+              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-400 px-1">1. Identity Type</label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {docTypes.map((type) => (
                   <button
                     key={type.id}
                     type="button"
                     onClick={() => setDocumentType(type.id)}
-                    className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
+                    className={`flex items-center lg:flex-col lg:justify-center lg:text-center p-5 rounded-xl border transition-all active:scale-[0.98] gap-4 ${
                       documentType === type.id 
-                        ? "bg-rui-dark text-white border-rui-dark shadow-lg shadow-black/5" 
-                        : "bg-white text-gray-500 border-rui-gray-border/50 hover:border-rui-dark/20"
+                        ? "bg-zinc-900 text-white border-zinc-900 shadow-xl" 
+                        : "bg-white text-zinc-400 border-zinc-100 hover:border-zinc-200"
                     }`}
                   >
-                    <div className="flex items-center gap-3">
+                    <div className={`${documentType === type.id ? 'text-emerald-400' : 'text-zinc-300'} transition-colors`}>
                       {type.icon}
-                      <span className="text-[11px] font-bold uppercase tracking-wider">{type.label}</span>
                     </div>
-                    {documentType === type.id && <CheckCircle2 size={14} className="text-rui-success" />}
+                    <span className="text-[9px] font-black uppercase tracking-widest">{type.label.split(' ')[0]}</span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Upload Area */}
+            {/* Step 2: Upload */}
             <div className="space-y-4">
-              <label className="label-caps !text-[10px]">2. Upload Document Scan</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-400 px-1">2. Document Scan</label>
               <div 
-                className={`relative border-2 border-dashed rounded-2xl p-6 md:p-10 transition-all text-center cursor-pointer ${
-                  file ? "border-rui-success/50 bg-rui-success/5" : "border-rui-gray-border/50 hover:border-rui-dark/30 hover:bg-rui-light/30"
+                className={`relative border-2 border-dashed rounded-2xl lg:rounded-[2rem] p-8 lg:p-12 transition-all active:scale-[0.98] cursor-pointer text-center ${
+                  file ? "border-emerald-500/50 bg-emerald-50/20" : "border-zinc-100 hover:border-zinc-300 bg-zinc-50/50"
                 }`}
                 onClick={() => document.getElementById('file-upload').click()}
               >
-                <input 
-                  id="file-upload" 
-                  type="file" 
-                  className="hidden" 
-                  accept="image/*" 
-                  onChange={handleFileChange} 
-                />
+                <input id="file-upload" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                 
-                <div className="flex flex-col items-center space-y-4">
+                <div className="flex flex-col items-center gap-4">
                   {preview ? (
-                    <img src={preview} alt="Preview" className="w-full max-h-40 object-contain rounded-lg" />
+                    <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="relative">
+                       <img src={preview} alt="Preview" className="w-full max-h-48 object-contain rounded-xl shadow-lg" />
+                       <div className="absolute top-2 right-2 p-2 bg-zinc-900 text-white rounded-lg shadow-xl">
+                          <Camera size={14} />
+                       </div>
+                    </motion.div>
                   ) : (
                     <>
-                      <div className="w-12 h-12 rounded-full bg-rui-light flex items-center justify-center text-rui-gray-muted">
-                        <Upload size={20} />
+                      <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-zinc-300 shadow-sm">
+                        <Camera size={20} />
                       </div>
-                      <div>
-                        <p className="text-[11px] font-bold text-rui-dark uppercase tracking-widest">Select Image File</p>
-                        <p className="text-[10px] text-gray-400 mt-1">High-quality JPG or PNG (Max 5MB)</p>
+                      <div className="space-y-1">
+                        <p className="text-[10px] font-black text-zinc-900 uppercase tracking-widest">Execute Scan</p>
+                        <p className="text-[8px] text-zinc-400 font-bold uppercase tracking-widest">JPG, PNG (Max 10MB)</p>
                       </div>
                     </>
                   )}
@@ -271,53 +260,35 @@ export default function KYC() {
             <button
               type="submit"
               disabled={loading || !file}
-              className="w-full py-4 bg-rui-dark text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-rui-success transition-all flex items-center justify-center gap-3 shadow-xl shadow-black/5 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-4 bg-zinc-900 text-white rounded-xl lg:rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-emerald-600 transition-all flex items-center justify-center gap-4 shadow-xl disabled:opacity-30"
             >
-              {loading ? "Transmitting..." : (
-                <>
-                  Submit for Verification
-                  <ArrowRight size={14} />
-                </>
-              )}
+              {loading ? "Transmitting..." : "Initialize Verification"}
             </button>
           </form>
         </div>
 
-        {/* Sidebar Info */}
+        {/* Security Summary */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-rui-dark text-white rounded-2xl p-8 space-y-6 shadow-xl shadow-black/10">
-            <h3 className="text-[12px] font-bold uppercase tracking-widest text-rui-success">Security Standards</h3>
-            <ul className="space-y-4">
-              {[
-                { title: "End-to-End Encryption", desc: "Data is encrypted before leaving your browser node." },
-                { title: "Identity Protection", desc: "We use decentralized verification protocols to secure your PII." },
-                { title: "Compliance Ready", desc: "Meets international anti-money laundering regulations." }
-              ].map((item, i) => (
-                <li key={i} className="flex gap-4">
-                  <div className="shrink-0 w-5 h-5 rounded-full bg-rui-success/20 flex items-center justify-center text-rui-success mt-0.5">
-                    <ShieldCheck size={12} />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-[11px] font-bold uppercase tracking-wider leading-none">{item.title}</p>
-                    <p className="text-[10px] text-white/50 leading-relaxed font-medium">{item.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-rui-warning/5 border border-rui-warning/20 rounded-2xl p-6 flex gap-4">
-            <AlertCircle className="text-rui-warning shrink-0" size={16} />
-            <div>
-              <p className="text-[10px] font-bold text-rui-warning uppercase tracking-widest mb-1">Upload Guidelines</p>
-              <p className="text-[10px] text-rui-warning/70 font-medium leading-relaxed">
-                Ensure all four corners of the document are visible and all text is legible. 
-                Blurry or cropped images will be rejected by the protocol.
-              </p>
-            </div>
-          </div>
+           <div className="bg-zinc-900 text-white rounded-2xl lg:rounded-[2.5rem] p-8 lg:p-10 space-y-8 shadow-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl" />
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400 relative z-10">Security Core</h3>
+              <div className="space-y-6 relative z-10">
+                 {[
+                   { title: "Encrypted Node", desc: "Hashing before transmission." },
+                   { title: "Vault Privacy", desc: "Cold storage archiving." }
+                 ].map((item, i) => (
+                   <div key={i} className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                         <ShieldCheck className="text-emerald-500" size={14} />
+                         <p className="text-[10px] font-black uppercase tracking-wider">{item.title}</p>
+                      </div>
+                      <p className="text-[9px] text-zinc-500 font-medium leading-relaxed">{item.desc}</p>
+                   </div>
+                 ))}
+              </div>
+           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

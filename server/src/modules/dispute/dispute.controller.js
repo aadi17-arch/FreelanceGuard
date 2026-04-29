@@ -1,138 +1,121 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../../config/database.js";
+import fs from "fs";
+import path from "path";
 
-const prisma = new PrismaClient();
+// Diagnostic Logging Helper
+const logDebug = (msg) => {
+  const logPath = "C:/Users/ADI/Desktop/FreelanceUp/freelanceguard/server/dispute_debug.log";
+  const timestamp = new Date().toISOString();
+  fs.appendFileSync(logPath, `[${timestamp}] ${msg}\n`);
+};
+
 export const raiseDispute = async (req, res) => {
   try {
     const { milestoneId, reason } = req.body;
-    const raisedById = req.user.id;
+    const userId = req.user.id;
 
-    if (!milestoneId || !reason) {
-      return res.status(400).json({ message: "Reason and Target ID are required" });
+    const milestone = await prisma.milestone.findUnique({
+      where: { id: milestoneId },
+      include: {
+        contract: true
+      }
+    });
+
+    if (!milestone) {
+      return res.status(404).json({ message: "Milestone not found" });
     }
 
-    const result = await prisma.$transaction(async (tx) => {
-      // 1. Resolve Target (Check if ID is a Contract or Milestone)
-      let targetMilestoneId = milestoneId;
-      
-      const milestone = await tx.milestone.findUnique({ where: { id: milestoneId } });
-      
-      if (!milestone) {
-        // ID might be a Contract ID, let's find the first milestone
-        let firstMilestone = await tx.milestone.findFirst({
-          where: { contractId: milestoneId }
-        });
-        
-        // LEGACY SUPPORT: If no milestone exists for this contract, create a fallback one
-        if (!firstMilestone) {
-          const contract = await tx.contract.findUnique({ where: { id: milestoneId } });
-          if (!contract) {
-            throw new Error("Invalid target: Neither a milestone nor a contract ID.");
-          }
-
-          firstMilestone = await tx.milestone.create({
-            data: {
-              contractId: contract.id,
-              title: "Full Project Allocation",
-              description: "Automatic fallback milestone for legacy projects.",
-              amount: contract.totalAmount,
-              dueDate: new Date(),
-              status: 'PENDING'
-            }
-          });
-        }
-        targetMilestoneId = firstMilestone.id;
-      } else if (milestone.status === "COMPLETED") {
-        throw new Error("Cannot dispute a completed milestone");
+    const dispute = await prisma.dispute.create({
+      data: {
+        milestoneId,
+        raisedById: userId,
+        reason,
+        status: "OPEN"
       }
-
-      // 2. Create Dispute Record
-      const dispute = await tx.dispute.create({
-        data: {
-          milestoneId: targetMilestoneId,
-          raisedById,
-          reason,
-          status: 'OPEN'
-        }
-      });
-
-      // 3. Freeze the Milestone
-      const updatedMilestone = await tx.milestone.update({
-        where: { id: targetMilestoneId },
-        data: { status: 'DISPUTED' }
-      });
-
-      // 4. Update Contract Status to DISPUTED
-      await tx.contract.update({
-        where: { id: updatedMilestone.contractId },
-        data: { status: 'DISPUTED' }
-      });
-
-      return dispute;
     });
 
-    res.status(201).json({
-      message: "Freeze Protocol Initiated. Capital locked in vault.",
-      dispute: result
+    // Update milestone status to DISPUTED
+    await prisma.milestone.update({
+      where: { id: milestoneId },
+      data: { status: "DISPUTED" }
     });
+
+    res.status(201).json(dispute);
   } catch (error) {
-    console.error("Dispute error:", error);
-    res.status(500).json({ message: error.message || "Failed to initiate freeze protocol" });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
-export const addEvidence = async (req, res) => {
+
+export const getDisputes = async (req, res) => {
   try {
-    const { disputeId } = req.params;
-    const { fileName } = req.body;
-    const fileUrl = req.file ? req.file.path : null;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+    
+    logDebug(`--- FETCH REQUEST ---`);
+    logDebug(`USER_ID: ${userId} | ROLE: ${userRole}`);
 
-    console.log("--- EVIDENCE UPLOAD DEBUG ---");
-    console.log("DisputeID:", disputeId);
-    console.log("UserID:", req.user?.id);
-    console.log("File:", fileUrl);
+    const allDisputesCount = await prisma.dispute.count();
+    logDebug(`DB TOTAL DISPUTES: ${allDisputesCount}`);
 
-    if (!fileUrl) {
-      return res.status(400).json({ message: "No file uploaded. Please attach a JPG or PNG." });
-    }
-
-    if (!disputeId) {
-      return res.status(400).json({ message: "Missing Dispute ID. Operation aborted." });
-    }
-
-    const evidence = await prisma.evidence.create({
-      data: {
-        disputeId,
-        uploadedById: req.user.id,
-        fileUrl,
-        fileName: fileName || "Evidence File"
+    // Simplified Filter for Maximum Reliability
+    const disputes = await prisma.dispute.findMany({
+      where: {
+        OR: [
+          { raisedById: userId },
+          { milestone: { contract: { project: { clientId: userId } } } },
+          { milestone: { contract: { freelancerId: userId } } }
+        ]
       },
       include: {
-        uploadedBy: true
-      }
+        milestone: {
+          include: {
+            contract: {
+              include: {
+                project: {
+                  include: {
+                    client: { select: { name: true } }
+                  }
+                },
+                freelancer: { select: { name: true } }
+              }
+            }
+          }
+        },
+        raisedBy: {
+          select: { name: true }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
     });
 
-    console.log("Evidence logged successfully:", evidence.id);
-    res.status(201).json(evidence);
-  } catch (error) {
-    console.error("CRITICAL UPLOAD ERROR:", error);
-    res.status(500).json({ 
-      message: `Vault logging failed | D: ${disputeId} | U: ${req.user?.id}`, 
-      error: error.message 
+    logDebug(`MATCHES FOUND: ${disputes.length}`);
+    
+    res.json({
+      disputes,
+      diagnostics: {
+        userId,
+        userRole,
+        dbTotal: allDisputesCount,
+        matchCount: disputes.length
+      }
     });
+  } catch (error) {
+    logDebug(`CRITICAL ERROR: ${error.message}`);
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
+
 export const getDisputeDetails = async (req, res) => {
   try {
-    const id = req.params.id;
-    console.log(`--- FETCHING DISPUTE: ${id} ---`);
+    const { id } = req.params;
     
+    if (!id || id === 'undefined') {
+      return res.status(400).json({ error: "Invalid Dispute ID provided" });
+    }
+
     const dispute = await prisma.dispute.findUnique({
       where: { id: id },
       include: {
-        evidence: {
-          include: {
-            uploadedBy: true
-          }
-        },
         milestone: {
           include: {
             contract: {
@@ -142,65 +125,53 @@ export const getDisputeDetails = async (req, res) => {
             }
           }
         },
-        raisedBy: true
+        evidence: {
+          include: {
+            uploadedBy: {
+              select: { name: true }
+            }
+          }
+        },
+        raisedBy: {
+          select: { name: true }
+        }
       }
     });
 
     if (!dispute) {
-      console.log(`[ERROR] Dispute NOT FOUND for ID: ${id}`);
-      return res.status(404).json({ message: "Dispute not found in vault" });
+      return res.status(404).json({ error: "Case not found in vault archive" });
     }
 
-    console.log(`[SUCCESS] Dispute found. Milestone Amount: ${dispute.milestone?.amount}`);
-    res.status(200).json(dispute);
-
+    res.json(dispute);
   } catch (error) {
-    console.error("[CRITICAL] Dispute Fetch Error:", error);
     res.status(500).json({ 
-      message: "Server Protocol Failure", 
-      error: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      error: "Vault synchronization failure",
+      details: error.message 
     });
   }
-}
+};
 
-export const listDisputes = async (req, res) => {
+export const uploadEvidence = async (req, res) => {
   try {
+    const { id } = req.params;
+    const { fileName } = req.body;
     const userId = req.user.id;
-    console.log("--- DISPUTE LIST AUDIT ---");
-    console.log("Searching for User ID:", userId);
 
-    const disputes = await prisma.dispute.findMany({
-      include: {
-        milestone: {
-          include: {
-            contract: {
-              include: {
-                project: true
-              }
-            }
-          }
-        },
-        raisedBy: true
-      },
-      orderBy: {
-        createdAt: 'desc'
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const evidence = await prisma.evidence.create({
+      data: {
+        disputeId: id,
+        uploadedById: userId,
+        fileName: fileName || req.file.originalname,
+        fileUrl: req.file.path
       }
     });
 
-    console.log(`TOTAL DISPUTES IN DB: ${disputes.length}`);
-    
-    // Manual filtering for extra safety during debug
-    const userDisputes = disputes.filter(d => 
-      d.raisedById === userId || 
-      d.milestone?.contract?.freelancerId === userId ||
-      d.milestone?.contract?.project?.clientId === userId
-    );
-
-    console.log(`MATCHED FOR USER ${userId}: ${userDisputes.length}`);
-    res.status(200).json(userDisputes);
+    res.status(201).json(evidence);
   } catch (error) {
-    console.error("List disputes error:", error);
-    res.status(500).json({ message: "Failed to fetch disputes", error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
-}
+};
