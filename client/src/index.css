@@ -1,26 +1,26 @@
 @import "tailwindcss";
 
 @theme {
-  --color-rui-dark: #111827; 
+  --color-rui-dark: #111827;
   --color-rui-light: #F9FAFB;
-  --color-rui-blue: #378ADD; 
-  --color-rui-success: #1D9E75; 
+  --color-rui-blue: #378ADD;
+  --color-rui-success: #1D9E75;
   --color-rui-warning: #EF9F27;
   --color-rui-danger: #D85A30;
-  
+
   --color-background-primary: #ffffff;
   --color-background-secondary: #f3f4f6;
   --color-background-tertiary: #fafafa;
-  
+
   --color-border-tertiary: #e5e7eb;
-  
+
   --color-text-primary: #111827;
   --color-text-secondary: #4b5563;
   --color-text-tertiary: #9ca3af;
 
   --font-body: 'Sora', sans-serif;
   --font-mono: 'DM Mono', monospace;
-  
+
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
 }
@@ -32,7 +32,12 @@
     color: var(--color-text-primary);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply tracking-tight;
   }
 }
@@ -43,7 +48,7 @@
   }
 
   .rui-card-organic {
-    @apply bg-white border border-[var(--color-border-tertiary)] rounded-[var(--border-radius-lg)] p-[18px] sm:p-[20px] transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.02)];
+    @apply bg-white border border-[var(--color-border-tertiary)] rounded-[var(--border-radius-lg)] p-[18px] sm:p-[20px] transition-all hover:shadow-[0_4px_12px_rgba(0, 0, 0, 0.02)];
   }
 
   .label-caps {
@@ -116,7 +121,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.05);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 10px;
 }
 
@@ -125,8 +130,15 @@
 }
 
 @keyframes pulse-subtle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
 }
 
 .animate-pulse-subtle {

@@ -64,7 +64,7 @@ function App() {
         <Route path="/create-project" element={<ProtectedRoute><DashboardLayout><CreateProject /></DashboardLayout></ProtectedRoute>} />
         <Route path="/marketplace" element={<ProtectedRoute><DashboardLayout><Market /></DashboardLayout></ProtectedRoute>} />
         <Route path="/project/:id" element={<ProtectedRoute><DashboardLayout><ProjectDetails /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></ProtectedRoute>} />
+        <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></DashboardLayout></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
         <Route path="/kyc" element={<ProtectedRoute><DashboardLayout><KYC /></DashboardLayout></ProtectedRoute>} />
         
