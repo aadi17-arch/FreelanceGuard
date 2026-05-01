@@ -35,7 +35,7 @@ export default function ProjectDetails() {
       const res = await axios.get(`/projects/${id}`);
       setProject(res.data);
     } catch (err) {
-      showStatus("Failed to synchronize project node.", 'error');
+      showStatus("Failed to load project details.", 'error');
     } finally {
       setLoading(false);
     }
@@ -54,10 +54,10 @@ export default function ProjectDetails() {
         proposal,
         amount: parseFloat(amount)
       });
-      showStatus("Proposal Transmitted Successfully.", 'success');
+      showStatus("Proposal submitted successfully.", 'success');
       setTimeout(() => navigate("/dashboard"), 2000);
     } catch (err) {
-      showStatus(err.response?.data?.message || "Transmission failure.", 'error');
+      showStatus(err.response?.data?.message || "Submission failed.", 'error');
     }
   };
 
@@ -68,10 +68,10 @@ export default function ProjectDetails() {
         freelancerId: bid.freelancerId,
         bidAmount: bid.amount
       });
-      showStatus("Hiring Protocol Initialized.", 'success');
+      showStatus("Hire successful.", 'success');
       setTimeout(() => navigate("/escrow"), 2000);
     } catch (err) {
-      showStatus(err.response?.data?.message || "Hiring protocol failed.", 'error');
+      showStatus(err.response?.data?.message || "Hiring failed.", 'error');
     }
   };
 
@@ -102,8 +102,8 @@ export default function ProjectDetails() {
                 statusMessage.type === 'success' ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-amber-50 border-amber-100 text-amber-700'
               }`}
             >
-              <Fingerprint className="w-4 h-4" />
-              <span className="text-[10px] font-black uppercase tracking-wider">{statusMessage.msg}</span>
+              <ShieldCheck className="w-4 h-4" />
+              <span className="text-xs font-bold">{statusMessage.msg}</span>
             </motion.div>
           )}
         </AnimatePresence>
@@ -149,8 +149,8 @@ export default function ProjectDetails() {
                    <Clock size={16} />
                  </div>
                  <div>
-                    <p className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-0.5">Timestamp</p>
-                    <p className="text-[11px] font-black text-zinc-900 uppercase tracking-tight">
+                    <p className="text-[10px] font-bold text-zinc-400 mb-0.5">Date Created</p>
+                    <p className="text-xs font-bold text-zinc-900">
                       {new Date(project?.createdAt).toLocaleDateString()}
                     </p>
                  </div>
@@ -167,13 +167,13 @@ export default function ProjectDetails() {
                    <CheckCircle2 size={32} className="mx-auto text-white" />
                    <h3 className="text-sm font-bold text-white leading-none">Project Started</h3>
                    <button onClick={() => navigate('/escrow')} className="w-full py-3 bg-white text-emerald-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all">
-                     Access Vault
+                     View Escrow
                    </button>
                 </div>
               ) : project?.bids?.some(bid => bid.freelancerId === user.id) ? (
                 <div className="bg-white border border-zinc-100 rounded-2xl lg:rounded-[2rem] p-8 text-center space-y-4 shadow-sm">
                   <Clock size={24} className="mx-auto text-zinc-300" />
-                  <h3 className="text-[10px] font-black text-zinc-900 uppercase tracking-widest">Protocol Transmitted</h3>
+                  <h3 className="text-xs font-bold text-zinc-900">Proposal Submitted</h3>
                 </div>
               ) : project?.status === 'OPEN' ? (
                 <div className="bg-white border border-zinc-100 rounded-2xl lg:rounded-[2rem] p-6 lg:p-8 shadow-sm">
@@ -184,7 +184,7 @@ export default function ProjectDetails() {
                    
                    <form onSubmit={handleBidSubmit} className="space-y-6">
                       <div className="space-y-2">
-                         <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 px-1">Allocation ($)</label>
+                         <label className="text-[10px] font-bold text-zinc-400 px-1">Bid Amount ($)</label>
                          <div className="relative">
                             <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-300" size={14} />
                             <input 
@@ -199,7 +199,7 @@ export default function ProjectDetails() {
                       </div>
                       
                       <div className="space-y-2">
-                         <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 px-1">Engagement Proposal</label>
+                         <label className="text-[10px] font-bold text-zinc-400 px-1">Your Proposal</label>
                          <textarea 
                             required
                             rows={6}
@@ -214,7 +214,7 @@ export default function ProjectDetails() {
                         type="submit"
                         className="w-full py-3.5 bg-zinc-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg"
                       >
-                        Transmit Proposal
+                        Submit Proposal
                       </button>
                    </form>
                 </div>
@@ -242,8 +242,8 @@ export default function ProjectDetails() {
                     </div>
                     <p className="text-[11px] text-zinc-500 leading-relaxed italic line-clamp-3 mb-4">"{bid.proposal}"</p>
                     {project.status === 'OPEN' && (
-                      <button onClick={() => handleHire(bid)} className="w-full py-2 bg-zinc-50 text-zinc-900 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-zinc-900 hover:text-white transition-all">
-                        Initialize Hire
+                      <button onClick={() => handleHire(bid)} className="w-full py-2 bg-zinc-50 text-zinc-900 rounded-lg text-xs font-bold hover:bg-zinc-900 hover:text-white transition-all">
+                        Hire Freelancer
                       </button>
                     )}
                   </div>
