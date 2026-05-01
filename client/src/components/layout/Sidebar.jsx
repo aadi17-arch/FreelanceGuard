@@ -16,7 +16,6 @@ import {
   MessageSquare,
   ClipboardList,
   BarChart3,
-  FileText
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
