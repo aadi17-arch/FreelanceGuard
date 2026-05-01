@@ -55,24 +55,24 @@ export default function Profile() {
           <div className="space-y-1.5 lg:space-y-3">
             <div className="flex items-center gap-2 text-emerald-500">
                <Zap size={10} fill="currentColor" />
-               <p className="text-[7px] lg:text-[8px] font-black uppercase tracking-[0.3em]">Operational Node</p>
+               <p className="text-[10px] font-bold">Verified Account</p>
             </div>
-            <h1 className="text-xl lg:text-4xl font-black tracking-tighter text-zinc-900 uppercase leading-none">{user?.name}</h1>
+            <h1 className="text-xl lg:text-4xl font-black tracking-tighter text-zinc-900 leading-none">{user?.name}</h1>
             <div className="flex flex-wrap items-center gap-2 lg:gap-3">
-              <span className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-100">
+              <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-100">
                 Identity Verified
               </span>
-              <span className="text-[7px] lg:text-[9px] font-bold text-zinc-300 uppercase tracking-widest">UID: {user?.id?.slice(-8).toUpperCase()}</span>
+              <span className="text-[10px] font-bold text-zinc-300">UID: {user?.id?.slice(-8).toUpperCase()}</span>
             </div>
           </div>
         </div>
         
         <div className="flex gap-3 w-full lg:w-auto">
-          <button className="flex-grow lg:flex-none px-6 py-2.5 bg-zinc-100 text-zinc-900 border border-zinc-100 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-zinc-200 transition-all active:scale-95 flex items-center justify-center gap-2">
+          <button className="flex-grow lg:flex-none px-6 py-2.5 bg-zinc-100 text-zinc-900 border border-zinc-100 rounded-xl text-[10px] font-bold hover:bg-zinc-200 transition-all active:scale-95 flex items-center justify-center gap-2">
             <Settings size={14} /> Settings
           </button>
-          <button className="flex-grow lg:flex-none px-6 py-2.5 bg-zinc-900 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2">
-            <History size={14} /> Export Log
+          <button className="flex-grow lg:flex-none px-6 py-2.5 bg-zinc-900 text-white rounded-xl text-[10px] font-bold hover:bg-emerald-600 transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2">
+            <History size={14} /> Download Report
           </button>
         </div>
       </header>
@@ -83,16 +83,16 @@ export default function Profile() {
         {/* Left: Financial Performance Node */}
         <section className="lg:col-span-2 space-y-6">
           <div className="bg-white border border-zinc-100 rounded-[1.5rem] lg:rounded-[2rem] p-6 lg:p-10 shadow-sm">
-            <div className="flex justify-between items-center mb-8 lg:mb-12">
-               <div className="space-y-1">
-                 <h2 className="text-[9px] font-black text-zinc-900 uppercase tracking-[0.2em]">Institutional Revenue</h2>
-                 <p className="text-[8px] text-zinc-300 font-bold uppercase tracking-widest">Network Synchronized Data</p>
-               </div>
-               <div className="text-right space-y-1">
-                 <p className="text-[8px] font-black text-zinc-300 uppercase tracking-widest">Secured Capital</p>
-                 <p className="text-xl lg:text-3xl font-black text-zinc-900 font-mono tracking-tighter">${user?.totalEarned?.toLocaleString() || "0"}</p>
-               </div>
-            </div>
+             <div className="flex justify-between items-center mb-8 lg:mb-12">
+                <div className="space-y-1">
+                  <h2 className="text-[10px] font-bold text-zinc-900">Total Earnings</h2>
+                  <p className="text-[10px] text-zinc-300 font-bold">Verified Earnings Data</p>
+                </div>
+                <div className="text-right space-y-1">
+                  <p className="text-[10px] font-bold text-zinc-300">Total Earned</p>
+                  <p className="text-xl lg:text-3xl font-black text-zinc-900 font-mono tracking-tighter">${user?.totalEarned?.toLocaleString() || "0"}</p>
+                </div>
+             </div>
             
             <div className="h-48 lg:h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -130,17 +130,17 @@ export default function Profile() {
           <div className="bg-white border border-zinc-100 rounded-[1.5rem] p-6 lg:p-8 space-y-6 shadow-sm">
             <div className="flex items-center gap-3 border-b border-zinc-50 pb-4">
                <Fingerprint size={16} className="text-zinc-900" />
-               <h2 className="text-[9px] font-black text-zinc-900 uppercase tracking-[0.2em]">Security Clearance</h2>
+               <h2 className="text-[10px] font-bold text-zinc-900">Account Status</h2>
             </div>
             <div className="space-y-5">
               {[
-                { label: "Identity Node", status: "Verified", color: "text-emerald-500" },
-                { label: "Wallet Protocol", status: "Connected", color: "text-emerald-500" },
-                { label: "Trust Score", status: "9.8 / 10", color: "text-zinc-900" }
+                { label: "Identity Status", status: "Verified", color: "text-emerald-500" },
+                { label: "Payment Status", status: "Connected", color: "text-emerald-500" },
+                { label: "Reliability Score", status: "9.8 / 10", color: "text-zinc-900" }
               ].map((item, i) => (
                 <div key={i} className="flex justify-between items-center group">
-                  <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-tight group-hover:text-zinc-900 transition-colors">{item.label}</span>
-                  <span className={`text-[9px] font-black uppercase tracking-widest ${item.color}`}>{item.status}</span>
+                  <span className="text-[10px] font-bold text-zinc-400 group-hover:text-zinc-900 transition-colors">{item.label}</span>
+                  <span className={`text-[10px] font-bold ${item.color}`}>{item.status}</span>
                 </div>
               ))}
             </div>
@@ -150,10 +150,10 @@ export default function Profile() {
              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
              <div className="flex items-center gap-3 text-emerald-500 relative z-10">
                 <ShieldCheck size={16} strokeWidth={3} />
-                <span className="text-[9px] font-black uppercase tracking-widest">Protocol Standing</span>
+                <span className="text-[10px] font-bold">Account Health</span>
              </div>
-             <p className="text-[9px] text-zinc-400 leading-relaxed font-bold uppercase tracking-tighter relative z-10">
-               Your operational node is fully synchronized with the global network. All institutional vault limits are enabled.
+             <p className="text-[10px] text-zinc-400 leading-relaxed font-bold relative z-10">
+               Your account is fully verified. All professional payment and withdrawal features are enabled.
              </p>
           </div>
         </aside>
