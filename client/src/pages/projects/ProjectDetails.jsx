@@ -227,7 +227,7 @@ export default function ProjectDetails() {
             </div>
           ) : (
             <div className="space-y-4">
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-900 mb-4">Transmissions ({project?.bids?.length || 0})</h3>
+              <h3 className="text-sm font-bold text-zinc-900 mb-4">Proposals ({project?.bids?.length || 0})</h3>
               <div className="space-y-4">
                 {project?.bids?.map((bid) => (
                   <div key={bid.id} className="bg-white border border-zinc-100 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all group">

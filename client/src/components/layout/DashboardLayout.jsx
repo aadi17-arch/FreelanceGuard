@@ -19,16 +19,16 @@ export default function DashboardLayout({ children }) {
   const getPageTitle = () => {
     const path = location.pathname;
     const titles = {
-      "/dashboard": "Operational Overview",
-      "/marketplace": "Global Marketplace",
-      "/escrow": "Financial Vault",
+      "/dashboard": "Dashboard",
+      "/marketplace": "Find Projects",
+      "/escrow": "Payments & Escrow",
       "/profile": "My Profile",
       "/kyc": "Identity Verification",
-      "/contracts": "Active Contracts",
-      "/proposals": "Bids & Proposals",
-      "/analytics": "Network Analytics",
-      "/messages": "Secure Messaging",
-      "/disputes": "Resolution Center"
+      "/contracts": "My Projects",
+      "/proposals": "My Proposals",
+      "/analytics": "Reports & Stats",
+      "/messages": "Messages",
+      "/disputes": "Help & Support"
     };
     
     if (titles[path]) return titles[path];
@@ -92,7 +92,7 @@ export default function DashboardLayout({ children }) {
                  <span className="opacity-30">·</span>
                  <span className="flex items-center gap-1">
                     <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
-                    Network Status: Secure
+                    System Online
                  </span>
                </div>
             </div>

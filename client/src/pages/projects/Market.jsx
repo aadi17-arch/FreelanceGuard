@@ -61,7 +61,7 @@ export default function Market() {
       <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}>
         <Briefcase className="w-6 h-6 text-zinc-300" />
       </motion.div>
-      <p className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-400">Scanning Market...</p>
+      <p className="text-sm font-bold text-emerald-500">Finding projects...</p>
     </div>
   );
 
@@ -72,7 +72,7 @@ export default function Market() {
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-emerald-500">
              <Zap size={10} fill="currentColor" />
-             <p className="text-[7px] font-black uppercase tracking-[0.3em]">Network Active</p>
+             <p className="text-xs font-bold text-emerald-500">System Ready</p>
           </div>
           <h1 className="text-xl lg:text-3xl font-black tracking-tight text-zinc-900">Marketplace</h1>
         </div>
@@ -179,7 +179,7 @@ export default function Market() {
             <div className="w-16 h-16 bg-zinc-50 rounded-2xl flex items-center justify-center mx-auto text-zinc-200">
                <Briefcase size={24} />
             </div>
-            <p className="text-[8px] font-black text-zinc-300 uppercase tracking-[0.3em]">No operational activity logged</p>
+            <p className="text-sm font-bold text-zinc-300">No projects found in this category</p>
           </div>
         )}
       </div>
