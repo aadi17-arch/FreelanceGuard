@@ -170,8 +170,8 @@ export default function Register() {
               >
                 {agreedTerms && <div className="w-2 h-2 bg-white rounded-full" />}
               </button>
-              <label className="text-xs font-medium text-zinc-500 leading-relaxed cursor-pointer" onClick={() => setAgreedTerms(!agreedTerms)}>
-                I agree to the <span className="text-zinc-900 font-bold">Terms of Service</span> and the <span className="text-zinc-900 font-bold">Privacy Policy</span>.
+              <label className="text-xs font-medium text-zinc-500 leading-relaxed">
+                I agree to the <Link to="/terms" onClick={(e) => e.stopPropagation()} className="text-zinc-900 font-bold hover:text-emerald-500 transition-colors">Terms of Service</Link> and the <Link to="/privacy" onClick={(e) => e.stopPropagation()} className="text-zinc-900 font-bold hover:text-emerald-500 transition-colors">Privacy Policy</Link>.
               </label>
             </div>
 

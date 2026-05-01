@@ -49,7 +49,9 @@ export const register = async (req, res) => {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role
+        role: user.role,
+        walletBalance: 0,
+        kyc: null
       }
     });
   }
