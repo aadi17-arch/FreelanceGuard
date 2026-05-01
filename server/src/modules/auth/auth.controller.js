@@ -23,10 +23,12 @@ export const register = async (req, res) => {
         name,
         email,
         password: hashedPassword,
-        role: role === "FREELANCER" ? "FREELANCER" : "CLIENT"
+        role: role === "FREELANCER" ? "FREELANCER" : "CLIENT",
+        walletBalance: 0,
+        kyc: null
       }
     });
-    
+
     if (!process.env.JWT_SECRET) {
       console.error("FATAL: JWT_SECRET is missing from environment variables");
     }
@@ -75,7 +77,7 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Wrong Password" });
     }
-    
+
     if (!process.env.JWT_SECRET) {
       console.error("FATAL: JWT_SECRET is missing from environment variables");
     }
@@ -95,7 +97,10 @@ export const login = async (req, res) => {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role
+        role: user.role,
+        walletBalance: user.walletBalance,
+        heldAmount: user.heldAmount,
+        kyc: user.kyc
       }
 
     });
