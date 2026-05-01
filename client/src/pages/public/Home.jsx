@@ -106,7 +106,7 @@ export default function Home() {
       {/* 3. Stats Bar */}
       <section className="w-full border-y border-zinc-100 bg-zinc-50/30">
         <div className="max-w-7xl mx-auto px-6 py-12 md:py-16 space-y-10">
-          <h3 className="text-center text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Trusted by freelancers worldwide</h3>
+          <h3 className="text-center text-sm font-bold text-zinc-400">Trusted by freelancers worldwide</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 md:gap-16">
             {[
               { label: "Secured in vault", value: "$2.4M+" },
@@ -116,7 +116,7 @@ export default function Home() {
             ].map((stat, i) => (
               <div key={i} className="text-center space-y-2 group">
                 <p className="text-3xl md:text-5xl font-bold text-zinc-900 tracking-tight transition-transform group-hover:scale-105">{stat.value}</p>
-                <p className="text-[11px] font-bold text-emerald-500 uppercase tracking-wider">{stat.label}</p>
+                <p className="text-xs font-bold text-emerald-500">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -182,7 +182,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center space-y-4 mb-20 md:mb-24">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">How it works</h2>
-            <p className="text-emerald-500 font-bold text-[12px] tracking-widest uppercase">Three steps to a protected income</p>
+            <p className="text-emerald-500 font-bold text-sm">Three steps to a protected income</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
             {[
@@ -214,7 +214,7 @@ export default function Home() {
         <div className="max-w-md mx-auto bg-white border border-zinc-100 rounded-[2rem] p-10 md:p-12 text-center shadow-2xl shadow-zinc-200/50 space-y-8 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl" />
           <div className="space-y-2 relative z-10">
-            <p className="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">Network Standard</p>
+            <p className="text-sm font-bold text-emerald-500">Security Standard</p>
             <div className="flex items-baseline justify-center gap-1.5">
               <span className="text-6xl font-bold text-zinc-900 tracking-tight">1%</span>
               <span className="text-zinc-400 font-semibold text-sm">per release</span>
@@ -302,7 +302,7 @@ export default function Home() {
           </div>
           <p className="text-[12px] font-medium text-zinc-400">&copy; 2026. Institutional Protocol Layer.</p>
         </div>
-        <div className="flex gap-8 text-[12px] font-bold text-zinc-400 uppercase tracking-widest">
+        <div className="flex gap-8 text-sm font-bold text-zinc-400">
           <a href="#" className="hover:text-emerald-500 transition-colors">Privacy</a>
           <a href="#" className="hover:text-emerald-500 transition-colors">Terms</a>
           <a href="#" className="hover:text-emerald-500 transition-colors">Support</a>

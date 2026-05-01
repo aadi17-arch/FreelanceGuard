@@ -80,7 +80,7 @@ export default function ProjectDetails() {
       <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}>
         <ShieldCheck className="w-8 h-8 text-emerald-500" />
       </motion.div>
-      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500">Syncing...</p>
+      <p className="text-xs font-bold text-emerald-500">Syncing...</p>
     </div>
   );
 
@@ -90,7 +90,7 @@ export default function ProjectDetails() {
       <header className="space-y-6">
         <Link to="/marketplace" className="inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-900 transition-colors group">
           <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[9px] font-black uppercase tracking-[0.2em]">Marketplace</span>
+          <span className="text-xs font-bold">Marketplace</span>
         </Link>
 
         <AnimatePresence>
@@ -112,14 +112,14 @@ export default function ProjectDetails() {
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-emerald-500">
               <ShieldCheck size={12} strokeWidth={3} />
-              <p className="text-[8px] font-black uppercase tracking-[0.3em]">Verified Opportunity</p>
+              <p className="text-xs font-bold text-zinc-400">Verified Opportunity</p>
             </div>
             <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-zinc-900 leading-tight">
               {project?.title}
             </h1>
           </div>
           <div className="bg-zinc-900 rounded-2xl px-6 py-4 text-white shadow-xl shadow-zinc-900/10">
-             <p className="text-[8px] font-black uppercase tracking-[0.3em] text-white/40 mb-1">Vault Allocation</p>
+             <p className="text-xs font-bold text-white/40 mb-1">Project Budget</p>
              <p className="text-2xl lg:text-3xl font-black tracking-tighter text-emerald-400">${project?.budget?.toLocaleString()}</p>
           </div>
         </div>
@@ -129,7 +129,7 @@ export default function ProjectDetails() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <section className="lg:col-span-2 space-y-6">
            <div className="bg-white border border-zinc-100 rounded-2xl lg:rounded-[2rem] p-6 lg:p-8 space-y-6 shadow-sm">
-              <h2 className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400 border-b border-zinc-50 pb-4">Objective & Scope</h2>
+              <h2 className="text-sm font-bold text-zinc-400 border-b border-zinc-50 pb-4">Project Overview</h2>
               <div className="text-sm lg:text-base text-zinc-600 font-medium leading-relaxed whitespace-pre-wrap">
                 {project?.description}
               </div>
@@ -141,8 +141,7 @@ export default function ProjectDetails() {
                    <User size={16} />
                  </div>
                  <div>
-                    <p className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-0.5">Contractor</p>
-                    <p className="text-[11px] font-black text-zinc-900 uppercase tracking-tight">{project?.client?.name}</p>
+                    <p className="text-sm font-bold text-zinc-900 tracking-tight">{project?.client?.name}</p>
                  </div>
               </div>
               <div className="bg-zinc-50/50 border border-zinc-100 rounded-xl p-5 flex items-center gap-4">
@@ -166,7 +165,7 @@ export default function ProjectDetails() {
               {project?.contracts?.some(c => c.freelancerId === user.id) ? (
                 <div className="bg-emerald-500 rounded-2xl lg:rounded-[2rem] p-8 text-center space-y-4 shadow-xl shadow-emerald-500/10">
                    <CheckCircle2 size={32} className="mx-auto text-white" />
-                   <h3 className="text-sm font-black text-white uppercase tracking-widest leading-none">Mission Assigned</h3>
+                   <h3 className="text-sm font-bold text-white leading-none">Project Started</h3>
                    <button onClick={() => navigate('/escrow')} className="w-full py-3 bg-white text-emerald-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all">
                      Access Vault
                    </button>
@@ -180,7 +179,7 @@ export default function ProjectDetails() {
                 <div className="bg-white border border-zinc-100 rounded-2xl lg:rounded-[2rem] p-6 lg:p-8 shadow-sm">
                    <div className="flex items-center gap-3 mb-6">
                       <Send size={14} className="text-zinc-900" />
-                      <h3 className="text-[10px] font-black text-zinc-900 uppercase tracking-widest">Apply Protocol</h3>
+                      <h3 className="text-sm font-bold text-zinc-900">Submit a Proposal</h3>
                    </div>
                    
                    <form onSubmit={handleBidSubmit} className="space-y-6">
@@ -222,7 +221,7 @@ export default function ProjectDetails() {
               ) : (
                 <div className="bg-zinc-50 border border-zinc-100 rounded-2xl p-8 text-center space-y-2">
                   <Lock className="mx-auto text-zinc-300" size={24} />
-                  <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">Node Closed</p>
+                  <p className="text-xs font-bold text-zinc-400">Project Closed</p>
                 </div>
               )}
             </div>

@@ -56,7 +56,7 @@ export default function CreateProject() {
       <header className="space-y-6">
         <Link to="/dashboard" className="inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-900 transition-colors group">
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[9px] font-black uppercase tracking-[0.2em]">Dashboard</span>
+          <span className="text-xs font-bold">Dashboard</span>
         </Link>
 
         <AnimatePresence>
@@ -77,9 +77,9 @@ export default function CreateProject() {
         <div className="space-y-3">
           <div className="flex items-center gap-3 text-emerald-500">
              <Zap size={14} fill="currentColor" />
-             <p className="text-[9px] font-black uppercase tracking-[0.3em]">Project Architecture Node</p>
+             <p className="text-xs font-bold text-zinc-400">Project Builder</p>
           </div>
-          <h1 className="text-2xl lg:text-3xl font-black tracking-tighter text-zinc-900 uppercase leading-none">Initialize Project</h1>
+          <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-zinc-900 leading-none">Create a Project</h1>
           <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] leading-loose max-w-lg">
              Configure your mission requirements to initiate a secure escrow contract.
           </p>
@@ -97,7 +97,7 @@ export default function CreateProject() {
                 <div className="w-8 h-8 rounded-lg bg-zinc-900 text-white flex items-center justify-center shadow-lg">
                   <PenTool size={14} />
                 </div>
-                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">Mission Designation</label>
+                <label className="text-sm font-bold text-zinc-500">Project Name</label>
               </div>
               <input
                 type="text"
@@ -115,7 +115,7 @@ export default function CreateProject() {
                 <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20">
                   <DollarSign size={14} />
                 </div>
-                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">Vault Allocation</label>
+                <label className="text-sm font-bold text-zinc-500">Project Budget ($)</label>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-black text-zinc-300">$</span>
@@ -138,7 +138,7 @@ export default function CreateProject() {
               <div className="w-8 h-8 rounded-lg bg-zinc-100 text-zinc-400 flex items-center justify-center">
                 <FileText size={14} />
               </div>
-              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">Scope & Deliverables</label>
+              <label className="text-sm font-bold text-zinc-500">Project Description</label>
             </div>
             <textarea
               name="description"
@@ -169,7 +169,7 @@ export default function CreateProject() {
                <button
                  type="submit"
                  disabled={loading}
-                 className="flex-grow sm:flex-none px-10 py-3.5 bg-zinc-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-zinc-900/10 active:scale-95 flex items-center justify-center gap-3"
+                 className="flex-grow sm:flex-none px-10 py-3.5 bg-zinc-900 text-white rounded-2xl text-sm font-bold hover:bg-emerald-600 transition-all shadow-xl shadow-zinc-900/10 active:scale-95 flex items-center justify-center gap-3"
                >
                  {loading ? "Initializing..." : (
                    <>

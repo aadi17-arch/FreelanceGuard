@@ -74,7 +74,7 @@ export default function Market() {
              <Zap size={10} fill="currentColor" />
              <p className="text-[7px] font-black uppercase tracking-[0.3em]">Network Active</p>
           </div>
-          <h1 className="text-xl lg:text-4xl font-black tracking-tighter text-zinc-900 uppercase">Marketplace</h1>
+          <h1 className="text-xl lg:text-3xl font-black tracking-tight text-zinc-900">Marketplace</h1>
         </div>
 
         <div className="flex items-center gap-3 w-full lg:w-auto">
@@ -160,7 +160,7 @@ export default function Market() {
 
               <div className="flex items-center justify-between w-full lg:w-auto gap-6 pt-3 lg:pt-0 border-t border-zinc-50 lg:border-none">
                  <div className="space-y-0.5">
-                    <p className="text-[8px] font-black text-zinc-300 uppercase tracking-widest leading-none">Allocation</p>
+                    <p className="text-xs font-bold text-zinc-300 leading-none">Budget</p>
                     <div className="flex items-center gap-0.5 font-black text-zinc-900 text-base lg:text-2xl font-mono tracking-tighter">
                        <DollarSign size={12} className="text-emerald-500" />
                        {proj.budget?.toLocaleString()}
