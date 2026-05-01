@@ -198,9 +198,9 @@ export default function Dashboard() {
                     <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
                        <Clock size={20} className="animate-pulse" />
                     </div>
-                    <h4 className="text-lg font-black tracking-tight text-white">Security Review</h4>
+                    <h4 className="text-lg font-black tracking-tight text-white">Account Review</h4>
                     <p className="text-sm text-amber-50 font-medium leading-relaxed">
-                       We are currently reviewing your profile security and documents.
+                       We are currently reviewing your account and verification documents.
                     </p>
                  </div>
                  <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
@@ -216,7 +216,7 @@ export default function Dashboard() {
                     <div className="min-w-0">
                        <h4 className="text-lg font-black tracking-tight text-white leading-none mb-1">Verified Account</h4>
                        <p className="text-[10px] text-zinc-500 font-bold tracking-tight">
-                          Trust Score: 98%
+                          Reliability Score: 98%
                        </p>
                     </div>
                  </div>

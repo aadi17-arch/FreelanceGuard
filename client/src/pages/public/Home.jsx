@@ -63,7 +63,7 @@ export default function Home() {
           className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-100 rounded-full mb-8 md:mb-10"
         >
           <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-          <span className="text-[10px] md:text-[11px] font-bold text-emerald-600 tracking-tight">Institutional Escrow Protocol Active</span>
+          <span className="text-[10px] md:text-[11px] font-bold text-emerald-600 tracking-tight">Secure Payment Protection Active</span>
         </motion.div>
 
         <motion.h1 
@@ -109,7 +109,7 @@ export default function Home() {
           <h3 className="text-center text-sm font-bold text-zinc-400">Trusted by freelancers worldwide</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 md:gap-16">
             {[
-              { label: "Secured in vault", value: "$2.4M+" },
+              { label: "Total payments secured", value: "$2.4M+" },
               { label: "Projects managed", value: "1,200+" },
               { label: "Dispute success", value: "99.8%" },
               { label: "Global users", value: "10K+" }
@@ -132,9 +132,8 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-12 md:gap-y-16">
           {[
-            { 
               title: "Your money stays safe", 
-              desc: "Funds are locked in secure escrow nodes until work is approved. No more chasing invoices.", 
+              desc: "Funds are locked in secure payment accounts until work is approved. No more chasing invoices.", 
               icon: ShieldCheck 
             },
             { 
@@ -144,21 +143,21 @@ export default function Home() {
             },
             { 
               title: "Fair Dispute Resolution", 
-              desc: "Institutional-grade dispute system ensures you get paid for the work you've completed.", 
+              desc: "Professional dispute resolution ensures you get paid for the work you've completed.", 
               icon: Scale 
             },
             { 
-              title: "Legal Signature Layer", 
+              title: "Secure Contract Signing", 
               desc: "Upload, sign, and store legally-binding contracts with a full audit history.", 
               icon: FileText 
             },
             { 
               title: "Real-time Visibility", 
-              desc: "See your vault balances, released funds, and upcoming payments in a single dashboard.", 
+              desc: "See your account balances, released funds, and upcoming payments in a single dashboard.", 
               icon: Wallet 
             },
             { 
-              title: "Smart Network Alerts", 
+              title: "Instant Activity Alerts", 
               desc: "Instant notifications for milestones, payments, and contract signatures.", 
               icon: Bell 
             }
@@ -187,7 +186,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
             {[
               { step: "01", title: "Create agreement", desc: "Define your scope and milestones. Both parties sign digitally in seconds." },
-              { step: "02", title: "Client deposits money", desc: "Capital is locked in a secure vault. You start working knowing the money is there." },
+              { step: "02", title: "Client deposits money", desc: "Funds are locked in a secure account. You start working knowing the money is there." },
               { step: "03", title: "Get paid instantly", desc: "Complete a milestone, client approves, and funds release to your wallet immediately." }
             ].map((item, i) => (
               <div key={i} className="text-center space-y-6 group">
@@ -229,7 +228,7 @@ export default function Home() {
           <ul className="text-left space-y-4 py-8 border-y border-zinc-50 relative z-10">
             {[
               "Unlimited Milestone Contracts",
-              "Institutional Escrow Nodes",
+              "Multi-Layer Payment Security",
               "Resolution Center Access",
               "Legal Document Storage",
               "No Setup Fee · Cancel Anytime"
@@ -264,7 +263,7 @@ export default function Home() {
               { q: "What if the client doesn’t approve work?", a: "**You are protected.** If work is completed as per the contract, you can trigger a Dispute. Our resolution team reviews the evidence and can force the release of funds." },
               { q: "How long does payout take?", a: "**Instant.** Once the client clicks 'Approve', the funds are released from the vault to your wallet immediately with zero clearing time." },
               { q: "Can I get a refund as a client?", a: "**Only with freelancer consent.** Funds are locked in escrow; they can only be released to the freelancer or refunded to the client if both parties agree or a dispute is resolved." },
-              { q: "How secure is the vault?", a: "**Institutional grade.** Funds are held in segregated escrow nodes and are never used for any other purpose than your specific contract release." }
+              { q: "How secure is my money?", a: "**Completely secure.** Funds are held in separate secure accounts and are never used for any other purpose than your specific contract release." }
             ].map((faq, i) => (
               <div key={i} className="space-y-3">
                 <h4 className="text-[16px] font-bold text-zinc-900">{faq.q}</h4>
@@ -300,7 +299,7 @@ export default function Home() {
             </div>
             <span className="text-[15px] font-bold tracking-tight text-zinc-900">FreelanceGuard</span>
           </div>
-          <p className="text-[12px] font-medium text-zinc-400">&copy; 2026. Institutional Protocol Layer.</p>
+          <p className="text-[12px] font-medium text-zinc-400">&copy; 2026. Secure Freelance Payments.</p>
         </div>
         <div className="flex gap-8 text-sm font-bold text-zinc-400">
           <a href="#" className="hover:text-emerald-500 transition-colors">Privacy</a>
