@@ -50,14 +50,14 @@ export default function PrivacyPolicy() {
               <Eye size={20} />
            </div>
            <p>
-            "We believe your privacy is a right, not a choice. We only collect the information we absolutely need to keep your money safe."
+            "Your privacy is our priority. We only collect the information necessary to keep your account and payments safe."
            </p>
         </div>
 
         <div className="space-y-2">
-            <LegalSection title="1. Your Identity Info">
+            <LegalSection title="1. Your Identity">
             <p>
-                When you prove who you are (ID check), we store that information in a private, locked vault. We never sell your personal details to other companies.
+                When you verify your identity, we store that information in a private, encrypted system. We never share your personal details with outside parties.
             </p>
             </LegalSection>
 
@@ -69,13 +69,13 @@ export default function PrivacyPolicy() {
 
             <LegalSection title="3. Cookies & Tracking">
             <p>
-                We don't use annoying tracking tools to follow you around the internet. We only use simple cookies to keep you logged in and make the website work smoothly.
+                We don't use tracking tools to follow you around the internet. We only use simple cookies to keep you logged in and make the website work smoothly.
             </p>
             </LegalSection>
 
             <LegalSection title="4. Keeping Data Safe">
             <p>
-                If you stop using the website for a long time (2 years), we will securely delete your personal information. We only keep what is legally required for tax and financial records.
+                If you stop using the website for a long time, we will securely delete your personal information. We only keep what is legally required for tax and financial records.
             </p>
             </LegalSection>
         </div>
