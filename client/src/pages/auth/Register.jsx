@@ -98,7 +98,7 @@ export default function Register() {
                    value={formData.name}
                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                    className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all"
-                   placeholder="e.g. Alexander Pierce"
+                   placeholder="Enter your full name"
                    required
                  />
                </div>
@@ -114,7 +114,7 @@ export default function Register() {
                    value={formData.email}
                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                    className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all"
-                   placeholder="e.g. alexander@company.com"
+                   placeholder="Enter your email address"
                    required
                  />
                </div>
@@ -130,7 +130,7 @@ export default function Register() {
                    value={formData.password}
                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                    className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all"
-                   placeholder="Min. 8 characters with symbols"
+                   placeholder="Create a strong password"
                    required
                  />
                </div>
