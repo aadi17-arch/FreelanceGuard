@@ -43,7 +43,7 @@ export default function Sidebar({ onClose }) {
     { name: "Messages", path: "/messages", icon: <MessageSquare size={14} />, section: "SECURITY" },
     { name: "Active Cases", path: "/disputes", icon: <AlertTriangle size={14} />, section: "SECURITY" },
     { name: "My Profile", path: "/profile", icon: <User size={14} />, section: "SECURITY" },
-    { name: "Identity Proof", path: "/kyc", icon: <ShieldCheck size={14} />, section: "SECURITY" },
+    { name: "Identity Proof", path: "/kyc", icon: <Shield size={14} />, section: "SECURITY" },
   ];
 
   const sections = ["WORK", "FINANCES", "SECURITY"];

@@ -16,18 +16,16 @@ import DisputeDetails from "./pages/disputes/DisputeDetails";
 import DisputesList from "./pages/disputes/DisputesList";
 import TermsOfService from "./pages/legal/TermsOfService";
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
-import { Zap, Clock } from "lucide-react";
 
 // Simple Placeholder for upcoming features
 const OperationalPlaceholder = ({ title }) => (
   <div className="min-h-[400px] flex flex-col items-center justify-center gap-6">
-    <div className="w-16 h-16 bg-zinc-50 rounded-[2.5rem] flex items-center justify-center text-zinc-200 shadow-inner">
-       <Zap size={32} />
+    <div className="w-16 h-16 bg-zinc-50 rounded-[2.5rem] flex items-center justify-center text-zinc-200 shadow-inner text-2xl font-bold">
+       ⚡
     </div>
     <div className="text-center space-y-2">
        <h2 className="text-xl font-black text-zinc-900 uppercase tracking-tight">{title}</h2>
        <div className="flex items-center justify-center gap-2 text-emerald-500">
-          <Clock size={12} className="animate-pulse" />
           <p className="text-[10px] font-black uppercase tracking-[0.3em]">Node Synchronization Pending</p>
        </div>
     </div>
