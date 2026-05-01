@@ -3,7 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  ShieldCheck, 
+  Shield, 
   ArrowUpRight, 
   Clock, 
   CheckCircle2, 
@@ -12,7 +12,7 @@ import {
   TrendingUp,
   FileText,
   AlertTriangle,
-  Fingerprint,
+  Lock,
   Zap
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -114,7 +114,7 @@ export default function Dashboard() {
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
         {[
           { label: "Active Nodes", value: stats.activeProjects, icon: <FileText />, color: "text-blue-500", bg: "bg-blue-50" },
-          { label: "Vault Value", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck />, color: "text-emerald-500", bg: "bg-emerald-50" },
+          { label: "Vault Value", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <Shield />, color: "text-emerald-500", bg: "bg-emerald-50" },
           { label: "Pending", value: stats.pendingMilestones, icon: <Clock />, color: "text-amber-500", bg: "bg-amber-50" },
           { label: "Alerts", value: stats.openDisputes, icon: <AlertTriangle />, color: "text-rose-500", bg: "bg-rose-50" },
         ].map((stat, i) => (
@@ -143,7 +143,7 @@ export default function Dashboard() {
                  <div key={item.id} className={`p-4 lg:p-6 flex items-center justify-between hover:bg-zinc-50 transition-all group cursor-pointer ${index !== recentActivity.length - 1 ? 'border-b border-zinc-50' : ''}`}>
                     <div className="flex items-center gap-4">
                        <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-xl bg-zinc-900 text-emerald-500 flex items-center justify-center shrink-0">
-                          <Fingerprint size={14} />
+                          <Lock size={14} />
                        </div>
                        <div className="min-w-0">
                           <p className="text-[11px] lg:text-[13px] font-black text-zinc-900 uppercase tracking-tight truncate leading-none">
@@ -204,7 +204,7 @@ export default function Dashboard() {
               <div className="bg-zinc-900 rounded-2xl lg:rounded-[2.5rem] p-8 lg:p-10 text-white space-y-6 shadow-xl group">
                  <div className="flex items-center gap-4">
                     <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                       <ShieldCheck size={20} />
+                       <Shield size={20} />
                     </div>
                     <div className="min-w-0">
                        <h4 className="text-sm font-black uppercase tracking-tighter">Verified</h4>

@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import { 
-  ShieldCheck,
+  Shield,
   LayoutDashboard, 
   Briefcase, 
   Wallet, 
@@ -16,7 +16,7 @@ import {
   MessageSquare,
   ClipboardList,
   BarChart3,
-  GanttChartSquare
+  FileText
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
@@ -34,7 +34,7 @@ export default function Sidebar({ onClose }) {
   const navItems = [
     { name: "Overview", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "WORK" },
     { name: "Global Market", path: "/marketplace", icon: <Search size={14} />, section: "WORK" },
-    { name: "My Contracts", path: "/contracts", icon: <GanttChartSquare size={14} />, section: "WORK" },
+    { name: "My Contracts", path: "/contracts", icon: <FileText size={14} />, section: "WORK" },
     { name: "Bids & Proposals", path: "/proposals", icon: <ClipboardList size={14} />, section: "WORK" },
     
     { name: "Financial Vault", path: "/escrow", icon: <Wallet size={14} />, section: "FINANCES" },
@@ -63,7 +63,7 @@ export default function Sidebar({ onClose }) {
       <div className="px-6 mb-8">
         <Link to="/dashboard" onClick={onClose} className="flex items-center gap-3 group">
           <div className="w-6 h-6 bg-emerald-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:rotate-12 transition-transform">
-            <ShieldCheck size={14} className="text-white" />
+            <Shield size={14} className="text-white" />
           </div>
           <span className="text-[13px] font-black text-zinc-900 tracking-tight">FreelanceGuard</span>
         </Link>

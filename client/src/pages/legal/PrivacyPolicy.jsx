@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ShieldCheck, Lock, Eye, Server } from 'lucide-react';
+import { ArrowLeft, Shield, Lock, Eye, Server } from 'lucide-react';
 
 const LegalSection = ({ title, children }) => (
   <section className="space-y-4 py-8 border-b border-zinc-100 last:border-0">
@@ -74,7 +74,7 @@ export default function PrivacyPolicy() {
 
         <div className="mt-20 pt-10 border-t border-zinc-100 flex flex-col items-center gap-8">
            <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500">
-              <ShieldCheck size={24} />
+              <Shield size={24} />
            </div>
            <p className="text-[10px] font-black text-zinc-300 uppercase tracking-[0.4em] text-center">
               Secured & Encrypted

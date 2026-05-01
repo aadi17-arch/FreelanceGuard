@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ShieldCheck, Scale, FileText, Lock } from 'lucide-react';
+import { ArrowLeft, Shield, Briefcase, FileText, Lock } from 'lucide-react';
 
 const LegalSection = ({ title, children }) => (
   <section className="space-y-4 py-8 border-b border-zinc-100 last:border-0">
@@ -23,7 +23,7 @@ export default function TermsOfService() {
           </Link>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center text-emerald-500 shadow-lg shadow-black/5">
-              <Scale size={16} />
+              <Briefcase size={16} />
             </div>
             <span className="text-xs font-black text-zinc-900 tracking-tighter">Legal Framework</span>
           </div>
@@ -81,7 +81,7 @@ export default function TermsOfService() {
 
         <div className="mt-20 pt-10 border-t border-zinc-100 flex flex-col items-center gap-8">
            <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500">
-              <ShieldCheck size={24} />
+              <Shield size={24} />
            </div>
            <p className="text-[10px] font-black text-zinc-300 uppercase tracking-[0.4em] text-center">
               End of Protocol
