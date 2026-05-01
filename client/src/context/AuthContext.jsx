@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         return;
       }
-      
+
       try {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         const res = await axios.get("/auth/profile");
@@ -39,9 +39,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+
+
       const res = await axios.post("/auth/login", { email, password });
       setToken(res.data.token);
       setUser(res.data.user);
+
       localStorage.setItem("token", res.data.token);
       return res.data;
     } catch (err) {
