@@ -48,7 +48,7 @@
   }
 
   .rui-card-organic {
-    @apply bg-white border border-[var(--color-border-tertiary)] rounded-[var(--border-radius-lg)] p-[18px] sm:p-[20px] transition-all hover:shadow-[0_4px_12px_rgba(0, 0, 0, 0.02)];
+    @apply bg-white border border-[var(--color-border-tertiary)] rounded-[var(--border-radius-lg)] p-[18px] sm:p-[20px] transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.02)];
   }
 
   .label-caps {

@@ -24,8 +24,7 @@ export const register = async (req, res) => {
         email,
         password: hashedPassword,
         role: role === "FREELANCER" ? "FREELANCER" : "CLIENT",
-        walletBalance: 0,
-        kyc: null
+        walletBalance: 0
       }
     });
 
@@ -70,7 +69,8 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "All Fields Required" });
     }
     const user = await prisma.user.findUnique({
-      where: { email }
+      where: { email },
+      include: { kyc: true }
     });
     if (!user) {
       return res.status(400).json({ message: "Invalid Credentials" });
