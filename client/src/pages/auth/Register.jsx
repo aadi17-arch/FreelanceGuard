@@ -5,6 +5,7 @@ import { FormInput, FormButton } from '../../components/ui/AuthFormComponents';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 import axios from 'axios';
+import { useAuth } from '../../context/AuthContext';
 const registerSchema = z.object({
   name: z.string().min(3, "Enter valid name"),
   email: z.string().email("Please enter valid email address"),
@@ -30,6 +31,7 @@ export default function Register() {
   const [agreedTerms, setAgreedTerms] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [errors, setErrors] = useState({});
+  const { register } = useAuth();
 
   const handleSubmit = async (e) => {
     setIsLoading(true);
@@ -47,10 +49,10 @@ export default function Register() {
       return toast.error("Please fix the errors below");
     }
     try {
-      const response = await axios.post('http://localhost:5001/api/auth/register', formData);
+      const user = await register(formData.name, formData.email, formData.password, formData.role);
       setShowSuccess(true);
       setTimeout(() =>
-        navigate('/login'), 2500);
+        navigate('/dashboard'), 2500);
 
     } catch (error) {
       toast.error(error.response?.data?.message || "Registration failed");

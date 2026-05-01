@@ -4,7 +4,8 @@ import { ShieldCheck, Mail, Lock, ArrowRight, User } from 'lucide-react';
 import { FormInput, FormButton } from '../../components/ui/AuthFormComponents';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-import axios from "axios";
+import axios from 'axios';
+import { useAuth } from '../../context/AuthContext'
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
@@ -17,6 +18,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,14 +36,10 @@ export default function Login() {
 
     // 2. Perform API Authentication
     try {
-      const response = await axios.post('http://localhost:5001/api/auth/login', formData);
+      const data = await login(formData.email, formData.password);
 
-      const { token, user } = response.data;
 
-      // Save credentials for the session
-      localStorage.setItem('token', token);
-
-      toast.success(`Welcome back, ${user.name}!`);
+      toast.success(`Welcome back, ${data.user.name}!`);
       navigate('/dashboard');
     } catch (error) {
       const message = error.response?.data?.message || "Connection failed. Please check your server.";
