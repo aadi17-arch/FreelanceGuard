@@ -4,7 +4,9 @@ import { createProject, getAllProjects, getMyProject, getProjectStats, getProjec
 
 const router = express.Router();
 router.post("/create", authMiddleware, createProject);
-router.get("/all", getAllProjects);
+router.get("/", getAllProjects);
+router.get("/all", getAllProjects); // Keep for backward compatibility
+
 router.get("/userProjectList", authMiddleware, getMyProject);
 router.get("/stats", authMiddleware, getProjectStats);
 router.post("/hire", authMiddleware, hireFreelancer);

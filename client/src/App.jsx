@@ -1,83 +1,88 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
-import { Zap } from 'lucide-react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import Dashboard from "./pages/dashboard/Dashboard";
+import Home from "./pages/public/Home";
+import CreateProject from "./pages/projects/CreateProject";
+import Market from "./pages/projects/Market";
+import ProjectDetails from "./pages/projects/ProjectDetails";
+import EscrowDashboard from "./pages/escrow/EscrowDashboard";
+import Profile from "./pages/profile/profile";
+import KYC from "./pages/kyc/KYC";
+import DashboardLayout from "./components/layout/DashboardLayout";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import { Toaster } from "react-hot-toast";
+import DisputeDetails from "./pages/disputes/DisputeDetails";
+import DisputesList from "./pages/disputes/DisputesList";
+import TermsOfService from "./pages/legal/TermsOfService";
+import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
+import { Zap } from "lucide-react";
 
-// Layouts
-import DashboardLayout from './components/layout/DashboardLayout';
-
-// Pages
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
-import Dashboard from './pages/dashboard/Dashboard';
-import Home from './pages/public/Home';
-import KYC from './pages/kyc/KYC';
-import TermsOfService from './pages/legal/TermsOfService';
-import PrivacyPolicy from './pages/legal/PrivacyPolicy';
-import Market from './pages/projects/Market';
-import CreateProject from './pages/projects/CreateProject';
-import ProjectDetails from './pages/projects/ProjectDetails';
-import Profile from './pages/profile/profile';
-import EscrowDashboard from './pages/escrow/EscrowDashboard';
+// Simple Placeholder for upcoming features
+const OperationalPlaceholder = ({ title }) => (
+  <div className="min-h-[400px] flex flex-col items-center justify-center gap-6">
+    <div className="w-16 h-16 bg-zinc-50 rounded-[2.5rem] flex items-center justify-center text-zinc-200 shadow-inner text-2xl font-bold">
+       <Zap size={32} />
+    </div>
+    <div className="text-center space-y-2">
+       <h2 className="text-xl font-bold text-zinc-900 tracking-tight">{title}</h2>
+       <div className="flex items-center justify-center gap-2 text-emerald-500">
+          <p className="text-xs font-bold">This feature is coming soon</p>
+       </div>
+    </div>
+  </div>
+);
 
 function App() {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-white">
-        <div className="w-12 h-12 border-4 border-zinc-900 border-t-emerald-500 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  const ProtectedRoute = ({ children }) => {
-    if (!user) return <Navigate to="/login" />;
-    return <DashboardLayout>{children}</DashboardLayout>;
-  };
-
-  const FeaturePlaceholder = ({ name }) => (
-    <div className="h-[60vh] flex flex-col items-center justify-center space-y-6">
-      <div className="w-20 h-20 bg-zinc-50 rounded-[2rem] flex items-center justify-center text-zinc-200">
-        <Zap size={40} />
-      </div>
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-black text-zinc-900 tracking-tight">{name} Coming Soon</h2>
-        <p className="text-sm font-bold text-zinc-300 max-w-xs mx-auto">
-          We are currently building this feature to provide you with a world-class experience.
-        </p>
-      </div>
-    </div>
-  );
-
   return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-      <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
-      <Route path="/terms" element={<TermsOfService />} />
-      <Route path="/privacy" element={<PrivacyPolicy />} />
+    <Router>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: '#111111',
+            color: '#ffffff',
+            borderRadius: '16px',
+            padding: '16px 24px',
+            fontSize: '11px',
+            fontWeight: '700',
+            textTransform: 'none',
+            letterSpacing: 'normal',
+            border: '1px solid rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+          }
+        }}
+      />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
 
-      {/* Dashboard Routes */}
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/marketplace" element={<ProtectedRoute><Market /></ProtectedRoute>} />
-      <Route path="/project/:id" element={<ProtectedRoute><ProjectDetails /></ProtectedRoute>} />
-      <Route path="/create-project" element={<ProtectedRoute><CreateProject /></ProtectedRoute>} />
-      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      <Route path="/escrow" element={<ProtectedRoute><EscrowDashboard /></ProtectedRoute>} />
-      <Route path="/kyc" element={<ProtectedRoute><KYC /></ProtectedRoute>} />
-      
-      {/* Feature Placeholders */}
-      <Route path="/contracts" element={<ProtectedRoute><FeaturePlaceholder name="My Projects" /></ProtectedRoute>} />
-      <Route path="/proposals" element={<ProtectedRoute><FeaturePlaceholder name="My Proposals" /></ProtectedRoute>} />
-      <Route path="/analytics" element={<ProtectedRoute><FeaturePlaceholder name="Reports & Stats" /></ProtectedRoute>} />
-      <Route path="/messages" element={<ProtectedRoute><FeaturePlaceholder name="Messaging" /></ProtectedRoute>} />
-      <Route path="/disputes" element={<ProtectedRoute><FeaturePlaceholder name="Support & Disputes" /></ProtectedRoute>} />
+        {/* Core Operational Routes */}
+        <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><Dashboard /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/create-project" element={<ProtectedRoute><DashboardLayout><CreateProject /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/marketplace" element={<ProtectedRoute><DashboardLayout><Market /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/project/:id" element={<ProtectedRoute><DashboardLayout><ProjectDetails /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/kyc" element={<ProtectedRoute><DashboardLayout><KYC /></DashboardLayout></ProtectedRoute>} />
+        
+        {/* Dispute & Resolution */}
+        <Route path="/disputes" element={<ProtectedRoute><DashboardLayout><DisputesList /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/dispute/:id" element={<ProtectedRoute><DashboardLayout><DisputeDetails /></DashboardLayout></ProtectedRoute>} />
 
-      {/* Catch-all */}
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+        {/* Restored Strategic Roadmap Routes (Placeholders) */}
+        <Route path="/contracts" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Active Contracts" /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/proposals" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Bids & Proposals" /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Network Analytics" /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/messages" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Secure Messaging" /></DashboardLayout></ProtectedRoute>} />
+
+      </Routes>
+    </Router>
   );
 }
-
 export default App;

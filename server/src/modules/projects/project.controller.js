@@ -2,7 +2,7 @@ import prisma from "../../config/database.js";
 // create->project
 export const createProject = async (req, res) => {
   try {
-    const { title, description, budget } = req.body;
+    const { title, description, budget, category } = req.body;
     const clientId = req.user.id;
     if (!title || !description) {
       return res.status(400).json({ message: "All fields required" });
@@ -11,6 +11,7 @@ export const createProject = async (req, res) => {
       data: {
         title,
         description,
+        category: category || "Development",
         budget: parseFloat(budget) || 0,
         clientId
       }

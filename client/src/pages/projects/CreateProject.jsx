@@ -20,6 +20,7 @@ export default function CreateProject() {
     title: "",
     description: "",
     budget: "",
+    category: "Development",
   });
   const [statusMessage, setStatusMessage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -37,10 +38,10 @@ export default function CreateProject() {
 
     try {
       await axios.post("/projects/create", formData);
-      showStatus("Project node established successfully.", 'success');
+      showStatus("Project created successfully.", 'success');
       setTimeout(() => navigate("/dashboard"), 1500);
     } catch (err) {
-      showStatus(err.response?.data?.message || "Node initialization failed.", 'error');
+      showStatus(err.response?.data?.message || "Project creation failed.", 'error');
     } finally {
       setLoading(false);
     }
@@ -80,8 +81,8 @@ export default function CreateProject() {
              <p className="text-xs font-bold text-zinc-400">Project Builder</p>
           </div>
           <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-zinc-900 leading-none">Create a Project</h1>
-          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] leading-loose max-w-lg">
-             Configure your mission requirements to initiate a secure escrow contract.
+          <p className="text-sm font-medium text-zinc-400 max-w-lg">
+             Configure your project requirements to start a secure escrow contract.
           </p>
         </div>
       </header>
@@ -110,7 +111,29 @@ export default function CreateProject() {
               />
             </div>
 
-            <div className="space-y-4 bg-zinc-50/50 p-6 rounded-2xl border border-zinc-50 lg:border-none lg:bg-transparent lg:p-0">
+          {/* Section 2: Category & Allocation */}
+          <div className="p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-zinc-100 text-zinc-400 flex items-center justify-center">
+                  <Package size={14} />
+                </div>
+                <label className="text-sm font-bold text-zinc-500">Project Category</label>
+              </div>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full text-lg font-bold bg-transparent border-none focus:ring-0 text-zinc-900 tracking-tight px-0 appearance-none cursor-pointer"
+              >
+                <option value="Development">Development</option>
+                <option value="Design">Design</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Writing">Writing</option>
+              </select>
+            </div>
+
+            <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20">
                   <DollarSign size={14} />
@@ -118,18 +141,19 @@ export default function CreateProject() {
                 <label className="text-sm font-bold text-zinc-500">Project Budget ($)</label>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-black text-zinc-300">$</span>
+                <span className="text-xl font-bold text-zinc-300">$</span>
                 <input
                   type="number"
                   name="budget"
                   required
-                  className="w-full text-lg lg:text-xl font-black bg-transparent border-none focus:ring-0 placeholder:text-zinc-200 text-zinc-900 tracking-tight"
+                  className="w-full text-lg lg:text-xl font-bold bg-transparent border-none focus:ring-0 placeholder:text-zinc-200 text-zinc-900 tracking-tight"
                   placeholder="0.00"
                   value={formData.budget}
                   onChange={handleChange}
                 />
               </div>
             </div>
+          </div>
           </div>
 
           {/* Section 2: Scope of Operations */}
@@ -155,7 +179,7 @@ export default function CreateProject() {
           <div className="p-6 lg:p-8 bg-zinc-50/30 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">System Status: Node Ready</span>
+              <span className="text-xs font-bold text-zinc-400">System Online</span>
             </div>
             
             <div className="flex items-center gap-4 w-full sm:w-auto">
@@ -171,9 +195,9 @@ export default function CreateProject() {
                  disabled={loading}
                  className="flex-grow sm:flex-none px-10 py-3.5 bg-zinc-900 text-white rounded-2xl text-sm font-bold hover:bg-emerald-600 transition-all shadow-xl shadow-zinc-900/10 active:scale-95 flex items-center justify-center gap-3"
                >
-                 {loading ? "Initializing..." : (
+                 {loading ? "Creating..." : (
                    <>
-                     Establish Node
+                     Create Project
                      <ChevronRight size={14} strokeWidth={3} />
                    </>
                  )}

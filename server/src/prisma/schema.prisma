@@ -28,6 +28,7 @@ model Project {
   id          String        @id @default(uuid())
   title       String
   description String
+  category    String        @default("Development")
   clientId    String
   budget      Float         @default(0)
   status      ProjectStatus @default(OPEN)
