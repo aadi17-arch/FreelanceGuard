@@ -31,42 +31,42 @@ export default function Sidebar({ onClose }) {
   };
 
   const navItems = [
-    { name: "Overview", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "MAIN" },
-    { name: "Find Jobs", path: "/marketplace", icon: <Search size={14} />, section: "MAIN" },
-    { name: "My Contracts", path: "/contracts", icon: <FileText size={14} />, section: "MAIN" },
-    { name: "My Bids", path: "/proposals", icon: <ClipboardList size={14} />, section: "MAIN" },
+    { name: "Overview", path: "/dashboard", icon: <LayoutDashboard size={15} />, section: "Dashboard" },
+    { name: "Marketplace", path: "/marketplace", icon: <Search size={15} />, section: "Dashboard" },
+    { name: "My Projects", path: "/contracts", icon: <FileText size={15} />, section: "Dashboard" },
+    { name: "My Proposals", path: "/proposals", icon: <ClipboardList size={15} />, section: "Dashboard" },
     
-    { name: "Payments", path: "/escrow", icon: <Wallet size={14} />, section: "FINANCES" },
-    { name: "Reports", path: "/analytics", icon: <BarChart3 size={14} />, section: "FINANCES" },
+    { name: "Payments", path: "/escrow", icon: <Wallet size={15} />, section: "Finances" },
+    { name: "Reports", path: "/analytics", icon: <BarChart3 size={15} />, section: "Finances" },
     
-    { name: "Messages", path: "/messages", icon: <MessageSquare size={14} />, section: "ACCOUNT" },
-    { name: "Issues", path: "/disputes", icon: <AlertTriangle size={14} />, section: "ACCOUNT" },
-    { name: "Profile", path: "/profile", icon: <User size={14} />, section: "ACCOUNT" },
-    { name: "Security Check", path: "/kyc", icon: <ShieldCheck size={14} />, section: "ACCOUNT" },
+    { name: "Messages", path: "/messages", icon: <MessageSquare size={15} />, section: "Account" },
+    { name: "Support & Issues", path: "/disputes", icon: <AlertTriangle size={15} />, section: "Account" },
+    { name: "Settings", path: "/profile", icon: <User size={15} />, section: "Account" },
+    { name: "Verification", path: "/kyc", icon: <ShieldCheck size={15} />, section: "Account" },
   ];
 
-  const sections = ["MAIN", "FINANCES", "ACCOUNT"];
+  const sections = ["Dashboard", "Finances", "Account"];
 
   return (
     <aside className="h-screen w-[210px] bg-white border-r border-zinc-100 flex flex-col py-6 z-[60] relative">
       {/* Brand Logo */}
       <div className="px-6 mb-8">
         <Link to="/dashboard" onClick={onClose} className="flex items-center gap-3 group">
-          <div className="w-6 h-6 bg-emerald-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:rotate-12 transition-transform">
-            <ShieldCheck size={14} className="text-white" />
+          <div className="w-7 h-7 bg-emerald-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:rotate-12 transition-transform">
+            <ShieldCheck size={16} className="text-white" />
           </div>
-          <span className="text-[13px] font-black text-zinc-900 tracking-tight">FreelanceGuard</span>
+          <span className="text-sm font-black text-zinc-900 tracking-tight">FreelanceGuard</span>
         </Link>
       </div>
 
       {/* Navigation Nodes */}
-      <nav className="flex-1 px-3 space-y-8 overflow-y-auto custom-scrollbar">
+      <nav className="flex-1 px-3 space-y-7 overflow-y-auto custom-scrollbar">
         {sections.map((section) => (
-          <div key={section} className="space-y-3">
-            <h3 className="px-4 text-[10px] font-black text-zinc-300 uppercase tracking-[0.25em]">
+          <div key={section} className="space-y-2">
+            <h3 className="px-4 text-[11px] font-bold text-zinc-400">
               {section}
             </h3>
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {navItems
                 .filter((item) => item.section === section)
                 .map((item) => {
@@ -85,7 +85,7 @@ export default function Sidebar({ onClose }) {
                       <span className={`${isActive ? "text-emerald-400" : "text-zinc-400 group-hover:text-zinc-900"} transition-colors`}>
                         {item.icon}
                       </span>
-                      <span className="text-[13px] font-bold tracking-tight">{item.name}</span>
+                      <span className="text-[13px] font-semibold tracking-tight">{item.name}</span>
                       
                       {isActive && (
                         <motion.div 
@@ -108,8 +108,8 @@ export default function Sidebar({ onClose }) {
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 text-rose-500 hover:bg-rose-50 rounded-xl transition-all duration-300 group"
         >
-          <LogOut size={14} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[13px] font-bold tracking-tight">Log Out</span>
+          <LogOut size={15} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="text-[13px] font-semibold tracking-tight">Log Out</span>
         </button>
       </div>
     </aside>

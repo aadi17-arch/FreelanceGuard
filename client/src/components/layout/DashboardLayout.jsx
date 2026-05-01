@@ -34,7 +34,7 @@ export default function DashboardLayout({ children }) {
     if (titles[path]) return titles[path];
     if (path.startsWith("/project/")) return "Project Details";
     if (path.startsWith("/dispute/")) return "Resolution Center";
-    return "Management Node";
+    return "Management Hub";
   };
 
   return (
@@ -84,13 +84,16 @@ export default function DashboardLayout({ children }) {
               <Menu size={18} className="text-zinc-900" />
             </button>
             <div className="space-y-0.5 truncate">
-               <h2 className="text-[10px] lg:text-[14px] font-black text-zinc-900 uppercase tracking-widest leading-none truncate">
+               <h2 className="text-sm lg:text-base font-bold text-zinc-900 leading-none truncate">
                  {getPageTitle()}
                </h2>
-               <div className="hidden md:flex items-center gap-2 text-[9px] text-zinc-300 font-bold uppercase tracking-widest mt-1">
-                 <span>{new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</span>
+               <div className="hidden md:flex items-center gap-2 text-[10px] text-zinc-400 font-semibold mt-1">
+                 <span>{new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                  <span className="opacity-30">·</span>
-                 <span>Network Status: Online</span>
+                 <span className="flex items-center gap-1">
+                    <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
+                    Network Status: Secure
+                 </span>
                </div>
             </div>
           </div>
@@ -104,20 +107,20 @@ export default function DashboardLayout({ children }) {
             
             <Link 
               to="/profile" 
-              className="flex items-center gap-2 p-1 pl-2 pr-1 rounded-2xl border border-zinc-100 hover:bg-zinc-50 transition-all group"
+              className="flex items-center gap-2 p-1.5 rounded-xl border border-zinc-100 hover:bg-zinc-50 transition-all group"
             >
-               <span className="hidden md:block text-[8px] font-black text-zinc-400 uppercase tracking-widest group-hover:text-zinc-900 transition-colors">
-                 My Account
-               </span>
-               <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-xl bg-zinc-900 text-emerald-500 flex items-center justify-center text-[10px] lg:text-[11px] font-black shadow-lg shadow-zinc-900/10 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+               <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-lg bg-zinc-900 text-emerald-500 flex items-center justify-center text-[10px] lg:text-[11px] font-black shadow-lg shadow-zinc-900/10 group-hover:bg-emerald-500 group-hover:text-white transition-all">
                  {user?.name?.[0] || "A"}
                </div>
+               <span className="hidden md:block text-xs font-bold text-zinc-600 group-hover:text-zinc-900 transition-colors pr-2">
+                 {user?.name?.split(' ')[0]}
+               </span>
             </Link>
           </div>
         </header>
 
         {/* Dynamic Page Content */}
-        <main className="px-4 py-6 lg:px-12 lg:py-10 z-10 w-full overflow-x-hidden">
+        <main className="px-4 py-6 lg:px-10 lg:py-8 z-10 w-full overflow-x-hidden">
           <div className="max-w-[1400px] mx-auto">
             {children}
           </div>
