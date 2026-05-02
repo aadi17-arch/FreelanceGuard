@@ -7,3 +7,5 @@ dist
 *.log
 uploads/
 scratch/
+LOG.md
+LOG_PROTOCOL.md
