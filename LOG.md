@@ -248,16 +248,33 @@ FREELANCEGUARD: MASTER PROJECT LOG
 [STATUS]     : COMPLETED
 --------------------------------------------------------------------------------
 
-[UPDATE #012] – GRANULAR LOGIC SYNCHRONIZATION
+[UPDATE #013] – UI/UX HUMANIZATION & PREMIUM REFACTOR
 --------------------------------------------------------------------------------
-[DATE]       : 2026-05-01
-[AUTHOR]     : [USER]
-[TYPE]       : INFRASTRUCTURE SYNC
+[DATE]       : 2026-05-02
+[AUTHOR]     : [COMPUTER]
+[TYPE]       : UI/UX OVERHAUL
 [CHANGES]    :
-  - Performed 3 distinct granular commits for improved project auditability.
-  - Synced Global Auth Engine (Context/Provider).
-  - Synced Page Integration (Login/Register hooks).
-  - Synced Backend Hardening (Profile enrichment for Dashboard).
+  - Purged all technical/militaristic jargon across the platform.
+  - Redesigned Profile and Escrow dashboards with glassmorphism aesthetics.
+  - Implemented 'Sentence Case' typography and tightened layout sizing.
+  - Simplified navigation by consolidating Profile access and Logout placement.
+[RATIONALE]  : To transition the platform into a user-centric, professional
+               financial hub that feels premium and approachable.
+[STATUS]     : COMPLETED
+--------------------------------------------------------------------------------
+
+[UPDATE #014] – ESCROW LOGIC INITIALIZATION (DEPOSIT)
+--------------------------------------------------------------------------------
+[DATE]       : 2026-05-03
+[AUTHOR]     : [USER]
+[TYPE]       : LOGIC IMPLEMENTATION
+[CHANGES]    :
+  - Developed 'depositToEscrow' backend logic for locking project funds.
+  - Implemented secure Prisma Transactions for wallet balance protection.
+  - Added strict status checks and ownership verification for escrow actions.
+  - Built 'clean_and_seed.js' for rapid database testing and environment reset.
+[RATIONALE]  : To establish the core financial trust mechanism of the platform,
+               ensuring client funds are secured before work begins.
 [STATUS]     : COMPLETED
 --------------------------------------------------------------------------------
 
