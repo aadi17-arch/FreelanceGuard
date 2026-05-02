@@ -11,7 +11,14 @@ import {
   CheckCircle2,
   Lock,
   MessageSquare,
-  Scale
+  Scale,
+  ShieldCheck,
+  Gavel,
+  History,
+  Download,
+  Info,
+  User,
+  ArrowRight
 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -32,19 +39,13 @@ const DisputeDetails = () => {
   const fetchDisputeDetails = async () => {
     try {
       setLoading(true);
-      console.log("FETCHING VAULT ID:", id);
       const response = await axios.get(`/dispute/${id}`, {
         withCredentials: true
       });
-      console.log("VAULT DATA:", response.data);
-      if (!response.data || !response.data.id) {
-        toast.error("Vault data corrupted or incomplete");
-      }
       setDispute(response.data);
     } catch (error) {
       console.error("Vault sync failure:", error);
-      const errorMsg = error.response?.data?.error || error.response?.data?.message || error.message;
-      toast.error(`Sync Failure: ${errorMsg}`);
+      toast.error("Failed to synchronize with Resolution Vault");
     } finally {
       setLoading(false);
     }
@@ -65,230 +66,269 @@ const DisputeDetails = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true
       });
-      toast.success("Proof successfully logged in vault");
+      toast.success("Evidence secured in Case File");
       setEvidenceFile(null);
       setEvidenceDesc('');
       fetchDisputeDetails();
     } catch (error) {
-      console.error("Upload failed:", error);
-      toast.error(error.response?.data?.message || "Failed to submit evidence");
+      toast.error("Failed to secure evidence in vault");
     } finally {
       setUploading(false);
     }
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
-      <motion.div 
-        animate={{ rotate: 360 }}
-        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-      >
-        <Scale className="text-amber-600 w-8 h-8" />
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
+      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }}>
+        <ShieldCheck className="w-8 h-8 text-emerald-500" />
       </motion.div>
+      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">Syncing with Support Center...</p>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 text-zinc-900 p-4 lg:p-8">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto">
-        <button 
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-zinc-400 hover:text-zinc-900 font-bold uppercase text-[10px] tracking-widest transition-colors mb-8 group"
-        >
-          <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          Back to Dashboard
-        </button>
+    <div className="min-h-screen bg-[#fafafa] text-zinc-900 pb-20">
+      {/* 1. Case Info Bar */}
+      <div className="w-full bg-zinc-900 text-white py-3 px-6 flex justify-between items-center overflow-hidden relative">
+         <div className="flex items-center gap-4">
+            <button onClick={() => navigate(-1)} className="p-1 hover:bg-white/10 rounded-lg transition-colors">
+               <ChevronLeft size={16} />
+            </button>
+            <div className="h-4 w-[1px] bg-white/20" />
+            <div className="flex items-center gap-2">
+               <ShieldAlert size={12} className="text-emerald-500" />
+               <p className="text-[10px] font-black uppercase tracking-widest">Case ID: <span className="text-emerald-500">{dispute?.id?.toUpperCase()}</span></p>
+            </div>
+         </div>
+         <div className="hidden md:flex items-center gap-6">
+            <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Status: SECURE</p>
+            <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Server: US-EAST</p>
+         </div>
+         <div className="absolute top-0 right-0 w-64 h-full bg-gradient-to-l from-emerald-500/10 to-transparent" />
+      </div>
 
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12">
-          <div>
-            <div className="flex items-center gap-4 mb-3">
-              <div className="p-3 bg-zinc-900 rounded-2xl shadow-lg shadow-zinc-900/10">
-                <ShieldAlert className="text-white w-6 h-6" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-black tracking-tight text-zinc-900">Case #{dispute?.id?.slice(0, 8).toUpperCase() || 'REF-ID'}</h1>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${
-                    dispute?.status === 'OPEN' ? 'bg-amber-50 text-amber-600 border-amber-200' : 
-                    'bg-emerald-50 text-emerald-600 border-emerald-200'
-                  }`}>
-                    {dispute?.status || 'PENDING'}
-                  </span>
-                  <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
-                    {dispute?.milestone?.contract?.project?.title || 'Protocol'} / <span className="text-zinc-900">{dispute?.milestone?.title || 'Initial Allocation'}</span>
-                  </span>
+      <div className="max-w-7xl mx-auto px-6 mt-12">
+        {/* 2. Page Header */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12">
+          <div className="lg:col-span-8 space-y-4">
+             <div className="flex items-center gap-3">
+                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase border ${
+                  dispute?.status === 'OPEN' ? 'bg-amber-500 text-white border-amber-500' : 'bg-emerald-500 text-white border-emerald-500'
+                }`}>
+                  {dispute?.status === 'OPEN' ? 'Under Review' : 'Resolved'}
+                </span>
+                <span className="text-zinc-300 font-medium">/</span>
+                <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Category: Payment Support</p>
+             </div>
+             <h1 className="text-4xl lg:text-6xl font-black tracking-tighter text-zinc-900 uppercase">
+                {dispute?.milestone?.contract?.project?.title || "Contract Asset"}
+             </h1>
+             <div className="flex flex-wrap items-center gap-6 pt-2">
+                <div className="flex items-center gap-2">
+                   <User size={14} className="text-zinc-400" />
+                   <p className="text-xs font-bold text-zinc-500">Reported by: <span className="text-zinc-900">{dispute?.raisedBy?.name}</span></p>
                 </div>
-              </div>
-            </div>
+                <div className="flex items-center gap-2">
+                   <Clock size={14} className="text-zinc-400" />
+                   <p className="text-xs font-bold text-zinc-500">Date Reported: <span className="text-zinc-900">{new Date(dispute?.createdAt).toLocaleDateString()}</span></p>
+                </div>
+             </div>
           </div>
-          
-          <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-xl shadow-zinc-900/5 flex items-center gap-6">
-            <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center text-amber-600">
-              <Lock size={20} />
-            </div>
-            <div>
-              <p className="text-[10px] text-zinc-400 font-black uppercase tracking-widest mb-1">Locked in Vault</p>
-              <p className="text-2xl font-black text-zinc-900 leading-none">
-                ${dispute?.milestone?.amount?.toLocaleString() || '0.00'}
-              </p>
-            </div>
+
+          <div className="lg:col-span-4">
+             <div className="bg-white border border-zinc-100 p-8 rounded-[2.5rem] shadow-2xl shadow-zinc-200/50 flex items-center justify-between group relative overflow-hidden">
+                <div className="space-y-1 relative z-10">
+                   <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Amount in Question</p>
+                   <p className="text-4xl font-black text-zinc-900 tracking-tighter">${dispute?.milestone?.amount?.toLocaleString()}</p>
+                </div>
+                <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform relative z-10 shadow-inner">
+                   <Lock size={24} />
+                </div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+             </div>
           </div>
         </div>
 
+        {/* 3. Case Details */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* Left Column: Details & Evidence Upload */}
+          
+          {/* Left Column: Details & Upload */}
           <div className="lg:col-span-1 space-y-8">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white border border-gray-200 rounded-[32px] p-8 shadow-xl shadow-zinc-900/5"
-            >
-              <h3 className="text-[10px] font-black uppercase tracking-widest mb-6 flex items-center gap-2 text-zinc-400">
-                <AlertCircle className="w-4 h-4 text-amber-600" />
-                Dispute Reason
-              </h3>
-              <p className="text-sm font-medium text-zinc-700 leading-relaxed bg-gray-50 p-6 rounded-2xl border border-gray-100 italic">
-                "{dispute?.reason}"
-              </p>
-            </motion.div>
+            <div className="bg-zinc-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden group">
+               <div className="relative z-10 space-y-6">
+                  <div className="flex items-center gap-3">
+                     <div className="w-10 h-10 bg-white/10 rounded-2xl flex items-center justify-center">
+                        <Info size={18} className="text-emerald-500" />
+                     </div>
+                     <h3 className="text-sm font-black uppercase tracking-widest">Issue Description</h3>
+                  </div>
+                  <p className="text-zinc-400 text-sm font-medium leading-relaxed italic border-l-2 border-emerald-500 pl-4">
+                     "{dispute?.reason}"
+                  </p>
+               </div>
+               <div className="absolute bottom-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-[100px]" />
+            </div>
 
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white border border-gray-200 rounded-[32px] p-8 shadow-xl shadow-zinc-900/5"
-            >
-              <h3 className="text-[10px] font-black uppercase tracking-widest mb-6 flex items-center gap-2 text-zinc-400">
-                <Upload className="w-4 h-4 text-zinc-900" />
-                Submit Evidence
-              </h3>
-              <form onSubmit={handleUploadEvidence} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] text-zinc-400 uppercase tracking-widest font-black ml-1">Evidence Title</label>
+            <div className="bg-white border border-zinc-100 rounded-[2.5rem] p-8 shadow-sm space-y-6">
+               <div className="flex items-center justify-between">
+                  <h3 className="text-xs font-black uppercase tracking-widest text-zinc-900">Add Evidence</h3>
+                  <Upload size={16} className="text-zinc-400" />
+               </div>
+               
+               <form onSubmit={handleUploadEvidence} className="space-y-4">
                   <input 
                     type="text"
                     value={evidenceDesc}
                     onChange={(e) => setEvidenceDesc(e.target.value)}
-                    placeholder="e.g. Completed deliverable screenshot"
-                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-sm font-medium text-zinc-900 placeholder:text-zinc-300"
+                    placeholder="Briefly describe this document..."
+                    className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all"
                   />
-                </div>
-                
-                <div className="relative group">
-                  <input 
-                    type="file"
-                    onChange={(e) => setEvidenceFile(e.target.files[0])}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  />
-                  <div className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all ${
-                    evidenceFile ? 'border-amber-500 bg-amber-50/50' : 'border-gray-200 group-hover:border-zinc-900'
-                  }`}>
-                    <FileText className={`w-8 h-8 mx-auto mb-3 ${evidenceFile ? 'text-amber-600' : 'text-zinc-300 group-hover:text-zinc-900'} transition-colors`} />
-                    <p className="text-xs font-black text-zinc-900 uppercase tracking-tight">
-                      {evidenceFile ? evidenceFile.name : 'Drop Evidence Here'}
-                    </p>
-                    <p className="text-[10px] text-zinc-400 mt-1 uppercase font-bold tracking-tighter">PDF, JPG, PNG up to 10MB</p>
+                  
+                  <div className="relative group">
+                    <input 
+                      type="file"
+                      onChange={(e) => setEvidenceFile(e.target.files[0])}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    />
+                    <div className={`border-2 border-dashed rounded-2xl p-10 text-center transition-all ${
+                      evidenceFile ? 'border-emerald-500 bg-emerald-50/50' : 'border-zinc-100 group-hover:border-zinc-900'
+                    }`}>
+                      <FileText size={32} className={`mx-auto mb-4 ${evidenceFile ? 'text-emerald-600' : 'text-zinc-200'}`} />
+                      <p className="text-[11px] font-black text-zinc-900 uppercase tracking-tight">
+                        {evidenceFile ? evidenceFile.name : 'Select Proof File'}
+                      </p>
+                      <p className="text-[9px] text-zinc-400 mt-2 font-bold uppercase tracking-widest">PDF / Images Only</p>
+                    </div>
                   </div>
-                </div>
 
-                <button 
-                  type="submit"
-                  disabled={uploading || !evidenceFile}
-                  className="w-full bg-zinc-900 hover:bg-amber-600 disabled:opacity-30 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-zinc-900/10 flex items-center justify-center gap-3 uppercase text-[10px] tracking-widest"
-                >
-                  {uploading ? (
-                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity }}><Clock className="w-4 h-4" /></motion.div>
-                  ) : <Upload className="w-4 h-4" />}
-                  Submit Proof to Vault
-                </button>
-              </form>
-            </motion.div>
-          </div>
-
-          {/* Right Column: Evidence Timeline */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-[10px] font-black uppercase tracking-widest flex items-center gap-3 text-zinc-400">
-                <Clock className="w-4 h-4 text-zinc-900" />
-                Evidence Timeline
-              </h2>
-              <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{dispute?.evidence?.length} entries found</span>
+                  <button 
+                    type="submit"
+                    disabled={uploading || !evidenceFile}
+                    className="w-full bg-zinc-900 hover:bg-emerald-600 disabled:opacity-30 text-white rounded-2xl py-5 font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-xl shadow-zinc-900/10 flex items-center justify-center gap-3 active:scale-95"
+                  >
+                    {uploading ? "Uploading..." : (
+                       <>
+                        <ShieldCheck size={16} />
+                        Add to My Case
+                       </>
+                    )}
+                  </button>
+               </form>
             </div>
 
-            <div className="relative border-l-2 border-gray-200 ml-4 space-y-10 pb-8">
-              <AnimatePresence mode='popLayout'>
-                {dispute?.evidence?.map((item, index) => (
-                  <motion.div 
-                    key={item.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="relative pl-10"
-                  >
-                    <div className="absolute -left-[9px] top-0 w-4 h-4 bg-white border-[3px] border-zinc-900 rounded-full z-10" />
-                    
-                    <div className="bg-white border border-gray-200 rounded-[32px] p-6 hover:border-amber-500 transition-all group shadow-xl shadow-zinc-900/5">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <h4 className="font-black text-zinc-900 group-hover:text-amber-600 transition-colors tracking-tight">
-                            {item.fileName || "Unnamed Evidence"}
-                          </h4>
-                          <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-1.5 flex items-center gap-2">
-                            <Clock className="w-3 h-3" />
-                            {item.createdAt ? new Date(item.createdAt).toLocaleString() : 'Just Now'}
-                          </p>
+            <div className="bg-emerald-50/50 border border-emerald-100 rounded-[2.5rem] p-8 flex items-center gap-6">
+               <div className="w-12 h-12 bg-emerald-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                  <Gavel size={20} />
+               </div>
+               <div>
+                  <p className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em]">Resolution Team</p>
+                  <p className="text-xs font-bold text-emerald-800 mt-1">Reviewing Your Documents</p>
+               </div>
+            </div>
+          </div>
+
+          {/* Right Column: Timeline & Files */}
+          <div className="lg:col-span-2 space-y-10">
+            
+            <div className="space-y-6 px-1">
+               <div className="flex items-center gap-3">
+                  <History size={16} className="text-zinc-900" />
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900">Case Timeline</h3>
+               </div>
+               <div className="grid grid-cols-4 gap-4">
+                  {[
+                    { label: "Reported", icon: <AlertCircle />, active: true, done: true },
+                    { label: "Evidence", icon: <Upload />, active: true, done: false },
+                    { label: "Review", icon: <Gavel />, active: false, done: false },
+                    { label: "Resolved", icon: <CheckCircle2 />, active: false, done: false }
+                  ].map((step, i) => (
+                    <div key={i} className="space-y-3">
+                       <div className={`h-1.5 rounded-full transition-all duration-1000 ${step.done ? 'bg-emerald-500' : step.active ? 'bg-amber-500' : 'bg-zinc-100'}`} />
+                       <div className="flex items-center gap-2">
+                          <div className={`text-[10px] ${step.active ? 'text-zinc-900' : 'text-zinc-300'}`}>
+                             {React.cloneElement(step.icon, { size: 12 })}
+                          </div>
+                          <span className={`text-[9px] font-black uppercase tracking-widest ${step.active ? 'text-zinc-900' : 'text-zinc-300'}`}>{step.label}</span>
+                       </div>
+                    </div>
+                  ))}
+               </div>
+            </div>
+
+            <div className="space-y-6">
+               <div className="flex items-center justify-between px-1">
+                  <div className="flex items-center gap-3">
+                    <FileText size={16} className="text-zinc-900" />
+                    <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900">Submitted Documents</h3>
+                  </div>
+                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-white px-3 py-1 rounded-full border border-zinc-100 shadow-sm">{dispute?.evidence?.length} Files Attached</span>
+               </div>
+
+               <div className="space-y-4">
+                  <AnimatePresence mode='popLayout'>
+                    {dispute?.evidence?.map((item, index) => (
+                      <motion.div 
+                        key={item.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="bg-white border border-zinc-100 rounded-[2rem] p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-emerald-500 transition-all group"
+                      >
+                        <div className="flex items-center gap-6 w-full md:w-auto">
+                           <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center text-zinc-400 group-hover:bg-emerald-50 group-hover:text-emerald-500 transition-all shadow-inner">
+                              <FileText size={24} />
+                           </div>
+                           <div>
+                              <p className="text-[10px] font-black text-zinc-300 uppercase tracking-widest mb-1">Document #{item.id.slice(0, 8)}</p>
+                              <h4 className="text-lg font-black text-zinc-900 tracking-tight">{item.fileName || "Unnamed File"}</h4>
+                              <div className="flex items-center gap-3 mt-1.5">
+                                 <div className="flex items-center gap-1.5">
+                                    <div className="w-4 h-4 rounded-full bg-zinc-900 flex items-center justify-center text-[8px] font-black text-white">{item.uploadedBy?.name?.charAt(0)}</div>
+                                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-tight">{item.uploadedBy?.name}</span>
+                                 </div>
+                                 <span className="text-zinc-200 text-xs">|</span>
+                                 <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-tight">{new Date(item.createdAt).toLocaleDateString()}</span>
+                              </div>
+                           </div>
                         </div>
+
                         <a 
                           href={`http://localhost:5001/${item.fileUrl.replace(/\\/g, '/')}`} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="px-4 py-2 bg-zinc-900 text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-accent-primary transition-all"
+                          className="w-full md:w-auto px-8 py-3 bg-zinc-50 hover:bg-zinc-900 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
                         >
-                          View File
+                          <Download size={14} />
+                          Download File
                         </a>
-                      </div>
-                      
-                      <div className="flex items-center gap-3 pt-5 border-t border-gray-100">
-                        <div className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center text-[11px] font-black text-white shadow-lg shadow-zinc-900/20">
-                          {item.uploadedBy?.name?.charAt(0).toUpperCase() || 'U'}
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+
+                  <div className="bg-zinc-50 border border-zinc-100 rounded-[2rem] p-8 border-l-4 border-l-emerald-500">
+                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div className="space-y-1">
+                           <h4 className="text-sm font-black text-zinc-900 uppercase tracking-tight">Case Created</h4>
+                           <p className="text-xs font-medium text-zinc-500">Your support request has been successfully created and funds are held securely until the issue is resolved.</p>
                         </div>
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-tight">
-                          Evidence submitted by <span className="text-zinc-900 font-black tracking-tight">{item.uploadedBy?.name || 'System'}</span>
-                        </p>
+                        <div className="text-right shrink-0">
+                           <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Status: ACTIVE</p>
+                           <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{new Date(dispute?.createdAt).toLocaleString()}</p>
+                        </div>
+                     </div>
+                  </div>
+
+                  {dispute?.evidence?.length === 0 && (
+                    <div className="py-20 text-center space-y-4 bg-white border border-dashed border-zinc-200 rounded-[2.5rem]">
+                      <div className="w-16 h-16 bg-zinc-50 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <MessageSquare size={28} className="text-zinc-200" />
                       </div>
+                      <h4 className="text-sm font-bold text-zinc-900">No documents yet</h4>
+                      <p className="text-xs text-zinc-400 font-medium max-w-xs mx-auto">Please add any screenshots or documents that can help us resolve your issue.</p>
                     </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-
-              {/* Initial Dispute Node */}
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="relative pl-10"
-              >
-                <div className="absolute -left-[9px] top-0 w-4 h-4 bg-amber-500 rounded-full z-10 flex items-center justify-center shadow-lg shadow-amber-500/50">
-                  <ShieldAlert className="w-2.5 h-2.5 text-white" />
-                </div>
-                <div className="bg-amber-50 border border-amber-200 rounded-[32px] p-8 shadow-xl shadow-amber-500/5">
-                  <h4 className="font-black text-amber-700 uppercase text-xs tracking-widest mb-2">Dispute Protocol Initiated</h4>
-                  <p className="text-[11px] text-amber-600 font-medium leading-relaxed">
-                    Vault locked at <span className="text-amber-800 font-bold">{dispute?.createdAt ? new Date(dispute.createdAt).toLocaleString() : 'Processing...'}</span> by <span className="text-amber-800 font-black">{dispute?.raisedBy?.name || 'Authorized User'}</span>
-                  </p>
-                </div>
-              </motion.div>
+                  )}
+               </div>
             </div>
-
-            {dispute?.evidence?.length === 0 && (
-              <div className="text-center py-20 bg-background-secondary/50 rounded-3xl border-2 border-dashed border-border-primary">
-                <MessageSquare className="w-12 h-12 text-text-secondary/20 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-text-secondary">No evidence submitted yet</h3>
-                <p className="text-sm text-text-secondary/60 max-w-xs mx-auto mt-2">
-                  Use the upload panel to attach proof for the mediator to review.
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -297,3 +337,4 @@ const DisputeDetails = () => {
 };
 
 export default DisputeDetails;
+
