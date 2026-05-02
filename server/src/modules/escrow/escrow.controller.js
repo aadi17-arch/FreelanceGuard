@@ -51,6 +51,7 @@ export const releaseFunds = async (req, res) => {
       return res.status(403).json({ message: "Invalid Access" });
     }
     const result = await prisma.$transaction(async (tx) => {
+
       // subtracting held amount
       await tx.user.update({
         where: { id: contract.project.clientId },
@@ -78,6 +79,13 @@ export const releaseFunds = async (req, res) => {
       await tx.project.update({
         where: { id: contract.projectId },
         data: { status: "COMPLETED" }
+      });
+      await tx.payment.create({
+        data: {
+          contractId: contract.id,
+          amount: contract.totalAmount,
+          type: "RELEASE"
+        }
       });
       return { message: "Success" };
 
@@ -145,6 +153,13 @@ export const depositToEscrow = async (req, res) => {
         where: { id: contract.project.id },
         data: {
           status: "IN_PROGRESS"
+        }
+      });
+      await tx.payment.create({
+        data: {
+          contractId: contract.id,
+          amount: contract.totalAmount,
+          type: "DEPOSIT"
         }
       });
       return { message: "SUCCESS" };

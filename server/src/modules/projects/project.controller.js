@@ -147,15 +147,15 @@ export const hireFreelancer = async (req, res) => {
     if (!projectId || !freelancerId || !bidAmount) {
       return res.status(400).json({ message: "Missing hiring parameters" });
     }
+    const project = await prisma.project.findUnique({
+      where: { id: projectId }
+    });
+    if (!project || project.clientId !== clientId) {
+      return res.status(400).json({ message: "Unauthorized action" });
+    }
 
     const result = await prisma.$transaction(async (tx) => {
-      // 1. Update Project Status
-      const updatedProject = await tx.project.update({
-        where: { id: projectId },
-        data: {
-          status: 'IN_PROGRESS'
-        }
-      });
+
 
       // 2. Initialize Contract (The Escrow Vault)
       const contract = await tx.contract.create({
@@ -163,10 +163,11 @@ export const hireFreelancer = async (req, res) => {
           projectId,
           freelancerId,
           totalAmount: parseFloat(bidAmount),
-          heldAmount: parseFloat(bidAmount),
-          status: 'ACTIVE'
+          heldAmount: 0,
+          status: 'PENDING'
         }
       });
+
 
       // 3. Create Initial Milestone (Required for Disputes/Payments)
       const milestone = await tx.milestone.create({
@@ -188,14 +189,14 @@ export const hireFreelancer = async (req, res) => {
 
       // 5. Reject other bids
       await tx.bid.updateMany({
-        where: { 
-          projectId, 
-          NOT: { freelancerId } 
+        where: {
+          projectId,
+          NOT: { freelancerId }
         },
         data: { status: 'REJECTED' }
       });
 
-      return { updatedProject, contract, milestone };
+      return { contract, milestone };
     });
 
     res.status(200).json({

@@ -140,3 +140,20 @@ export const getProfile = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+export const addFunds = async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const userId = req.user.id;
+    const updateUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        walletBalance: {
+          increment: parseFloat(amount)
+        }
+      }
+    });
+    res.status(200).json({ message: "Funds added successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to add funds" });
+  }
+}

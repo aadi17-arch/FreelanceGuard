@@ -4,7 +4,7 @@ import path from "path";
 
 // Diagnostic Logging Helper
 const logDebug = (msg) => {
-  const logPath = "C:/Users/ADI/Desktop/FreelanceUp/freelanceguard/server/dispute_debug.log";
+  const logPath = path.join(process.cwd(), "dispute_debug.log");
   const timestamp = new Date().toISOString();
   fs.appendFileSync(logPath, `[${timestamp}] ${msg}\n`);
 };
@@ -50,7 +50,7 @@ export const getDisputes = async (req, res) => {
   try {
     const userId = req.user.id;
     const userRole = req.user.role;
-    
+
     logDebug(`--- FETCH REQUEST ---`);
     logDebug(`USER_ID: ${userId} | ROLE: ${userRole}`);
 
@@ -89,7 +89,7 @@ export const getDisputes = async (req, res) => {
     });
 
     logDebug(`MATCHES FOUND: ${disputes.length}`);
-    
+
     res.json({
       disputes,
       diagnostics: {
@@ -108,7 +108,7 @@ export const getDisputes = async (req, res) => {
 export const getDisputeDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     if (!id || id === 'undefined') {
       return res.status(400).json({ error: "Invalid Dispute ID provided" });
     }
@@ -144,9 +144,9 @@ export const getDisputeDetails = async (req, res) => {
 
     res.json(dispute);
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       error: "Vault synchronization failure",
-      details: error.message 
+      details: error.message
     });
   }
 };
