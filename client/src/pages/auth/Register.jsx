@@ -10,7 +10,9 @@ import {
   UserCheck, 
   ArrowRight,
   ShieldCheck,
-  Zap
+  Zap,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -21,7 +23,21 @@ export default function Register() {
     password: "",
     role: "FREELANCER",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const calculateStrength = (pass) => {
+    let score = 0;
+    if (pass.length === 0) return 0;
+    if (pass.length > 6) score++;
+    if (pass.length > 10) score++;
+    if (/[A-Z]/.test(pass)) score++;
+    if (/[0-9]/.test(pass)) score++;
+    if (/[^A-Za-z0-9]/.test(pass)) score++;
+    return score;
+  };
+
+  const strength = calculateStrength(formData.password);
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -29,7 +45,8 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     try {
-      const success = await register(formData);
+      const { name, email, password, role } = formData;
+      const success = await register(name, email, password, role);
       if (success) {
         toast.success("Account created successfully!");
         navigate("/dashboard");
@@ -119,21 +136,54 @@ export default function Register() {
                  />
                </div>
 
-               {/* Password */}
-               <div className="space-y-2">
-                 <div className="flex items-center gap-2 px-1">
-                   <Lock size={14} className="text-zinc-400" />
-                   <label className="text-xs font-bold text-zinc-500">Password</label>
-                 </div>
-                 <input
-                   type="password"
-                   value={formData.password}
-                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                   className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all"
-                   placeholder="Create a strong password"
-                   required
-                 />
-               </div>
+                {/* Password */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between px-1">
+                    <div className="flex items-center gap-2">
+                      <Lock size={14} className="text-zinc-400" />
+                      <label className="text-xs font-bold text-zinc-500">Password</label>
+                    </div>
+                    {formData.password && (
+                      <span className={`text-[10px] font-bold uppercase tracking-wider ${
+                        strength <= 2 ? "text-red-500" : strength <= 4 ? "text-amber-500" : "text-emerald-500"
+                      }`}>
+                        {strength <= 2 ? "Weak" : strength <= 4 ? "Medium" : "Secure"}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className="relative group">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all pr-12"
+                      placeholder="Create a strong password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 text-zinc-400 hover:text-zinc-900 transition-colors"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+
+                  {/* Strength Meter Bars */}
+                  <div className="flex gap-1.5 px-1 pt-1">
+                    {[1, 2, 3, 4, 5].map((step) => (
+                      <div 
+                        key={step}
+                        className={`h-1 flex-1 rounded-full transition-all duration-500 ${
+                          strength >= step 
+                            ? (strength <= 2 ? "bg-red-500" : strength <= 4 ? "bg-amber-500" : "bg-emerald-500")
+                            : "bg-zinc-100"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
              </div>
 
              <div className="flex items-start gap-3 px-1 group">

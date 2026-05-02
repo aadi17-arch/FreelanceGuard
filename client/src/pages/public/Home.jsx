@@ -131,7 +131,8 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-12 md:gap-y-16">
-          {[
+          { [
+            {
               title: "Your money stays safe", 
               desc: "Funds are locked in secure payment accounts until work is approved. No more chasing invoices.", 
               icon: ShieldCheck 
@@ -161,17 +162,20 @@ export default function Home() {
               desc: "Instant notifications for milestones, payments, and contract signatures.", 
               icon: Bell 
             }
-          ].map((feature, i) => (
-            <div key={i} className="space-y-5 group">
-              <div className="w-11 h-11 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-center text-zinc-400 transition-all group-hover:bg-emerald-500 group-hover:text-white group-hover:border-emerald-500 shadow-sm">
-                <feature.icon size={20} strokeWidth={2} />
+          ].map((feature, i) => {
+            const Icon = feature.icon;
+            return (
+              <div key={i} className="space-y-5 group">
+                <div className="w-11 h-11 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-center text-zinc-400 transition-all group-hover:bg-emerald-500 group-hover:text-white group-hover:border-emerald-500 shadow-sm">
+                  <Icon size={20} strokeWidth={2} />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-lg font-bold text-zinc-900">{feature.title}</h3>
+                  <p className="text-[14px] text-zinc-500 leading-relaxed font-medium">{feature.desc}</p>
+                </div>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold text-zinc-900">{feature.title}</h3>
-                <p className="text-[14px] text-zinc-500 leading-relaxed font-medium">{feature.desc}</p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

@@ -9,13 +9,16 @@ import {
   ArrowRight, 
   ShieldCheck, 
   Fingerprint,
-  Zap
+  Zap,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -92,21 +95,29 @@ export default function Login() {
                  />
                </div>
 
-               {/* Password Port */}
-               <div className="space-y-2">
-                 <div className="flex items-center gap-2 px-1">
-                   <Lock size={14} className="text-zinc-400" />
-                   <label className="text-xs font-bold text-zinc-500">Password</label>
-                 </div>
-                 <input
-                   type="password"
-                   value={password}
-                   onChange={(e) => setPassword(e.target.value)}
-                   className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all"
-                   placeholder="Enter your password"
-                   required
-                 />
-               </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 px-1">
+                    <Lock size={14} className="text-zinc-400" />
+                    <label className="text-xs font-bold text-zinc-500">Password</label>
+                  </div>
+                  <div className="relative group">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all pr-12"
+                      placeholder="Enter your password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 text-zinc-400 hover:text-zinc-900 transition-colors"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
              </div>
 
              <div className="pt-2">
