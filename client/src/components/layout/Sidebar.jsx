@@ -12,7 +12,8 @@ import {
   X,
   LogOut,
   User,
-  ClipboardList
+  ClipboardList,
+  HelpCircle
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
@@ -35,8 +36,7 @@ export default function Sidebar({ onClose }) {
     { name: "My Proposals", path: "/proposals", icon: <ClipboardList size={14} />, section: "Finance" },
 
     { name: "Identity Verification", path: "/kyc", icon: <ShieldCheck size={14} />, section: "Account" },
-    { name: "My Profile", path: "/profile", icon: <User size={14} />, section: "Account" },
-    { name: "Help & Support", path: "/disputes", icon: <AlertTriangle size={14} />, section: "Account" },
+    { name: "Help & Support", path: "/disputes", icon: <HelpCircle size={14} />, section: "Account" },
   ];
 
   const sections = ["Overview", "Finance", "Account"];
@@ -125,21 +125,8 @@ export default function Sidebar({ onClose }) {
         ))}
       </div>
 
-      {/* Profile Node & Logout */}
-      <div className="mt-auto px-4 pt-6 border-t border-zinc-50 space-y-3">
-        <div className="flex items-center gap-3 px-2">
-          <div className="w-9 h-9 rounded-xl bg-zinc-900 text-emerald-500 flex items-center justify-center text-[11px] font-black shadow-lg shadow-zinc-900/10">
-            {user?.name?.[0] || "U"}
-          </div>
-          <div className="flex-grow min-w-0">
-            <p className="text-[12px] font-black text-zinc-900 leading-none truncate">
-              {user?.name}
-            </p>
-            <p className="text-[10px] font-bold text-zinc-400 mt-1 opacity-80">
-              {user?.role === "CLIENT" ? "Client Account" : "Freelancer Account"}
-            </p>
-          </div>
-        </div>
+      {/* Logout Action */}
+      <div className="mt-auto px-4 pt-6 border-t border-zinc-50">
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 text-rose-500 hover:bg-rose-50 rounded-xl transition-all duration-300 group"

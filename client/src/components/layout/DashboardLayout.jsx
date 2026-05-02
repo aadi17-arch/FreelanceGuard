@@ -107,14 +107,22 @@ export default function DashboardLayout({ children }) {
             
             <Link 
               to="/profile" 
-              className="flex items-center gap-2 p-1.5 rounded-xl border border-zinc-100 hover:bg-zinc-50 transition-all group"
+              className="flex items-center gap-3 p-1.5 pr-4 rounded-2xl border border-zinc-100 bg-white hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/5 transition-all group"
             >
-               <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-lg bg-zinc-900 text-emerald-500 flex items-center justify-center text-[10px] lg:text-[11px] font-black shadow-lg shadow-zinc-900/10 group-hover:bg-emerald-500 group-hover:text-white transition-all">
-                 {user?.name?.[0] || "A"}
+               <div className="relative">
+                  <div className="w-8 h-8 lg:w-9 lg:h-9 rounded-xl bg-zinc-900 text-emerald-500 flex items-center justify-center text-[11px] font-black shadow-lg shadow-zinc-900/10 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                    {user?.name?.[0] || "A"}
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-sm" />
                </div>
-               <span className="hidden md:block text-xs font-bold text-zinc-600 group-hover:text-zinc-900 transition-colors pr-2">
-                 {user?.name?.split(' ')[0]}
-               </span>
+               <div className="hidden md:block">
+                  <p className="text-[11px] font-black text-zinc-900 leading-none tracking-tight">
+                    {user?.name?.split(' ')[0]}
+                  </p>
+                  <p className="text-[9px] font-bold text-zinc-400 mt-1 uppercase tracking-widest">
+                    Active
+                  </p>
+               </div>
             </Link>
           </div>
         </header>
