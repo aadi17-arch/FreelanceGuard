@@ -36,21 +36,17 @@ export default function Dashboard() {
   const fetchDashboardStats = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("/escrow");
-      const contracts = res.data || [];
+      // Synchronizing with the hardened backend stats engine
+      const res = await axios.get("/projects/stats");
+      const { totalEscrow, activeProjects, releasedThisMonth, breakdown } = res.data;
       
-      const totalSecured = contracts.reduce((acc, curr) => acc + (curr.totalAmount || 0), 0);
-      const active = contracts.filter(c => c.status !== 'COMPLETED').length;
-      const pending = contracts.filter(c => c.status === 'PENDING').length;
-      const disputed = contracts.filter(c => c.status === 'DISPUTED').length;
-
       setStats({
-        activeProjects: active,
-        totalEscrow: totalSecured,
-        pendingMilestones: pending,
-        openDisputes: disputed
+        activeProjects: activeProjects || 0,
+        totalEscrow: totalEscrow || 0,
+        pendingMilestones: 0, // Logic for this to be added later
+        releasedThisMonth: releasedThisMonth || 0
       });
-      setRecentActivity(contracts.slice(0, 4));
+      setRecentActivity(breakdown || []);
     } catch (err) {
       console.error("Dashboard sync error:", err);
     } finally {
@@ -117,8 +113,8 @@ export default function Dashboard() {
         {[
           { label: "Active Projects", value: stats.activeProjects, icon: <BriefcaseBusiness />, color: "text-blue-500", bg: "bg-blue-50" },
           { label: "Total in Escrow", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck />, color: "text-emerald-500", bg: "bg-emerald-50" },
-          { label: "Pending Tasks", value: stats.pendingMilestones, icon: <Clock />, color: "text-amber-500", bg: "bg-amber-50" },
-          { label: "Active Issues", value: stats.openDisputes, icon: <AlertTriangle />, color: "text-rose-500", bg: "bg-rose-50" },
+          { label: "Released Month", value: `$${(stats.releasedThisMonth || 0).toLocaleString()}`, icon: <CheckCircle2 />, color: "text-emerald-500", bg: "bg-emerald-50" },
+          { label: "Active Issues", value: stats.openDisputes || 0, icon: <AlertTriangle />, color: "text-rose-500", bg: "bg-rose-50" },
         ].map((stat, i) => (
           <div key={i} className="bg-white border border-zinc-100 rounded-2xl p-5 lg:p-6 space-y-3 hover:shadow-md transition-all">
              <div className={`w-10 h-10 ${stat.bg} ${stat.color} rounded-xl flex items-center justify-center`}>
