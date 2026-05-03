@@ -29,6 +29,7 @@ export const createProject = async (req, res) => {
 export const getAllProjects = async (req, res) => {
   try {
     const projects = await prisma.project.findMany({
+      where: { status: 'OPEN' },
       include: {
         client: {
           select: {
@@ -62,34 +63,62 @@ export const getMyProject = async (req, res) => {
 
 
 export const getProjectStats = async (req, res) => {
-  const userId = req.user.id;
-  const totalEscrow = await prisma.escrow.aggregate({
-    _sum: { amount: true },
-    where: {
-      OR: [{ clientId: userId }, { freelancerId: userId }],
-      status: 'SECURED'
-    }
-  });
-  const activeProjectCount = await prisma.project.count({
-    where: {
-      OR: [{ clientId: userId }, { freelancerId: userId }],
-      status: 'IN_PROGRESS'
-    }
-  });
-  const breakdown = await prisma.escrow.findMany({
-    where: { OR: [{ clientId: userId }, { freelancerId: userId }] },
-    include: { project: true },
-    take: 5,
-    orderBy: { createdAt: 'desc' }
-  });
-  res.status(200).json(
-    {
-      "totalEscrow": totalEscrow._sum.amount,
-      "activeProjects": activeProjectCount,
-      "releasedThisMonth": 8250,
-      "breakdown": breakdown
-    }
-  )
+  try {
+    const userId = req.user.id;
+    const totalEscrow = await prisma.contract.aggregate({
+      _sum: { heldAmount: true },
+      where: {
+        OR: [
+          { freelancerId: userId },
+          { project: { clientId: userId } }
+        ],
+        status: 'ACTIVE'
+      }
+    });
+    const activeProjectCount = await prisma.contract.count({
+      where: {
+        OR: [{ freelancerId: userId }, { project: { clientId: userId } }],
+
+        status: 'ACTIVE'
+      }
+    });
+    const breakdown = await prisma.contract.findMany({
+      where: {
+        OR: [{ freelancerId: userId },
+        { project: { clientId: userId } }
+        ]
+      },
+      include: { project: true },
+      take: 5,
+      orderBy: { createdAt: 'desc' }
+    });
+    const monthStart = new Date();
+    monthStart.setDate(1);
+    monthStart.setHours(0, 0, 0, 0);
+    const releasedstats = await prisma.payment.aggregate({
+      _sum: {
+        amount: true
+
+      },
+      where: {
+        type: 'RELEASE',
+        createdAt: { gte: monthStart },
+        contract: { OR: [{ freelancerId: userId }, { project: { clientId: userId } }] }
+      }
+
+    });
+    res.status(200).json(
+      {
+        "totalEscrow": totalEscrow._sum.heldAmount,
+        "activeProjects": activeProjectCount,
+        "releasedThisMonth": releasedstats._sum.amount || 0,
+        "breakdown": breakdown
+      }
+    )
+  }
+  catch (error) {
+    res.status(500).json({ message: "Internal Server error" });
+  }
 }
 
 // get->single project by ID
@@ -194,6 +223,10 @@ export const hireFreelancer = async (req, res) => {
           NOT: { freelancerId }
         },
         data: { status: 'REJECTED' }
+      });
+      await tx.project.update({
+        where: { id: projectId },
+        data: { status: 'IN_PROGRESS' }
       });
 
       return { contract, milestone };

@@ -73,12 +73,19 @@ export const releaseFunds = async (req, res) => {
       // update the status -> CONTRACT
       await tx.contract.update({
         where: { id: contractId },
-        data: { status: "COMPLETED" }
+        data: {
+          heldAmount: {
+            decrement: contract.totalAmount
+          }, status: "COMPLETED"
+        }
       });
       // update the status -> PROJECT
       await tx.project.update({
         where: { id: contract.projectId },
-        data: { status: "COMPLETED" }
+        data: {
+
+          status: "COMPLETED"
+        }
       });
       await tx.payment.create({
         data: {
