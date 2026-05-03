@@ -1,5 +1,5 @@
 import express from "express";
-import { submitKYC } from "./kyccontroller.js";
+import { submitKYC } from "./kyc.controller.js";
 import authMiddleware from "../auth/auth.middleware.js";
 import upload from "../../middleware/upload.js";
 
