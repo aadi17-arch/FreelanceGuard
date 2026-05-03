@@ -9,6 +9,7 @@ import bidRoutes from "./modules/projects/bid.routes.js";
 import escrowRoutes from "./modules/escrow/escrow.routes.js"
 import kycRoutes from "./modules/kyc/kyc.routes.js";
 import disputeRoutes from "./modules/dispute/dispute.routes.js";
+import milestoneRoutes from "./modules/milestone/milestone.routes.js"
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use("/api/bids", bidRoutes);
 app.use("/api/escrow", escrowRoutes);
 app.use("/api/kyc", kycRoutes);
 app.use("/api/dispute", disputeRoutes);
+app.use("/api/milestone", milestoneRoutes);
 
 
 app.get('/', (req, res) => {
