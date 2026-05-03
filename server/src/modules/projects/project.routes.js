@@ -10,7 +10,7 @@ router.get("/all", getAllProjects); // Keep for backward compatibility
 
 router.get("/userProjectList", authMiddleware, getMyProject);
 router.get("/stats", authMiddleware, getProjectStats);
-router.post("/hire", authMiddleware, hireFreelancer);
+router.post("/hire", authMiddleware, kycmiddleware, hireFreelancer);
 router.get("/:id", getProjectById);
 
 export default router;

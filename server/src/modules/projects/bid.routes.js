@@ -1,5 +1,5 @@
 import express from "express";
-import { createBid, getProjectBids, acceptBid } from "./bid.controller.js";
+import { createBid, getProjectBids } from "./bid.controller.js";
 import authMiddleware from "../auth/auth.middleware.js";
 import kycmiddleware from "../kyc/kyc.middleware.js";
 
