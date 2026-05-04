@@ -21,7 +21,7 @@ export default function Home() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8 text-[13px] font-semibold text-zinc-500">
           <a href="#features" className="hover:text-zinc-900 transition-colors">Features</a>
-          <a href="#how-it-works" className="hover:text-zinc-900 transition-colors">How it works</a>
+          <Link to="/how-it-works" className="hover:text-zinc-900 transition-colors">How it works</Link>
           <a href="#pricing" className="hover:text-zinc-900 transition-colors">Pricing</a>
           <Link to="/login" className="hover:text-zinc-900 transition-colors">Sign In</Link>
           <Link to="/register" className="bg-zinc-900 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-emerald-500 transition-all shadow-xl shadow-black/5">Create Account</Link>
@@ -42,14 +42,14 @@ export default function Home() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="absolute top-full left-0 w-full bg-white border-b border-zinc-100 p-6 flex flex-col gap-6 md:hidden shadow-2xl"
+              className="absolute top-full left-0 w-full bg-white border-b border-zinc-100 p-6 flex flex-col gap-6 md:hidden shadow-2xl z-[200]"
             >
-              <a href="#features" onClick={() => setIsMenuOpen(false)} className="text-sm font-semibold text-zinc-500">Features</a>
-              <a href="#how-it-works" onClick={() => setIsMenuOpen(false)} className="text-sm font-semibold text-zinc-500">How it works</a>
-              <a href="#pricing" onClick={() => setIsMenuOpen(false)} className="text-sm font-semibold text-zinc-500">Pricing</a>
+              <a href="#features" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-zinc-600 hover:text-emerald-600">Features</a>
+              <Link to="/how-it-works" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-zinc-600 hover:text-emerald-600">How it works</Link>
+              <a href="#pricing" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-zinc-600 hover:text-emerald-600">Pricing</a>
               <hr className="border-zinc-50" />
-              <Link to="/login" className="text-sm font-semibold text-zinc-500">Sign In</Link>
-              <Link to="/register" className="bg-emerald-500 text-white py-4 rounded-xl font-bold text-center text-sm">Create Free Account</Link>
+              <Link to="/login" className="text-sm font-bold text-zinc-600">Sign In</Link>
+              <Link to="/register" className="bg-emerald-500 text-white py-4 rounded-xl font-bold text-center text-sm shadow-lg shadow-emerald-500/20">Create Free Account</Link>
             </motion.div>
           )}
         </AnimatePresence>
@@ -91,7 +91,7 @@ export default function Home() {
           transition={{ delay: 0.3 }}
           className="flex flex-col items-center justify-center gap-4"
         >
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full justify-center">
             <Link to="/register" className="w-full sm:w-auto px-8 py-4 bg-zinc-900 text-white rounded-xl font-bold text-[15px] hover:bg-emerald-600 transition-all shadow-xl shadow-black/5 flex items-center justify-center gap-2 active:scale-95 group">
               Create Free Account <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Link>
@@ -99,15 +99,15 @@ export default function Home() {
               See how it works
             </a>
           </div>
-          <p className="text-[11px] font-medium text-zinc-400">Takes 30 seconds · No credit card required</p>
+          <p className="text-[11px] font-bold text-zinc-500">Takes 30 seconds · No credit card required</p>
         </motion.div>
       </section>
 
       {/* 3. Stats Bar */}
-      <section className="w-full border-y border-zinc-100 bg-zinc-50/30">
-        <div className="max-w-7xl mx-auto px-6 py-12 md:py-16 space-y-10">
-          <h3 className="text-center text-sm font-bold text-zinc-400">Trusted by freelancers worldwide</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 md:gap-16">
+      <section className="w-full border-y border-zinc-100 bg-zinc-50/20">
+        <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 space-y-12">
+          <h3 className="text-center text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-zinc-400">Trusted by freelancers worldwide</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 md:gap-16">
             {[
               { label: "Total payments secured", value: "$2.4M+" },
               { label: "Projects managed", value: "1,200+" },
@@ -124,7 +124,7 @@ export default function Home() {
       </section>
 
       {/* 4. Features Section */}
-      <section className="w-full max-w-7xl mx-auto px-6 py-24 md:py-32" id="features">
+      <section className="w-full max-w-7xl mx-auto px-6 py-20 md:py-32" id="features">
         <div className="text-center space-y-4 mb-20 md:mb-24">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900">Everything you need to work safely</h2>
           <p className="text-sm md:text-base text-zinc-500 font-medium max-w-xl mx-auto">Built for independent professionals who want absolute peace of mind.</p>
@@ -180,7 +180,7 @@ export default function Home() {
       </section>
 
       {/* 5. How it Works */}
-      <section className="w-full bg-zinc-900 py-24 md:py-32 text-white overflow-hidden relative" id="how-it-works">
+      <section className="w-full bg-zinc-900 py-20 md:py-32 text-white overflow-hidden relative" id="how-it-works">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center space-y-4 mb-20 md:mb-24">
@@ -204,11 +204,17 @@ export default function Home() {
               </div>
             ))}
           </div>
+
+          <div className="mt-16 md:mt-24 text-center">
+            <Link to="/how-it-works" className="inline-flex items-center gap-3 px-8 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-[10px] md:text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-all text-zinc-400 hover:text-white">
+              See exactly how we protect you <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* 6. Pricing Section */}
-      <section className="w-full max-w-5xl mx-auto px-6 py-24 md:py-32" id="pricing">
+      <section className="w-full max-w-5xl mx-auto px-6 py-20 md:py-32" id="pricing">
         <div className="text-center space-y-4 mb-16 md:mb-20">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900">Transparent Pricing</h2>
           <p className="text-sm md:text-base text-zinc-500 font-medium max-w-xl mx-auto">One simple fee to secure your entire project lifecycle.</p>
@@ -250,15 +256,15 @@ export default function Home() {
       </section>
 
       {/* 7. FAQ Section */}
-      <section className="w-full max-w-5xl mx-auto px-6 py-24 md:py-32 border-t border-zinc-100" id="docs">
+      <section className="w-full max-w-5xl mx-auto px-6 py-20 md:py-32 border-t border-zinc-100" id="docs">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
           <div className="space-y-6">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 leading-tight">Common Questions</h2>
             <p className="text-[15px] text-zinc-500 font-medium leading-relaxed">Everything you need to know about the protocol protection layers.</p>
             <div className="pt-2">
-              <button className="inline-flex items-center gap-2 text-emerald-600 font-bold text-sm hover:gap-3 transition-all">
-                Access full documentation <ArrowRight size={18} />
-              </button>
+              <Link to="/how-it-works" className="inline-flex items-center gap-2 text-emerald-600 font-bold text-sm hover:gap-3 transition-all">
+                Learn how it works <ArrowRight size={18} />
+              </Link>
             </div>
           </div>
           
@@ -281,7 +287,7 @@ export default function Home() {
       </section>
 
       {/* 8. CTA Banner */}
-      <section className="w-full px-4 md:px-6 py-24 md:py-32">
+      <section className="w-full px-4 md:px-6 py-20 md:py-32">
         <div className="max-w-7xl mx-auto bg-zinc-900 rounded-[2.5rem] p-12 md:p-24 text-center text-white space-y-8 md:space-y-12 shadow-2xl shadow-zinc-900/20 relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.08),transparent)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
           <h2 className="text-3xl md:text-6xl font-bold tracking-tight leading-tight relative z-10">Stop worrying about payments. <br className="hidden md:block" /> <span className="text-emerald-500 italic font-medium">Get paid safely every time.</span></h2>
@@ -295,20 +301,20 @@ export default function Home() {
       </section>
 
       {/* 9. Footer */}
-      <footer className="w-full max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-10 border-t border-zinc-100">
-        <div className="flex flex-col items-center md:items-start gap-4">
+      <footer className="w-full max-w-7xl mx-auto px-6 py-16 md:py-20 flex flex-col md:flex-row justify-between items-center gap-12 border-t border-zinc-100">
+        <div className="flex flex-col items-center md:items-start gap-5">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 bg-emerald-500 rounded flex items-center justify-center">
-              <ShieldCheck size={12} className="text-white" />
+            <div className="w-6 h-6 bg-emerald-500 rounded flex items-center justify-center shadow-lg shadow-emerald-500/20">
+              <ShieldCheck size={14} className="text-white" />
             </div>
-            <span className="text-[15px] font-bold tracking-tight text-zinc-900">FreelanceGuard</span>
+            <span className="text-base font-bold tracking-tight text-zinc-900">FreelanceGuard</span>
           </div>
-          <p className="text-[12px] font-medium text-zinc-400">&copy; 2026. Secure Freelance Payments.</p>
+          <p className="text-xs font-bold text-zinc-500 tracking-tight">&copy; 2026. Secure Freelance Payments for the modern professional.</p>
         </div>
-        <div className="flex gap-8 text-sm font-bold text-zinc-400">
-          <a href="#" className="hover:text-emerald-500 transition-colors">Privacy</a>
-          <a href="#" className="hover:text-emerald-500 transition-colors">Terms</a>
-          <a href="#" className="hover:text-emerald-500 transition-colors">Support</a>
+        <div className="flex gap-10 text-xs font-bold text-zinc-500">
+          <Link to="/privacy" className="hover:text-emerald-500 transition-colors">Privacy</Link>
+          <Link to="/terms" className="hover:text-emerald-500 transition-colors">Terms</Link>
+          <Link to="/how-it-works" className="hover:text-emerald-500 transition-colors">How it works</Link>
         </div>
       </footer>
     </div>

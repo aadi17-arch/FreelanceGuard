@@ -72,7 +72,7 @@ export default function DashboardLayout({ children }) {
       </div>
       
       {/* 2. Main Content Area */}
-      <div className="flex-grow flex flex-col lg:ml-[210px] min-h-screen relative w-full overflow-x-hidden">
+      <div className="flex-grow flex flex-col lg:ml-56 min-h-screen relative w-full overflow-x-hidden">
         
         {/* Scaled Global Header */}
         <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md px-4 py-3 lg:px-8 lg:py-5 flex justify-between items-center border-b border-zinc-50">
@@ -107,7 +107,7 @@ export default function DashboardLayout({ children }) {
             
             <Link 
               to="/profile" 
-              className="flex items-center gap-3 p-1.5 pr-4 rounded-2xl border border-zinc-100 bg-white hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/5 transition-all group"
+              className="flex items-center gap-2 p-1 md:p-1.5 md:pr-4 rounded-2xl border border-zinc-100 bg-white hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/5 transition-all group"
             >
                <div className="relative">
                   <div className="w-8 h-8 lg:w-9 lg:h-9 rounded-xl bg-zinc-900 text-emerald-500 flex items-center justify-center text-[11px] font-black shadow-lg shadow-zinc-900/10 group-hover:bg-emerald-500 group-hover:text-white transition-all">
@@ -128,8 +128,8 @@ export default function DashboardLayout({ children }) {
         </header>
 
         {/* Dynamic Page Content */}
-        <main className="px-4 py-6 lg:px-10 lg:py-8 z-10 w-full overflow-x-hidden">
-          <div className="max-w-[1400px] mx-auto">
+        <main className="px-4 py-6 lg:px-8 lg:py-10 z-10 w-full overflow-x-hidden">
+          <div className="max-w-7xl mx-auto">
             {children}
           </div>
         </main>

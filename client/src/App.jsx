@@ -14,8 +14,10 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
 import DisputeDetails from "./pages/disputes/DisputeDetails";
 import DisputesList from "./pages/disputes/DisputesList";
+import Proposals from "./pages/proposals/Proposals";
 import TermsOfService from "./pages/legal/TermsOfService";
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
+import HowItWorks from "./pages/public/HowItWorks";
 import { Zap } from "lucide-react";
 
 // Simple Placeholder for upcoming features
@@ -61,6 +63,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
 
         {/* Core Operational Routes */}
         <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><Dashboard /></DashboardLayout></ProtectedRoute>} />
@@ -77,7 +80,7 @@ function App() {
 
         {/* Restored Strategic Roadmap Routes (Placeholders) */}
         <Route path="/contracts" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Active Contracts" /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/proposals" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Bids & Proposals" /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/proposals" element={<ProtectedRoute><DashboardLayout><Proposals /></DashboardLayout></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Network Analytics" /></DashboardLayout></ProtectedRoute>} />
         <Route path="/messages" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Secure Messaging" /></DashboardLayout></ProtectedRoute>} />
 

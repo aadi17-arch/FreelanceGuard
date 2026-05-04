@@ -67,7 +67,7 @@ export default function Register() {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-[460px] space-y-10 relative z-10"
+        className="w-full max-w-[460px] px-2 sm:px-0 space-y-10 relative z-10"
       >
         {/* Brand Header */}
         <div className="flex flex-col items-center gap-6">
@@ -83,7 +83,7 @@ export default function Register() {
         </div>
 
         {/* Form Hub */}
-        <div className="bg-white border border-zinc-100 rounded-[2.5rem] p-8 lg:p-10 shadow-2xl shadow-zinc-200/50">
+        <div className="bg-white border border-zinc-100 rounded-[2.5rem] p-6 sm:p-8 lg:p-10 shadow-2xl shadow-zinc-200/50">
            <form onSubmit={handleSubmit} className="space-y-6">
              {/* Role Selector */}
              <div className="flex bg-zinc-50 p-1 rounded-2xl border border-zinc-100">

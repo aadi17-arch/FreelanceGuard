@@ -73,7 +73,7 @@ export default function KYC() {
   // --- PENDING STATE ---
   if (user?.kyc?.status === "PENDING") {
     return (
-      <div className="max-w-5xl mx-auto space-y-8 py-10 px-4 lg:px-0">
+      <div className="space-y-8 py-10">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-amber-500">
@@ -165,7 +165,7 @@ export default function KYC() {
 
   // --- SUBMISSION STATE ---
   return (
-    <div className="max-w-5xl mx-auto space-y-8 lg:space-y-12 pb-10 px-4 lg:px-0">
+    <div className="space-y-8 lg:space-y-12 pb-10">
       {/* Header & Status */}
       <div className="space-y-6">
         <AnimatePresence>
