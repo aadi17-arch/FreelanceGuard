@@ -55,7 +55,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-6 lg:space-y-10 pb-16 max-w-6xl mx-auto">
+    <div className="space-y-6 lg:space-y-10 pb-16">
       {/* 1. Welcome & Primary Balance */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-8">
         <div className="lg:col-span-2 bg-zinc-900 rounded-2xl lg:rounded-[2rem] p-6 lg:p-10 text-white relative overflow-hidden group">
@@ -68,18 +68,18 @@ export default function Dashboard() {
                 </div>
                 <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-white">Hello, {user?.name?.split(' ')[0]}!</h1>
                 <p className="text-sm lg:text-base text-zinc-400 font-medium max-w-sm leading-relaxed">
-                   Welcome back. Monitor your active projects and track your escrow payments in real-time.
+                   Welcome back. Monitor your active projects and track your secure payments in real-time.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
-                 <Link to={user?.role === 'CLIENT' ? '/create-project' : '/marketplace'}>
-                    <button className="px-6 py-3 bg-emerald-500 text-white rounded-xl text-sm font-bold transition-all active:scale-95 hover:bg-emerald-400 flex items-center gap-2 shadow-lg shadow-emerald-500/20">
+              <div className="flex flex-col sm:flex-row gap-3">
+                 <Link to={user?.role === 'CLIENT' ? '/create-project' : '/marketplace'} className="w-full sm:w-auto">
+                    <button className="w-full px-6 py-3 bg-emerald-500 text-white rounded-xl text-sm font-bold transition-all active:scale-95 hover:bg-emerald-400 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
                       {user?.role === 'CLIENT' ? 'Post Project' : 'Find Jobs'}
                       <ArrowUpRight size={16} />
                     </button>
                  </Link>
-                 <Link to="/escrow">
-                    <button className="px-6 py-3 bg-white/5 text-white border border-white/10 rounded-xl text-sm font-bold backdrop-blur-md hover:bg-white/10">
+                 <Link to="/escrow" className="w-full sm:w-auto">
+                    <button className="w-full px-6 py-3 bg-white/5 text-white border border-white/10 rounded-xl text-sm font-bold backdrop-blur-md hover:bg-white/10 flex items-center justify-center">
                       View Payments
                     </button>
                  </Link>
@@ -109,10 +109,10 @@ export default function Dashboard() {
       </section>
 
       {/* 2. Key Stats Grid */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
         {[
-          { label: "Active Projects", value: stats.activeProjects, icon: <BriefcaseBusiness />, color: "text-blue-500", bg: "bg-blue-50" },
-          { label: "Total in Escrow", value: `$${stats.totalEscrow.toLocaleString()}`, icon: <ShieldCheck />, color: "text-emerald-500", bg: "bg-emerald-50" },
+          { label: "Active Projects", value: stats.activeProjects || 0, icon: <BriefcaseBusiness />, color: "text-blue-500", bg: "bg-blue-50" },
+          { label: "Money Held Safely", value: `$${(stats.totalEscrow || 0).toLocaleString()}`, icon: <ShieldCheck />, color: "text-emerald-500", bg: "bg-emerald-50" },
           { label: "Released Month", value: `$${(stats.releasedThisMonth || 0).toLocaleString()}`, icon: <CheckCircle2 />, color: "text-emerald-500", bg: "bg-emerald-50" },
           { label: "Active Issues", value: stats.openDisputes || 0, icon: <AlertTriangle />, color: "text-rose-500", bg: "bg-rose-50" },
         ].map((stat, i) => (
@@ -177,9 +177,9 @@ export default function Dashboard() {
                     <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-xl">
                        <AlertTriangle size={20} />
                     </div>
-                    <h4 className="text-lg font-black tracking-tight text-white">Identity Verification</h4>
+                    <h4 className="text-lg font-black tracking-tight text-white">Confirm your Identity</h4>
                     <p className="text-sm text-rose-50 font-medium leading-relaxed">
-                       Please complete your identity check to enable all withdrawal features.
+                       Please verify your account to unlock all payment features.
                     </p>
                  </div>
                  <Link to="/kyc" className="block">
