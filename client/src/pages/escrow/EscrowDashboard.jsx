@@ -17,20 +17,25 @@ import { useAuth } from "../../context/AuthContext";
 
 export default function EscrowDashboard() {
    const [contracts, setContracts] = useState([]);
+   const [liveUser, setLiveUser] = useState(null);
    const [loading, setLoading] = useState(true);
    const { user } = useAuth();
 
    useEffect(() => {
-      fetchContracts();
+      fetchData();
    }, []);
 
-   const fetchContracts = async () => {
+   const fetchData = async () => {
       try {
          setLoading(true);
-         const res = await axios.get("/escrow");
-         setContracts(res.data);
+         const [contractsRes, profileRes] = await Promise.all([
+            axios.get("/escrow"),
+            axios.get("/auth/profile")
+         ]);
+         setContracts(contractsRes.data);
+         setLiveUser(profileRes.data);
       } catch (err) {
-         console.error("Escrow sync error:", err);
+         console.error("Data sync error:", err);
       } finally {
          setLoading(false);
       }
@@ -46,7 +51,7 @@ export default function EscrowDashboard() {
    );
 
    return (
-      <div className="max-w-7xl mx-auto space-y-8 pb-10">
+      <div className="space-y-8 pb-10">
          {/* 1. Slim Header */}
          <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-100 pb-8">
             <div>
@@ -73,7 +78,7 @@ export default function EscrowDashboard() {
                <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
                <p className="text-[9px] font-black text-emerald-100 uppercase tracking-widest mb-4">Money you can spend</p>
                <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-4xl font-black tracking-tighter">${user?.walletBalance?.toLocaleString() || "0"}</span>
+                  <span className="text-4xl font-black tracking-tighter">${(liveUser || user)?.walletBalance?.toLocaleString() || "0"}</span>
                   <span className="text-[10px] font-bold opacity-60">USD</span>
                </div>
                <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full w-fit">
@@ -86,7 +91,7 @@ export default function EscrowDashboard() {
             <div className="bg-white border border-zinc-100 rounded-3xl p-6 shadow-sm relative group">
                <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-4">Safe in a project</p>
                <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-4xl font-black tracking-tighter text-zinc-900">${user?.heldAmount?.toLocaleString() || "0"}</span>
+                  <span className="text-4xl font-black tracking-tighter text-zinc-900">${(liveUser || user)?.heldAmount?.toLocaleString() || "0"}</span>
                   <span className="text-[10px] font-bold text-zinc-400">USD</span>
                </div>
                <div className="flex items-center gap-2 text-emerald-500">
@@ -99,7 +104,7 @@ export default function EscrowDashboard() {
             <div className="bg-zinc-50 border border-zinc-100 rounded-3xl p-6 shadow-sm group">
                <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-4">Total earned so far</p>
                <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-4xl font-black tracking-tighter text-zinc-900">${user?.totalEarned?.toLocaleString() || "0"}</span>
+                  <span className="text-4xl font-black tracking-tighter text-zinc-900">${(liveUser || user)?.totalEarned?.toLocaleString() || "0"}</span>
                   <span className="text-[10px] font-bold text-zinc-400">USD</span>
                </div>
                <div className="flex items-center gap-2 text-zinc-400">
