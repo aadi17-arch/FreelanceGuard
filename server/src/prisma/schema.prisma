@@ -21,6 +21,7 @@ model User {
   disputes      Dispute[]  @relation("RaisedBy")
   projects      Project[]  @relation("ClientProjects")
   evidence      Evidence[]
+  proposal      Proposal[]
   kyc KYC?
 }
 
@@ -35,6 +36,7 @@ model Project {
   createdAt   DateTime      @default(now())
   bids        Bid[]
   contracts   Contract[]
+  proposal    Proposal[]
   client      User          @relation("ClientProjects", fields: [clientId], references: [id])
 }
 
@@ -126,6 +128,23 @@ model KYC {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   verifiedAt    DateTime?
+}
+
+model Proposal {
+  id              String         @id@default(uuid())
+  projectId       String
+  freelancerId    String
+  amount          Float
+  duration        Int
+  coverLetter     String
+  status          BidStatus      @default(PENDING)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  freelancer      User           @relation(fields: [freelancerId], references: [id])
+  project         Project        @relation(fields: [projectId], references: [id])
+  @@unique([projectId, freelancerId])
+
 }
 
 enum Role {
