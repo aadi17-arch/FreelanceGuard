@@ -15,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import DisputeDetails from "./pages/disputes/DisputeDetails";
 import DisputesList from "./pages/disputes/DisputesList";
 import Proposals from "./pages/proposals/Proposals";
+import Contracts from "./pages/contracts/Contracts";
 import TermsOfService from "./pages/legal/TermsOfService";
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
 import HowItWorks from "./pages/public/HowItWorks";
@@ -67,8 +68,8 @@ function App() {
 
         {/* Core Operational Routes */}
         <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><Dashboard /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/create-project" element={<ProtectedRoute><DashboardLayout><CreateProject /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/marketplace" element={<ProtectedRoute><DashboardLayout><Market /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/create-project" element={<ProtectedRoute allowedRoles={["CLIENT"]}><DashboardLayout><CreateProject /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/marketplace" element={<ProtectedRoute allowedRoles={["FREELANCER"]}><DashboardLayout><Market /></DashboardLayout></ProtectedRoute>} />
         <Route path="/project/:id" element={<ProtectedRoute><DashboardLayout><ProjectDetails /></DashboardLayout></ProtectedRoute>} />
         <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></DashboardLayout></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
@@ -79,7 +80,7 @@ function App() {
         <Route path="/dispute/:id" element={<ProtectedRoute><DashboardLayout><DisputeDetails /></DashboardLayout></ProtectedRoute>} />
 
         {/* Restored Strategic Roadmap Routes (Placeholders) */}
-        <Route path="/contracts" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Active Contracts" /></DashboardLayout></ProtectedRoute>} />
+        <Route path="/contracts" element={<ProtectedRoute><DashboardLayout><Contracts /></DashboardLayout></ProtectedRoute>} />
         <Route path="/proposals" element={<ProtectedRoute><DashboardLayout><Proposals /></DashboardLayout></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Network Analytics" /></DashboardLayout></ProtectedRoute>} />
         <Route path="/messages" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Secure Messaging" /></DashboardLayout></ProtectedRoute>} />
