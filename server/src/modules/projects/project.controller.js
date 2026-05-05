@@ -65,56 +65,30 @@ export const getMyProject = async (req, res) => {
 export const getProjectStats = async (req, res) => {
   try {
     const userId = req.user.id;
-    const totalEscrow = await prisma.contract.aggregate({
-      _sum: { heldAmount: true },
+
+    const activeProjectCount = await prisma.contract.count({
+      where: {
+        OR: [{ freelancerId: userId }, { project: { clientId: userId } }],
+        status: 'ACTIVE'
+      }
+    });
+
+    const breakdown = await prisma.contract.findMany({
       where: {
         OR: [
           { freelancerId: userId },
           { project: { clientId: userId } }
-        ],
-        status: 'ACTIVE'
-      }
-    });
-    const activeProjectCount = await prisma.contract.count({
-      where: {
-        OR: [{ freelancerId: userId }, { project: { clientId: userId } }],
-
-        status: 'ACTIVE'
-      }
-    });
-    const breakdown = await prisma.contract.findMany({
-      where: {
-        OR: [{ freelancerId: userId },
-        { project: { clientId: userId } }
         ]
       },
       include: { project: true },
       take: 5,
       orderBy: { createdAt: 'desc' }
     });
-    const monthStart = new Date();
-    monthStart.setDate(1);
-    monthStart.setHours(0, 0, 0, 0);
-    const releasedstats = await prisma.payment.aggregate({
-      _sum: {
-        amount: true
 
-      },
-      where: {
-        type: 'RELEASE',
-        createdAt: { gte: monthStart },
-        contract: { OR: [{ freelancerId: userId }, { project: { clientId: userId } }] }
-      }
-
+    res.status(200).json({
+      "activeProjects": activeProjectCount,
+      "breakdown": breakdown
     });
-    res.status(200).json(
-      {
-        "totalEscrow": totalEscrow._sum.heldAmount,
-        "activeProjects": activeProjectCount,
-        "releasedThisMonth": releasedstats._sum.amount || 0,
-        "breakdown": breakdown
-      }
-    )
   }
   catch (error) {
     res.status(500).json({ message: "Internal Server error" });
@@ -170,7 +144,7 @@ export const getProjectById = async (req, res) => {
 // Hire a freelancer and initiate contract/escrow
 export const hireFreelancer = async (req, res) => {
   try {
-    const { projectId, freelancerId, bidAmount } = req.body;
+    const { projectId, freelancerId, bidAmount, milestone } = req.body;
     const clientId = req.user.id;
 
     if (!projectId || !freelancerId || !bidAmount) {
@@ -182,6 +156,11 @@ export const hireFreelancer = async (req, res) => {
     if (!project || project.clientId !== clientId) {
       return res.status(400).json({ message: "Unauthorized action" });
     }
+    const proposal = await prisma.proposal.findUnique({
+      where: {
+        projectId_freelancerId: { projectId, freelancerId }
+      }
+    });
 
     const result = await prisma.$transaction(async (tx) => {
 
@@ -199,16 +178,20 @@ export const hireFreelancer = async (req, res) => {
 
 
       // 3. Create Initial Milestone (Required for Disputes/Payments)
-      const milestone = await tx.milestone.create({
-        data: {
-          contractId: contract.id,
-          title: "Initial Project Phase",
-          description: "Full project allocation secured in vault.",
-          amount: parseFloat(bidAmount),
-          dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days default
-          status: 'PENDING'
-        }
-      });
+      const allMilestones = await Promise.all(
+        proposal.milestones.map((m) =>
+          tx.milestone.create({
+            data: {
+              contractId: contract.id,
+              title: m.title,
+              description: "Full project allocation secured in vault.",
+              amount: parseFloat(m.amount),
+              dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days default
+              status: 'PENDING'
+            }
+          })
+        )
+      );
 
       // 4. Update Bid Status
       await tx.bid.updateMany({
