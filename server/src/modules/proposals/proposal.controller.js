@@ -114,7 +114,7 @@ export const acceptProposals = async (req, res) => {
       }
 
       // 2. Create the Contract with the held funds
-      await tx.contract.create({
+      const contract = await tx.contract.create({
         data: {
           projectId: proposal.projectId,
           freelancerId: proposal.freelancerId,
@@ -123,6 +123,49 @@ export const acceptProposals = async (req, res) => {
           status: 'ACTIVE'
         }
       });
+
+      // 2.5 Generate relational Milestones in the database Milestone table
+      let milestoneList = [];
+      try {
+        if (proposal.milestones) {
+          if (Array.isArray(proposal.milestones)) {
+            milestoneList = proposal.milestones;
+          } else if (typeof proposal.milestones === "string") {
+            milestoneList = JSON.parse(proposal.milestones);
+          } else if (typeof proposal.milestones === "object") {
+            milestoneList = Object.values(proposal.milestones);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to parse milestones JSON:", err);
+      }
+
+      if (milestoneList.length > 0) {
+        for (const m of milestoneList) {
+          await tx.milestone.create({
+            data: {
+              contractId: contract.id,
+              title: m.title || "Project Milestone",
+              description: m.description || "Escrow milestone secured in vault.",
+              amount: parseFloat(m.amount) || 0,
+              dueDate: new Date(Date.now() + (parseInt(proposal.duration) || 14) * 24 * 60 * 60 * 1000),
+              status: 'PENDING'
+            }
+          });
+        }
+      } else {
+        // Fallback milestone if no milestones list was specified
+        await tx.milestone.create({
+          data: {
+            contractId: contract.id,
+            title: "Project Milestone",
+            description: "Escrow milestone secured in vault.",
+            amount: proposal.amount,
+            dueDate: new Date(Date.now() + (parseInt(proposal.duration) || 14) * 24 * 60 * 60 * 1000),
+            status: 'PENDING'
+          }
+        });
+      }
 
       // 3. Mark proposal as Accepted
       await tx.proposal.update({
