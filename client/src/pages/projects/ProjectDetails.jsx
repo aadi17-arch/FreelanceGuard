@@ -95,7 +95,7 @@ export default function ProjectDetails() {
       <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}>
         <ShieldCheck className="w-8 h-8 text-emerald-500" />
       </motion.div>
-      <p className="text-xs font-bold text-emerald-500">Syncing...</p>
+      <p className="text-xs font-bold text-zinc-400">Loading...</p>
     </div>
   );
 
@@ -110,10 +110,7 @@ export default function ProjectDetails() {
 
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-emerald-500">
-              <ShieldCheck size={12} strokeWidth={3} />
-              <p className="text-xs font-bold text-zinc-400">Verified Opportunity</p>
-            </div>
+
             <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-zinc-900 leading-tight">
               {project?.title}
             </h1>
@@ -165,7 +162,7 @@ export default function ProjectDetails() {
               {project?.contracts?.some(c => c.freelancerId === user.id) ? (
                 <div className="bg-emerald-500 rounded-2xl lg:rounded-[2rem] p-8 text-center space-y-4 shadow-xl shadow-emerald-500/10">
                   <CheckCircle2 size={32} className="mx-auto text-white" />
-                  <h3 className="text-sm font-bold text-white leading-none">Project Started</h3>
+                  <h3 className="text-sm font-bold text-white leading-none">Agreement Active</h3>
                   <button onClick={() => navigate('/escrow')} className="w-full py-3 bg-white text-emerald-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all">
                     View Escrow
                   </button>
@@ -267,7 +264,7 @@ export default function ProjectDetails() {
                 </div>
               )}
             </div>
-          ) : (
+          ) : project?.clientId === user?.id ? (
             <div className="space-y-4">
               <h3 className="text-sm font-bold text-zinc-900 mb-4">Proposals ({project?.bids?.length || 0})</h3>
               <div className="space-y-4">
@@ -291,6 +288,14 @@ export default function ProjectDetails() {
                   </div>
                 ))}
               </div>
+            </div>
+          ) : (
+            <div className="bg-zinc-50 border border-zinc-100 rounded-2xl p-8 text-center space-y-3">
+              <Lock className="mx-auto text-zinc-400" size={24} />
+              <h3 className="text-sm font-bold text-zinc-950">Project Owner View</h3>
+              <p className="text-[11px] text-zinc-500 leading-relaxed">
+                You are viewing this project as a guest client. Only the posting client can view received bids and hire freelancers.
+              </p>
             </div>
           )}
         </aside>
