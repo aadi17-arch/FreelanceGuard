@@ -133,7 +133,37 @@ export const getProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User Not Found" });
     }
-    return res.status(200).json(user);
+
+    let totalSpent = 0;
+    let totalEarned = 0;
+
+    if (user.role === "CLIENT") {
+      const payments = await prisma.payment.findMany({
+        where: {
+          contract: {
+            project: { clientId: userId }
+          },
+          type: "RELEASE"
+        },
+        select: { amount: true }
+      });
+      totalSpent = payments.reduce((sum, p) => sum + p.amount, 0);
+    } else {
+      const payments = await prisma.payment.findMany({
+        where: {
+          contract: { freelancerId: userId },
+          type: "RELEASE"
+        },
+        select: { amount: true }
+      });
+      totalEarned = payments.reduce((sum, p) => sum + p.amount, 0);
+    }
+
+    return res.status(200).json({
+      ...user,
+      totalSpent,
+      totalEarned
+    });
   }
   catch (error) {
     console.error("Profile Error Details:", error);
