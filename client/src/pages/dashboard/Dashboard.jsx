@@ -22,7 +22,6 @@ export default function Dashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState({
     activeProjects: 0,
-    totalEscrow: 0,
     pendingMilestones: 0,
     openDisputes: 0
   });
@@ -38,13 +37,12 @@ export default function Dashboard() {
       setLoading(true);
       // Synchronizing with the hardened backend stats engine
       const res = await axios.get("/projects/stats");
-      const { totalEscrow, activeProjects, releasedThisMonth, breakdown } = res.data;
+      const { activeProjects, breakdown } = res.data;
       
       setStats({
         activeProjects: activeProjects || 0,
-        totalEscrow: totalEscrow || 0,
         pendingMilestones: 0, // Logic for this to be added later
-        releasedThisMonth: releasedThisMonth || 0
+        openDisputes: 0 // Logic to be synchronized later
       });
       setRecentActivity(breakdown || []);
     } catch (err) {
@@ -56,19 +54,19 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6 lg:space-y-10 pb-16">
-      {/* 1. Welcome & Primary Balance */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-8">
-        <div className="lg:col-span-2 bg-zinc-900 rounded-2xl lg:rounded-[2rem] p-6 lg:p-10 text-white relative overflow-hidden group">
+      {/* 1. Welcome & Primary Action */}
+      <section className="grid grid-cols-1 gap-5 lg:gap-8">
+        <div className="bg-zinc-900 rounded-2xl lg:rounded-[2rem] p-6 lg:p-10 text-white relative overflow-hidden group">
            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
            <div className="relative z-10 space-y-6 lg:space-y-8">
               <div className="space-y-2 lg:space-y-4">
                 <div className="flex items-center gap-2 text-emerald-400">
                    <Zap size={14} fill="currentColor" />
-                   <p className="text-xs font-semibold">Everything is up to date</p>
+                   <p className="text-xs font-semibold">Workspace is synchronized</p>
                 </div>
                 <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-white">Hello, {user?.name?.split(' ')[0]}!</h1>
                 <p className="text-sm lg:text-base text-zinc-400 font-medium max-w-sm leading-relaxed">
-                   Welcome back. Monitor your active projects and track your secure payments in real-time.
+                   Manage your active commitments and track project milestones through this command center.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -78,43 +76,22 @@ export default function Dashboard() {
                       <ArrowUpRight size={16} />
                     </button>
                  </Link>
-                 <Link to="/escrow" className="w-full sm:w-auto">
+                 <Link to="/contracts" className="w-full sm:w-auto">
                     <button className="w-full px-6 py-3 bg-white/5 text-white border border-white/10 rounded-xl text-sm font-bold backdrop-blur-md hover:bg-white/10 flex items-center justify-center">
-                      View Payments
+                      Active Contracts
                     </button>
                  </Link>
               </div>
            </div>
         </div>
-
-        <div className="bg-white border border-zinc-100 rounded-2xl lg:rounded-[2rem] p-6 lg:p-8 flex flex-col justify-between shadow-sm">
-           <div className="flex justify-between items-start">
-              <div className="w-10 h-10 bg-zinc-900 rounded-xl flex items-center justify-center text-emerald-500 shadow-md">
-                 <Wallet size={18} />
-              </div>
-              <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full tracking-tight">Active Balance</span>
-           </div>
-           <div className="mt-6 lg:mt-8">
-              <p className="text-xs text-zinc-400 font-bold mb-1.5">Available Funds</p>
-              <p className="text-3xl lg:text-4xl font-black text-zinc-900 tracking-tighter">
-                ${user?.walletBalance?.toLocaleString() || "0.00"}
-              </p>
-           </div>
-           <div className="mt-6 lg:mt-8 pt-4 border-t border-zinc-50">
-              <button className="text-xs font-bold text-zinc-900 hover:text-emerald-500 transition-colors flex items-center gap-2">
-                 Transaction History <ChevronRight size={14} />
-              </button>
-           </div>
-        </div>
       </section>
 
-      {/* 2. Key Stats Grid */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+      {/* 2. Operational Stats Grid */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
         {[
-          { label: "Active Projects", value: stats.activeProjects || 0, icon: <BriefcaseBusiness />, color: "text-blue-500", bg: "bg-blue-50" },
-          { label: "Money Held Safely", value: `$${(stats.totalEscrow || 0).toLocaleString()}`, icon: <ShieldCheck />, color: "text-emerald-500", bg: "bg-emerald-50" },
-          { label: "Released Month", value: `$${(stats.releasedThisMonth || 0).toLocaleString()}`, icon: <CheckCircle2 />, color: "text-emerald-500", bg: "bg-emerald-50" },
-          { label: "Active Issues", value: stats.openDisputes || 0, icon: <AlertTriangle />, color: "text-rose-500", bg: "bg-rose-50" },
+          { label: "Active Contracts", value: stats.activeProjects || 0, icon: <BriefcaseBusiness />, color: "text-blue-500", bg: "bg-blue-50" },
+          { label: "Pending Milestones", value: stats.pendingMilestones || 0, icon: <Clock />, color: "text-amber-500", bg: "bg-amber-50" },
+          { label: "Open Disputes", value: stats.openDisputes || 0, icon: <AlertTriangle />, color: "text-rose-500", bg: "bg-rose-50" },
         ].map((stat, i) => (
           <div key={i} className="bg-white border border-zinc-100 rounded-2xl p-5 lg:p-6 space-y-3 hover:shadow-md transition-all">
              <div className={`w-10 h-10 ${stat.bg} ${stat.color} rounded-xl flex items-center justify-center`}>

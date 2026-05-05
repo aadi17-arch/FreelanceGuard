@@ -29,14 +29,14 @@ export default function Sidebar({ onClose }) {
 
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "Overview" },
-    { name: "Find Projects", path: "/marketplace", icon: <Search size={14} />, section: "Overview" },
-    { name: "My Projects", path: "/contracts", icon: <FileText size={14} />, section: "Overview" },
+    { name: "Project Market", path: "/marketplace", icon: <Search size={14} />, section: "Overview" },
+    { name: "Active Contracts", path: "/contracts", icon: <FileText size={14} />, section: "Overview" },
 
-    { name: "Payments & Escrow", path: "/escrow", icon: <Wallet size={14} />, section: "Finance" },
-    { name: "My Proposals", path: "/proposals", icon: <ClipboardList size={14} />, section: "Finance" },
+    { name: "Wallet & Payments", path: "/escrow", icon: <Wallet size={14} />, section: "Finance" },
+    { name: "Negotiations", path: "/proposals", icon: <ClipboardList size={14} />, section: "Finance" },
 
     { name: "Identity Verification", path: "/kyc", icon: <ShieldCheck size={14} />, section: "Account" },
-    { name: "Help & Support", path: "/disputes", icon: <HelpCircle size={14} />, section: "Account" },
+    { name: "Conflict Resolution", path: "/disputes", icon: <HelpCircle size={14} />, section: "Account" },
   ];
 
   const sections = ["Overview", "Finance", "Account"];

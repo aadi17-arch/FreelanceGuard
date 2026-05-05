@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 import {
   Package,
   FileText,
@@ -22,15 +22,9 @@ export default function CreateProject() {
     budget: "",
     category: "Development",
   });
-  const [statusMessage, setStatusMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
-
-  const showStatus = (msg, type) => {
-    setStatusMessage({ msg, type });
-    setTimeout(() => setStatusMessage(null), 5000);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,10 +32,10 @@ export default function CreateProject() {
 
     try {
       await axios.post("/projects/create", formData);
-      showStatus("Project created successfully.", 'success');
+      toast.success("Project created successfully.");
       setTimeout(() => navigate("/dashboard"), 1500);
     } catch (err) {
-      showStatus(err.response?.data?.message || "Project creation failed.", 'error');
+      toast.error(err.response?.data?.message || "Project creation failed.");
     } finally {
       setLoading(false);
     }
