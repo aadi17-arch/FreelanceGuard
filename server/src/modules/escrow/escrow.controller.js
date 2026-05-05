@@ -178,3 +178,57 @@ export const depositToEscrow = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
+export const addFundsToWallet = async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const userId = req.user.id;
+    if (!amount || parseFloat(amount) <= 0) {
+      return res.status(400).json({ message: "Invalid amount" });
+    }
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        walletBalance: {
+          increment: parseFloat(amount)
+        }
+      }
+    });
+    res.status(200).json({
+      message: "Funds added successfully",
+      walletBalance: user.walletBalance
+    });
+  } catch (error) {
+    console.error("Add Funds Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const withdrawFundsFromWallet = async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const userId = req.user.id;
+    if (!amount || parseFloat(amount) <= 0) {
+      return res.status(400).json({ message: "Invalid amount" });
+    }
+    const currentUser = await prisma.user.findUnique({ where: { id: userId } });
+    if (currentUser.walletBalance < parseFloat(amount)) {
+      return res.status(400).json({ message: "Insufficient wallet balance" });
+    }
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        walletBalance: {
+          decrement: parseFloat(amount)
+        }
+      }
+    });
+    res.status(200).json({
+      message: "Withdrawal completed successfully",
+      walletBalance: user.walletBalance
+    });
+  } catch (error) {
+    console.error("Withdraw Funds Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
