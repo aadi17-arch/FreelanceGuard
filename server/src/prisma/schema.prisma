@@ -138,6 +138,7 @@ model Proposal {
   duration        Int
   coverLetter     String
   status          BidStatus      @default(PENDING)
+  milestones      Json?          @default("[]")
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
