@@ -105,8 +105,8 @@
   @apply w-full max-w-7xl mx-auto px-5 md:px-10 lg:px-16;
 }
 
-/* Global Smooth Transitions */
-* {
+/* Global Smooth Transitions - Target only interactive elements to prevent heavy style/layout recalculations on mobile browsers */
+a, button, input, select, textarea, [role="button"] {
   transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
