@@ -28,21 +28,29 @@ export default function Sidebar({ onClose }) {
   };
 
   const navItems = [
-    { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "Overview" },
-    { name: "Project Market", path: "/marketplace", icon: <Search size={14} />, section: "Overview" },
-    { name: "Active Contracts", path: "/contracts", icon: <FileText size={14} />, section: "Overview" },
+    { name: "Home", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "Overview" },
+    ...(user?.role === "CLIENT"
+      ? [{ name: "Post Project", path: "/create-project", icon: <LayoutDashboard size={14} />, section: "Overview" }]
+      : [{ name: "Find Work", path: "/marketplace", icon: <Search size={14} />, section: "Overview" }]
+    ),
+    { name: "My Contracts", path: "/contracts", icon: <FileText size={14} />, section: "Overview" },
 
-    { name: "Wallet & Payments", path: "/escrow", icon: <Wallet size={14} />, section: "Finance" },
-    { name: "Negotiations", path: "/proposals", icon: <ClipboardList size={14} />, section: "Finance" },
+    { name: "My Wallet", path: "/escrow", icon: <Wallet size={14} />, section: "Finance" },
+    { 
+      name: user?.role === "CLIENT" ? "Received Bids" : "My Bids", 
+      path: "/proposals", 
+      icon: <ClipboardList size={14} />, 
+      section: "Finance" 
+    },
 
-    { name: "Identity Verification", path: "/kyc", icon: <ShieldCheck size={14} />, section: "Account" },
-    { name: "Conflict Resolution", path: "/disputes", icon: <HelpCircle size={14} />, section: "Account" },
+    { name: "Verification", path: "/kyc", icon: <ShieldCheck size={14} />, section: "Account" },
+    { name: "Help", path: "/disputes", icon: <HelpCircle size={14} />, section: "Account" },
   ];
 
   const sections = ["Overview", "Finance", "Account"];
 
   return (
-    <aside className="h-screen w-56 bg-white border-r border-zinc-100 flex flex-col py-6 z-[60] transition-all duration-300">
+    <aside className="h-screen w-56 bg-[#f9f9f9] border-r border-[#e5e5e5] flex flex-col py-6 z-[60] transition-all duration-300">
       {/* Brand Header */}
       <div className="px-6 mb-8 flex justify-between items-center">
         <Link to="/dashboard" onClick={onClose} className="flex items-center gap-2.5 group">
@@ -53,9 +61,7 @@ export default function Sidebar({ onClose }) {
             <h1 className="text-[13px] font-black tracking-tight text-zinc-900 leading-none">
               FreelanceGuard
             </h1>
-            <p className="text-[10px] font-bold text-zinc-400 mt-1">
-              Secure Escrow
-            </p>
+
           </div>
         </Link>
         <button onClick={onClose} className="lg:hidden p-1.5 hover:bg-zinc-50 rounded-lg transition-colors">
@@ -100,18 +106,18 @@ export default function Sidebar({ onClose }) {
                     to={item.path}
                     onClick={onClose}
                     className={`flex items-center gap-3 px-5 py-2.5 rounded-xl transition-all duration-300 group relative ${isActive
-                        ? "text-zinc-900 bg-zinc-50 font-bold"
-                        : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50/50"
+                        ? "text-[#111111] bg-white border border-[#e5e5e5] font-bold"
+                        : "text-[#666666] hover:text-[#111111] hover:bg-white"
                       }`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="activeIndicator"
-                        className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-emerald-500 rounded-full"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-[#10b981] rounded-full"
                       />
                     )}
 
-                    <div className={`${isActive ? "text-emerald-500" : "text-zinc-400 group-hover:text-zinc-900"} transition-all duration-300`}>
+                    <div className={`${isActive ? "text-[#10b981]" : "text-[#666666] group-hover:text-[#111111]"} transition-all duration-300`}>
                       {item.icon}
                     </div>
                     <span className={`text-[12px] tracking-tight transition-all duration-300 ${isActive ? "translate-x-1" : ""}`}>
@@ -125,16 +131,7 @@ export default function Sidebar({ onClose }) {
         ))}
       </div>
 
-      {/* Logout Action */}
-      <div className="mt-auto px-4 pt-6 border-t border-zinc-50">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 text-rose-500 hover:bg-rose-50 rounded-xl transition-all duration-300 group"
-        >
-          <LogOut size={14} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-xs font-bold">Sign Out</span>
-        </button>
-      </div>
+
     </aside>
   );
 }
