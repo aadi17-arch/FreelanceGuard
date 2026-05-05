@@ -12,6 +12,7 @@ import {
   Plus,
   ShieldCheck,
   ChevronRight,
+  ChevronDown,
   X,
   Loader2
 } from "lucide-react";
@@ -86,9 +87,14 @@ export default function Market() {
   const filteredProjects = projects.filter(p => {
     const matchesSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          p.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = activeFilter === "all projects" || activeFilter === "all" || p.category?.toLowerCase() === activeFilter;
+    const matchesFilter = activeFilter === "all" || p.category?.toLowerCase() === activeFilter;
     return matchesSearch && matchesFilter;
   });
+
+  const getCount = (filter) => {
+    if (filter === "All") return projects.length;
+    return projects.filter(p => p.category?.toLowerCase() === filter.toLowerCase()).length;
+  };
 
   if (loading) return (
     <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
@@ -102,50 +108,52 @@ export default function Market() {
   return (
     <div className="space-y-8 pb-20">
       {/* 1. Market Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 text-emerald-500">
-            <Zap size={10} fill="currentColor" />
-            <p className="text-xs font-bold text-emerald-500">System Ready</p>
-          </div>
-          <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-zinc-900">Project Marketplace</h1>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
-          <div className="relative w-full sm:flex-grow lg:w-72 group">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" />
-            <input
-              type="text"
-              placeholder="Search projects..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 bg-zinc-100 border-none rounded-xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-emerald-500/10 outline-none transition-all placeholder:text-zinc-400"
-            />
-          </div>
-          {user?.role === "CLIENT" && (
-            <Link to="/create-project" className="w-full sm:w-auto">
-              <button className="w-full flex items-center justify-center gap-2 px-6 py-2.5 bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-emerald-600 transition-all shadow-xl active:scale-95 text-nowrap">
-                <Plus size={16} /> Post Project
-              </button>
-            </Link>
-          )}
+      <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
+        <div className="relative w-full sm:w-72 group">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666666] group-focus-within:text-[#10b981] transition-colors" />
+          <input
+            type="text"
+            placeholder="Search projects..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 bg-[#ffffff] border border-[#e5e5e5] rounded-[8px] text-xs font-medium focus:outline-none focus:border-[#10b981] transition-all placeholder:text-[#666666] text-[#111111]"
+          />
         </div>
       </div>
 
-      {/* 2. Quick Filters */}
-      <div className="flex items-center gap-6 overflow-x-auto pb-2 px-1 custom-scrollbar no-scrollbar">
-        {["All Projects", "Development", "Design", "Marketing", "Writing"].map((filter) => (
+      {/* Mobile Dropdown Quick Filters (shown on mobile, hidden on desktop) */}
+      <div className="md:hidden relative w-full">
+        <select
+          value={activeFilter}
+          onChange={(e) => setActiveFilter(e.target.value)}
+          className="w-full bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] pl-4 pr-10 py-2.5 text-xs font-bold text-[#111111] appearance-none focus:outline-none focus:border-[#10b981] hover:border-[#111111] transition-all cursor-pointer"
+        >
+          {["All", "Development", "Design", "Marketing", "Writing"].map((filter) => (
+            <option key={filter} value={filter.toLowerCase()}>
+              {filter} ({getCount(filter)})
+            </option>
+          ))}
+        </select>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#666666]">
+          <ChevronDown size={14} />
+        </div>
+      </div>
+
+      {/* Desktop Quick Filters (hidden on mobile, shown on desktop) */}
+      <div className="hidden md:flex items-center gap-6 overflow-x-auto pb-2 px-1 custom-scrollbar no-scrollbar border-b border-[#e5e5e5]">
+        {["All", "Development", "Design", "Marketing", "Writing"].map((filter) => (
           <button
             key={filter}
             onClick={() => setActiveFilter(filter.toLowerCase())}
-            className={`pb-3 px-1 text-xs font-bold whitespace-nowrap transition-all relative ${(activeFilter === filter.toLowerCase() || (activeFilter === 'all' && filter === 'All Projects'))
-                ? "text-zinc-900"
-                : "text-zinc-400 hover:text-zinc-600"
+            className={`pb-3 px-1 text-xs font-bold whitespace-nowrap transition-all relative flex items-center gap-2 ${(activeFilter === filter.toLowerCase())
+                ? "text-[#111111]"
+                : "text-[#666666] hover:text-[#111111]"
               }`}
           >
             {filter}
-            {(activeFilter === filter.toLowerCase() || (activeFilter === 'all' && filter === 'All Projects')) && (
-              <motion.div layoutId="marketFilter" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 rounded-full" />
+            <span className="bg-[#f0fdf4] text-[#10b981] px-2 py-0.5 rounded-[20px] text-[10px] font-black">{getCount(filter)}</span>
+            {(activeFilter === filter.toLowerCase()) && (
+              <motion.div layoutId="marketFilter" className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#10b981] rounded-full" />
             )}
           </button>
         ))}
@@ -157,38 +165,35 @@ export default function Market() {
           <Link
             key={proj.id}
             to={`/project/${proj.id}`}
-            className="group bg-white border border-zinc-100 rounded-2xl p-5 lg:p-6 hover:shadow-2xl hover:shadow-zinc-200/50 hover:border-emerald-100 transition-all duration-500 flex flex-col lg:flex-row lg:items-center gap-6"
+            className="group bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] p-[20px] hover:shadow-md hover:border-[#10b981] transition-all duration-500 flex flex-col lg:flex-row lg:items-center gap-6"
           >
             <div className="flex-grow space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-zinc-50 text-zinc-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:text-emerald-500 transition-all duration-500">
+                <div className="w-10 h-10 rounded-lg bg-zinc-50 text-[#666666] flex items-center justify-center group-hover:bg-[#f0fdf4] group-hover:text-[#10b981] transition-all duration-500">
                   <Briefcase size={18} />
                 </div>
                 <div className="space-y-0.5">
-                  <span className="px-1.5 py-0.5 rounded-md text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 tracking-tight">
-                    Open Project
-                  </span>
-                  <div className="flex items-center gap-1 text-[10px] font-bold text-zinc-300">
+                  <div className="flex items-center gap-1 text-[10px] font-bold text-[#666666]">
                     <Clock size={10} /> {new Date(proj.createdAt).toLocaleDateString()}
                   </div>
                 </div>
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-lg lg:text-xl font-bold text-zinc-900 tracking-tight truncate group-hover:text-emerald-600 transition-colors">
+                <h3 className="text-lg lg:text-xl font-bold text-[#111111] tracking-tight truncate group-hover:text-[#10b981] transition-colors">
                   {proj.title}
                 </h3>
-                <p className="text-sm text-zinc-500 line-clamp-2 leading-relaxed max-w-2xl font-medium">
+                <p className="text-sm text-[#666666] line-clamp-2 leading-relaxed max-w-2xl font-medium">
                   {proj.description}
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between w-full lg:w-auto gap-6 pt-4 lg:pt-0 border-t border-zinc-50 lg:border-none">
+            <div className="flex flex-col sm:flex-row items-center justify-between w-full lg:w-auto gap-6 pt-4 lg:pt-0 border-t border-[#e5e5e5] lg:border-none">
               <div className="flex items-center gap-8">
                 <div className="space-y-0.5">
-                  <p className="text-xs font-bold text-zinc-300 uppercase tracking-wider">Project Budget</p>
-                  <div className="flex items-center gap-0.5 font-black text-zinc-900 text-xl lg:text-2xl tracking-tighter">
-                    <DollarSign size={16} className="text-emerald-500" />
+                  <p className="text-xs font-bold text-[#666666] capitalize">Project budget</p>
+                  <div className="flex items-center gap-0.5 font-black text-[#111111] text-xl lg:text-2xl tracking-tighter">
+                    <DollarSign size={16} className="text-[#10b981]" />
                     {proj.budget?.toLocaleString()}
                   </div>
                 </div>
@@ -198,23 +203,30 @@ export default function Market() {
                 {user?.role === "FREELANCER" && (
                   <button
                     onClick={(e) => handleApplyClick(e, proj)}
-                    className="flex-grow sm:flex-grow-0 px-6 py-2.5 bg-emerald-500 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20 active:scale-95"
+                    className="flex-grow sm:flex-grow-0 px-6 py-2.5 bg-[#10b981] text-white rounded-[10px] text-xs font-black capitalize hover:bg-[#059669] transition-all active:scale-95"
                   >
-                    Apply Now
+                    Apply now
                   </button>
                 )}
-                <div className="w-10 h-10 rounded-full border border-zinc-100 flex items-center justify-center text-zinc-200 group-hover:bg-zinc-900 group-hover:text-white group-hover:border-zinc-900 transition-all duration-500">
+                <div className="w-10 h-10 rounded-full border border-[#e5e5e5] flex items-center justify-center text-[#666666] group-hover:bg-[#111111] group-hover:text-white transition-all duration-500">
                   <ChevronRight size={18} />
                 </div>
               </div>
             </div>
           </Link>
         )) : (
-          <div className="py-32 text-center space-y-4">
-            <div className="w-16 h-16 bg-zinc-50 rounded-2xl flex items-center justify-center mx-auto text-zinc-200">
+          <div className="py-20 text-center flex flex-col items-center justify-center gap-4 border border-[#e5e5e5] rounded-[10px] bg-[#ffffff]">
+            <div className="text-[#666666]">
               <Briefcase size={24} />
             </div>
-            <p className="text-sm font-bold text-zinc-300">No projects found in this category</p>
+            <p className="text-xs font-bold text-[#666666]">No projects yet. Check back soon or post your own.</p>
+            {user?.role === "CLIENT" && (
+               <Link to="/create-project">
+                 <button className="px-6 py-2.5 bg-[#10b981] text-white rounded-[10px] text-sm font-bold transition-all">
+                   Post a project
+                 </button>
+               </Link>
+            )}
           </div>
         )}
       </div>
