@@ -33,52 +33,57 @@ export default function Profile() {
   const { user } = useAuth();
   
   return (
-    <div className="max-w-5xl mx-auto space-y-10 lg:space-y-16 pb-20 px-4 lg:px-0">
+    <div className="w-full space-y-6 pb-20 px-6 bg-[#ffffff]">
       
       {/* 1. Professional Identity Header */}
-      <header className="flex flex-col md:flex-row items-center md:items-end gap-8 border-b border-zinc-100 pb-12">
-        <div className="relative">
-          <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-[2.5rem] bg-zinc-900 text-white flex items-center justify-center text-4xl lg:text-5xl font-black shadow-2xl shadow-zinc-900/20">
-            {user?.name?.[0]}
+      <header className="flex flex-col md:flex-row items-center md:items-center justify-between gap-6 border-b border-[#e5e5e5] pb-6">
+        <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+          <div className="relative">
+            {/* Reduced avatar size */}
+            <div className="w-16 h-16 rounded-[10px] bg-[#111111] text-white flex items-center justify-center text-2xl font-black">
+              {user?.name?.[0]}
+            </div>
+            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-[4px] bg-[#10b981] flex items-center justify-center text-white">
+              <ShieldCheck size={12} strokeWidth={2.5} />
+            </div>
           </div>
-          <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-2xl bg-emerald-500 border-4 border-white flex items-center justify-center text-white shadow-lg">
-            <ShieldCheck size={18} strokeWidth={3} />
-          </div>
-        </div>
-        
-        <div className="space-y-3 flex-grow text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-2 text-emerald-600 font-bold">
-             <Zap size={12} fill="currentColor" />
-             <p className="text-[10px] uppercase tracking-[0.2em]">Verified Identity</p>
-          </div>
-          <h1 className="text-4xl lg:text-6xl font-black tracking-tighter text-zinc-900 uppercase leading-none">{user?.name}</h1>
-          <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs font-medium text-zinc-400">
-             <span className="text-zinc-900 font-bold bg-zinc-100 px-3 py-1 rounded-lg uppercase tracking-widest text-[9px]">{user?.role} ACCOUNT</span>
-             <span>•</span>
-             <span>Member since {new Date(user?.createdAt).getFullYear()}</span>
+          
+          <div className="space-y-1">
+            {/* Sentence case name */}
+            <h1 className="text-2xl font-black tracking-tight text-[#111111] leading-none">
+              {user?.name}
+            </h1>
+            <div className="flex flex-col sm:flex-row items-center gap-2 text-xs font-bold text-[#666666]">
+              {/* Sentence case account role */}
+              <span className="text-[#111111]">
+                {user?.role === "CLIENT" ? "Client account" : "Freelancer account"}
+              </span>
+              <span className="hidden sm:inline">•</span>
+              <span>Member since {new Date(user?.createdAt).getFullYear()}</span>
+            </div>
           </div>
         </div>
 
-        <div className="flex gap-3 w-full md:w-auto">
-           <button className="flex-grow md:flex-none px-8 py-4 bg-zinc-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl active:scale-95">
-             Edit Profile
-           </button>
+        <div className="w-full md:w-auto">
+          {/* Sentence case black background edit button */}
+          <button className="w-full md:w-auto px-5 py-2.5 bg-[#111111] hover:bg-[#333333] text-white rounded-[8px] text-xs font-bold transition-all shadow-sm">
+            Edit profile
+          </button>
         </div>
       </header>
 
       {/* 2. Professional Dashboard Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Main Content Area */}
-        <div className="lg:col-span-8 space-y-10">
+        <div className="lg:col-span-8 space-y-6">
            
            {/* Glass Summary Card */}
-           <div className="bg-white/40 backdrop-blur-xl border border-white p-10 rounded-[3rem] shadow-sm relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-              <div className="relative z-10 space-y-4">
-                 <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">Professional Summary</h3>
-                 <p className="text-lg lg:text-xl font-medium text-zinc-600 leading-relaxed italic">
-                    "Experienced {user?.role?.toLowerCase()} focused on high-quality delivery and secure collaboration within the FreelanceGuard ecosystem."
+           <div className="bg-[#ffffff] border border-[#e5e5e5] p-6 rounded-[10px] shadow-sm relative overflow-hidden">
+              <div className="space-y-2">
+                 <h3 className="text-xs font-bold text-[#666666]">About me</h3>
+                 <p className="text-xs font-medium text-[#111111] leading-relaxed">
+                    Experienced {user?.role?.toLowerCase() === "client" ? "client" : "freelancer"} focused on high-quality delivery and secure collaboration within the FreelanceGuard ecosystem.
                  </p>
               </div>
            </div>
@@ -86,84 +91,68 @@ export default function Profile() {
            {/* Stats Row */}
            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { label: "Earnings", value: `$${user?.totalEarned?.toLocaleString() || "0"}`, color: "text-emerald-500" },
-                { label: "Completion", value: "98%", color: "text-blue-500" },
-                { label: "Reliability", value: "A+", color: "text-amber-500" }
+                { label: "Earnings", value: `$${user?.totalEarned?.toLocaleString() || "0"}` },
+                { label: "Completion", value: "98%" },
+                { label: "Reliability", value: "Verified" }
               ].map((stat, i) => (
-                <div key={i} className="bg-white border border-zinc-50 p-8 rounded-[2.5rem] shadow-sm hover:shadow-xl hover:shadow-zinc-100/50 transition-all">
-                   <p className="text-[10px] font-black text-zinc-300 uppercase tracking-widest mb-1">{stat.label}</p>
-                   <p className={`text-3xl font-black ${stat.color} tracking-tighter`}>{stat.value}</p>
+                <div key={i} className="bg-[#ffffff] border border-[#e5e5e5] p-4 rounded-[10px] shadow-sm">
+                   <p className="text-xs font-bold text-[#666666] mb-1">{stat.label}</p>
+                   <p className={`text-[28px] font-black tracking-tight leading-none ${
+                     stat.label === "Reliability" ? "text-[#10b981]" : "text-[#111111]"
+                   }`}>{stat.value}</p>
                 </div>
               ))}
            </div>
 
            {/* Detailed Information */}
-           <div className="bg-zinc-50/50 rounded-[3rem] p-10 space-y-10 border border-zinc-100/50">
-              <div className="flex items-center gap-3">
-                 <User size={16} className="text-zinc-900" />
-                 <h2 className="text-xs font-black uppercase tracking-widest text-zinc-900">Personal Details</h2>
+           <div className="bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] p-6 space-y-6">
+              <div className="flex items-center gap-2">
+                 <User size={14} className="text-[#10b981]" />
+                 <h2 className="text-xs font-bold text-[#111111]">Personal details</h2>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  {[
-                   { label: "Email Address", value: user?.email },
+                   { label: "Email", value: user?.email },
                    { label: "Account ID", value: `ID-${user?.id?.slice(-12).toUpperCase()}`, font: "font-mono" },
-                   { label: "Primary Role", value: user?.role },
-                   { label: "Last Active", value: "Today" }
+                   { label: "Role", value: user?.role === "CLIENT" ? "Client" : "Freelancer" },
+                   { label: "Last active", value: "Today" }
                  ].map((detail, i) => (
-                   <div key={i} className="space-y-1.5">
-                      <p className="text-[10px] font-black text-zinc-300 uppercase tracking-widest">{detail.label}</p>
-                      <p className={`text-sm font-bold text-zinc-900 ${detail.font || ""}`}>{detail.value}</p>
+                   <div key={i} className="space-y-1">
+                      <p className="text-xs font-bold text-[#666666]">{detail.label}</p>
+                      <p className={`text-xs font-medium text-[#111111] ${detail.font || ""}`}>{detail.value}</p>
                    </div>
                  ))}
               </div>
            </div>
         </div>
 
-        {/* Sidebar / Sidebar Activity Area */}
-        <div className="lg:col-span-4 space-y-10">
+        {/* Sidebar Activity Area */}
+        <div className="lg:col-span-4 space-y-6">
            
            {/* Activity Timeline */}
-           <div className="space-y-6">
-              <div className="flex items-center gap-3 px-2">
-                 <History size={16} className="text-zinc-900" />
-                 <h2 className="text-xs font-black uppercase tracking-widest text-zinc-900">Recent Activity</h2>
+           <div className="space-y-3">
+              <div className="flex items-center gap-2 px-1">
+                 <History size={14} className="text-[#10b981]" />
+                 <h2 className="text-xs font-bold text-[#111111]">Recent activity</h2>
               </div>
               
-              <div className="bg-white border border-zinc-100 rounded-[2.5rem] p-8 space-y-8 shadow-sm">
+              <div className="bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] p-4 space-y-4 shadow-sm">
                  {[
-                   { title: "Payment Received", time: "2 hours ago", icon: <Wallet className="text-emerald-500" /> },
-                   { title: "Project Milstone", time: "Yesterday", icon: <ShieldCheck className="text-blue-500" /> },
-                   { title: "Login Verified", time: "2 days ago", icon: <User className="text-zinc-400" /> }
+                   { title: "Payment received", time: "2 hours ago", icon: <Wallet size={14} className="text-[#10b981]" /> },
+                   { title: "Project milestone", time: "Yesterday", icon: <ShieldCheck size={14} className="text-[#10b981]" /> },
+                   { title: "Login verified", time: "2 days ago", icon: <User size={14} className="text-[#10b981]" /> }
                  ].map((item, i) => (
-                   <div key={i} className="flex gap-4 group">
-                      <div className="w-10 h-10 rounded-xl bg-zinc-50 flex items-center justify-center shrink-0 group-hover:bg-zinc-900 group-hover:text-white transition-all">
-                         {React.cloneElement(item.icon, { size: 14 })}
+                   <div key={i} className="flex gap-3 items-start">
+                      <div className="w-8 h-8 rounded-[6px] bg-[#f9f9f9] border border-[#e5e5e5] flex items-center justify-center shrink-0">
+                         {item.icon}
                       </div>
-                      <div className="space-y-1">
-                         <p className="text-xs font-bold text-zinc-900">{item.title}</p>
-                         <p className="text-[10px] font-medium text-zinc-400">{item.time}</p>
+                      <div className="space-y-0.5">
+                         <p className="text-xs font-bold text-[#111111]">{item.title}</p>
+                         <p className="text-[10px] font-medium text-[#666666]">{item.time}</p>
                       </div>
                    </div>
                  ))}
-              </div>
-           </div>
-
-           {/* Security Status Card */}
-           <div className="bg-zinc-900 rounded-[2.5rem] p-8 space-y-6 text-white shadow-2xl shadow-zinc-900/20 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl" />
-              <div className="flex items-center gap-3 text-emerald-500 relative z-10">
-                 <ShieldCheck size={16} strokeWidth={3} />
-                 <span className="text-[10px] font-black uppercase tracking-widest">Account Health</span>
-              </div>
-              <p className="text-[11px] text-zinc-400 font-medium leading-relaxed relative z-10">
-                 Your account is in excellent standing. 2FA is enabled and identity verification is complete.
-              </p>
-              <div className="pt-2 relative z-10">
-                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Fully Protected</span>
-                 </div>
               </div>
            </div>
 
