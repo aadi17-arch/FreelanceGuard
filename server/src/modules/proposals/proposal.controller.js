@@ -3,7 +3,7 @@ import prisma from "../../config/database.js";
 
 export const createProposal = async (req, res) => {
   try {
-    const { projectId, amount, duration, coverLetter } = req.body;
+    const { projectId, amount, duration, coverLetter, milestones } = req.body;
     const freelancerId = req.user.id;
 
     if (req.user.role !== 'FREELANCER') {
@@ -18,13 +18,18 @@ export const createProposal = async (req, res) => {
     if (existing) {
       return res.status(400).json({ message: "You have already submitted a proposal for this project" });
     }
+    const totalMilestonePrice = milestones.reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
+    if (totalMilestonePrice !== amount) {
+      return res.status(403).json({ message: "Milestones amount must be same after adding." });
+    }
     const newProposal = await prisma.proposal.create({
       data: {
         projectId,
         freelancerId,
         amount: parseFloat(amount),
         duration: parseInt(duration),
-        coverLetter
+        coverLetter,
+        milestones
       }
     });
 
