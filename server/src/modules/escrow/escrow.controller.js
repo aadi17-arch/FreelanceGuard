@@ -326,45 +326,6 @@ export const approveAndReleaseMilestoneAmount = async (req, res) => {
     return res.status(500).json({message:"Server Error"});
   }
 }
-export const raiseMilestoneDispute = async (req, res) => {
-  try {
-  const { milestoneId } = req.params;
-  const { reason } = req.body;
-  const userId  = req.user.id;
-  const milestone = await prisma.milestone.findUnique({
-    where: { id: milestoneId },
-    include:{contract:{include:{project:true}}}
-  });
-  if (!milestone) return res.status(404).json({ message: "Milestone not found" });
-  const isClient = milestone.contract.project.clientId === userId;
-  const isFreelancer = milestone.contract.freelancerId === userId;
-  if (!isClient && !isFreelancer) {
-    return res.status(403).json({message:"Unauthorized"});
-  }
-  const dispute = await prisma.$transaction(async(tx) =>{
-    await tx.milestone.update({
-      where: { id: milestoneId },
-      data: {
-        status:"DISPUTED"
-      }
-    });
-    await tx.dispute.create({
-      data: {
-        contractId:milestone.contractId,
-        raisedById: userId,
-        reason,
-        status:"OPEN"
-      }
-    });
-  });
-    res.status(200).json({ message: "Dispute opened successfully", dispute });
-  }
-  catch (error) {
-    console.error("Dispute Error", error);
-    res.status(500).json({ message: "Server error while raising dispute" });
-  }
-}
-
 export const getUserTransactions = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -405,4 +366,3 @@ export const getUserTransactions = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
-

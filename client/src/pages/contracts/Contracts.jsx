@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 
 export default function Contracts() {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [activeTab, setActiveTab] = useState("active");
   const [showDemo, setShowDemo] = useState(false);
   const [contracts, setContracts] = useState([]);
@@ -92,6 +92,9 @@ export default function Contracts() {
       await axios.post(`/escrow/release/${milestoneId}`);
       toast.success("Funds released successfully!");
       await fetchContracts();
+      if (refreshUser) {
+        await refreshUser();
+      }
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || "Failed to release funds.");
@@ -130,6 +133,9 @@ export default function Contracts() {
       });
 
       await fetchContracts();
+      if (refreshUser) {
+        await refreshUser();
+      }
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || "Failed to submit work deliverable.");
@@ -169,6 +175,9 @@ export default function Contracts() {
       });
 
       await fetchContracts();
+      if (refreshUser) {
+        await refreshUser();
+      }
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || "Failed to initiate dispute.");
