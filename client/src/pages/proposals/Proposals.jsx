@@ -22,6 +22,7 @@ import { toast } from "react-hot-toast";
 export default function Proposals() {
   const { user, refreshUser } = useAuth();
   const [activeTab, setActiveTab] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [proposals, setProposals] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -99,6 +100,8 @@ export default function Proposals() {
           <input
             type="text"
             placeholder="Search proposals..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-4 py-2 bg-[#ffffff] border border-[#e5e5e5] rounded-[8px] text-xs font-medium focus:outline-none focus:border-[#10b981] transition-all text-[#111111] placeholder:text-[#666666]"
           />
         </div>
@@ -163,7 +166,11 @@ export default function Proposals() {
         ) : (() => {
           const filtered = proposals.filter(p => {
             const matchesTab = activeTab === "all" || p.status?.toLowerCase() === activeTab.toLowerCase();
-            return matchesTab;
+            const matchesSearch = !searchTerm || 
+              p.project?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              p.coverLetter?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              p.freelancer?.name?.toLowerCase().includes(searchTerm.toLowerCase());
+            return matchesTab && matchesSearch;
           });
 
           return filtered.length > 0 ? filtered.map((proposal) => (
