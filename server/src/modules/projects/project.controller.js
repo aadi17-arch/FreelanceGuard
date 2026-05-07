@@ -72,14 +72,18 @@ export const getProjectStats = async (req, res) => {
         status: 'ACTIVE'
       }
     });
+
     const pendingMilestoneCount = await prisma.milestone.count({
       where: {
         contract: {
           OR: [{ freelancerId: userId }, { project: { clientId: userId } }]
         },
-        status: 'PENDING'
+        status: {
+          in: ['PENDING', 'IN_PROGRESS', 'SUBMITTED']
+        }
       }
     });
+
     const openDisputeCount = await prisma.dispute.count({
       where: {
         milestone: {
@@ -90,7 +94,8 @@ export const getProjectStats = async (req, res) => {
         status: 'OPEN'
       }
     });
-    const breakdown = await prisma.contract.findMany({
+ 
+     const breakdown = await prisma.contract.findMany({
       where: {
         OR: [
           { freelancerId: userId },
