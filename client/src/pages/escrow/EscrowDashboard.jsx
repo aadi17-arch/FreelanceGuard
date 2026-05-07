@@ -20,6 +20,7 @@ import { toast } from "react-hot-toast";
 
 export default function EscrowDashboard() {
    const [contracts, setContracts] = useState([]);
+   const [transactions, setTransactions] = useState([]);
    const [liveUser, setLiveUser] = useState(null);
    const [loading, setLoading] = useState(true);
    const [showFundForm, setShowFundForm] = useState(false);
@@ -34,12 +35,14 @@ export default function EscrowDashboard() {
    const fetchData = async () => {
       try {
          setLoading(true);
-         const [contractsRes, profileRes] = await Promise.all([
+         const [contractsRes, profileRes, transactionsRes] = await Promise.all([
             axios.get("/escrow"),
-            axios.get("/auth/profile")
+            axios.get("/auth/profile"),
+            axios.get("/escrow/transactions")
          ]);
          setContracts(contractsRes.data);
          setLiveUser(profileRes.data);
+         setTransactions(transactionsRes.data);
       } catch (err) {
          console.error("Data sync error:", err);
       } finally {
@@ -218,40 +221,58 @@ export default function EscrowDashboard() {
             </div>
 
             <div className="divide-y divide-[#e5e5e5]">
-               {contracts.length > 0 ? (
-                  contracts.map((contract) => (
-                     <div key={contract.id} className="px-8 py-5 flex items-center justify-between hover:bg-[#f9f9f9] transition-all group">
-                        <div className="flex items-center gap-5">
-                           <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${contract.status === 'COMPLETED' ? 'bg-[#f0fdf4] text-[#10b981]' : 'bg-[#f9f9f9] text-[#666666]'
-                              }`}>
-                              {contract.status === 'COMPLETED' ? <CheckCircle2 size={16} /> : <Clock size={16} />}
-                           </div>
-                           <div>
-                              <p className="text-sm font-black text-[#111111] tracking-tight truncate max-w-[200px]">
-                                 {contract.project?.title}
-                              </p>
-                              <p className="text-xs font-bold text-[#666666] mt-1">
-                                 {new Date(contract.createdAt).toLocaleDateString()} • {contract.status === 'COMPLETED' ? 'Money paid' : 'Safe in project'}
-                              </p>
-                           </div>
-                        </div>
+               {transactions.length > 0 ? (
+                  transactions.map((tx) => {
+                     const isIncoming = tx.type === "DEPOSIT" || (tx.type === "RELEASE" && user?.role === "FREELANCER");
+                     const displayTitle = tx.type === "DEPOSIT" 
+                        ? "Wallet Deposit" 
+                        : tx.type === "WITHDRAWAL" 
+                        ? "Wallet Withdrawal" 
+                        : tx.contract?.project?.title || tx.milestone?.title || "Milestone Release";
 
-                        <div className="flex items-center gap-10">
-                           <div className="text-right hidden sm:block">
-                              <p className="text-sm font-black text-[#111111] tracking-tighter">${contract.totalAmount?.toLocaleString()}</p>
+                     return (
+                        <div key={tx.id} className="px-8 py-5 flex items-center justify-between hover:bg-[#f9f9f9] transition-all group">
+                           <div className="flex items-center gap-5">
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isIncoming ? "bg-[#f0fdf4] text-[#10b981]" : "bg-zinc-50 text-[#666666]"}`}>
+                                 {tx.type === "DEPOSIT" ? (
+                                    <Plus size={16} />
+                                 ) : tx.type === "WITHDRAWAL" ? (
+                                    <ArrowUpRight size={16} />
+                                 ) : tx.type === "RELEASE" ? (
+                                    <CheckCircle2 size={16} />
+                                 ) : (
+                                    <Wallet size={16} />
+                                 )}
+                              </div>
+                              <div>
+                                 <p className="text-sm font-black text-[#111111] tracking-tight truncate max-w-[200px]">
+                                    {displayTitle}
+                                 </p>
+                                 <p className="text-xs font-bold text-[#666666] mt-1">
+                                    {new Date(tx.createdAt).toLocaleDateString()} • {tx.type}
+                                 </p>
+                              </div>
                            </div>
-                           <div className="w-8 h-8 rounded-full border border-[#e5e5e5] flex items-center justify-center text-[#666666] group-hover:bg-[#111111] group-hover:text-white transition-all">
-                              <ChevronRight size={14} />
+
+                           <div className="flex items-center gap-10">
+                              <div className="text-right hidden sm:block">
+                                 <p className={`text-sm font-black tracking-tighter ${isIncoming ? "text-[#10b981]" : "text-[#111111]"}`}>
+                                    {isIncoming ? "+" : "-"}${tx.amount?.toLocaleString()}
+                                 </p>
+                              </div>
+                              <div className="w-8 h-8 rounded-full border border-[#e5e5e5] flex items-center justify-center text-[#666666] group-hover:bg-[#111111] group-hover:text-white transition-all">
+                                 <ChevronRight size={14} />
+                              </div>
                            </div>
                         </div>
-                     </div>
-                  ))
+                     );
+                  })
                ) : (
                   <div className="py-10 text-center space-y-3">
                      <div className="text-[#666666]">
                         <History size={20} className="mx-auto" />
                      </div>
-                     <p className="text-xs font-bold text-[#666666]">No transactions yet</p>
+                     <p className="text-xs font-bold text-[#666666]">No payments logged in history</p>
                   </div>
                )}
             </div>

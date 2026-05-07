@@ -1,10 +1,11 @@
 import express from "express";
-import { depositToEscrow, getUserContracts, releaseFunds, addFundsToWallet, withdrawFundsFromWallet, submitMilestoneWork, approveAndReleaseMilestoneAmount, raiseMilestoneDispute } from "./escrow.controller.js";
+import { depositToEscrow, getUserContracts, releaseFunds, addFundsToWallet, withdrawFundsFromWallet, submitMilestoneWork, approveAndReleaseMilestoneAmount, raiseMilestoneDispute, getUserTransactions } from "./escrow.controller.js";
 import authMiddleware from "../auth/auth.middleware.js";
 
 
 const router = express.Router();
 router.get("/", authMiddleware, getUserContracts);
+router.get("/transactions", authMiddleware, getUserTransactions);
 router.post("/release/:contractId", authMiddleware, releaseFunds);
 router.post("/deposit/:contractId", authMiddleware, depositToEscrow);
 router.post("/add-funds", authMiddleware, addFundsToWallet);

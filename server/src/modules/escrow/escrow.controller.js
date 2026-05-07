@@ -364,3 +364,45 @@ export const raiseMilestoneDispute = async (req, res) => {
     res.status(500).json({ message: "Server error while raising dispute" });
   }
 }
+
+export const getUserTransactions = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const transactions = await prisma.payment.findMany({
+      where: {
+        contract: {
+          OR: [
+            { freelancerId: userId },
+            { project: { clientId: userId } }
+          ]
+        }
+      },
+      include: {
+        contract: {
+          include: {
+            project: {
+              select: {
+                title: true
+              }
+            }
+          }
+        },
+        milestone: {
+          select: {
+            title: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: "desc"
+      }
+    });
+
+    res.status(200).json(transactions);
+  } catch (error) {
+    console.error("Fetch transactions error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
