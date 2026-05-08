@@ -29,6 +29,7 @@ export default function Contracts() {
   const [contracts, setContracts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedContractId, setExpandedContractId] = useState(null);
+  const [selectedContractForModal, setSelectedContractForModal] = useState(null);
 
   useEffect(() => {
     fetchContracts();
@@ -483,15 +484,20 @@ export default function Contracts() {
                       </div>
                     </div>
 
-                    {/* Expand details Trigger */}
-                    <div className="pt-2">
+                    {/* Expand details Trigger & View Details Button */}
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <button
+                        onClick={() => setSelectedContractForModal(contract)}
+                        className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#111111] hover:bg-[#333333] text-white rounded-[8px] text-xs font-bold transition-all shadow-sm"
+                      >
+                        <FileText size={13} />
+                        <span>View details</span>
+                      </button>
                       <button
                         onClick={() => toggleExpand(contract.id)}
-                        className="w-full flex items-center justify-between px-4 py-2.5 bg-[#f9f9f9] hover:bg-[#111111] hover:text-white rounded-[8px] text-xs font-bold transition-all border border-[#e5e5e5]"
+                        className="flex items-center justify-between px-4 py-2.5 bg-[#f9f9f9] hover:bg-[#eaeaea] text-[#111111] rounded-[8px] text-xs font-bold transition-all border border-[#e5e5e5]"
                       >
-                        <span>
-                          Interactive milestones ({activeMilestones.length})
-                        </span>
+                        <span>Milestones ({activeMilestones.length})</span>
                         {isExpanded ? (
                           <ChevronDown size={14} />
                         ) : (
@@ -709,6 +715,120 @@ export default function Contracts() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* 4. Contract Details Overlay Modal */}
+      <AnimatePresence>
+        {selectedContractForModal && (() => {
+          const contract = selectedContractForModal;
+          const activeMilestones = contract.milestones && contract.milestones.length > 0
+            ? contract.milestones
+            : [
+                {
+                  id: `fallback-${contract.id}`,
+                  title: "Contract Escrow Milestone",
+                  description: "Standard project deliverable secured inside the secure FreelanceGuard vault.",
+                  amount: contract.rawAmount || 0,
+                  status: contract.status === "COMPLETED" ? "RELEASED" : "PENDING"
+                }
+              ];
+
+          return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedContractForModal(null)}
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+              />
+
+              {/* Modal Content */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                className="relative bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-[#e5e5e5] max-h-[90vh] flex flex-col"
+              >
+                {/* Modal Header */}
+                <div className="p-6 border-b border-[#e5e5e5] flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#10b981] bg-[#f0fdf4] px-2.5 py-1 rounded-full">
+                      Escrow Vault Secure
+                    </span>
+                    <h3 className="text-base font-black text-[#111111] mt-2">
+                      {contract.title}
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setSelectedContractForModal(null)}
+                    className="w-8 h-8 rounded-full hover:bg-zinc-100 flex items-center justify-center text-[#666666] font-bold text-sm transition-all"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Modal Body */}
+                <div className="p-6 overflow-y-auto space-y-6">
+                  {/* Parties overview */}
+                  <div className="grid grid-cols-2 gap-4 bg-[#f9f9f9] p-4 rounded-xl border border-[#e5e5e5]">
+                    <div>
+                      <p className="text-[10px] font-bold text-[#666666]">Counterparty Name</p>
+                      <p className="text-sm font-bold text-[#111111]">{contract.counterpartyName}</p>
+                      <p className="text-[9px] text-[#666666]">{contract.counterpartyLabel}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-[#666666]">Contract Value</p>
+                      <p className="text-sm font-bold text-[#111111]">{contract.amount}</p>
+                      <p className="text-[9px] text-[#666666]">Start Date: {contract.startDate}</p>
+                    </div>
+                  </div>
+
+                  {/* Milestones timeline list */}
+                  <div className="space-y-4">
+                    <h4 className="text-xs font-black uppercase tracking-wider text-[#666666]">
+                      Milestone Settlements ({activeMilestones.length})
+                    </h4>
+
+                    <div className="space-y-3">
+                      {activeMilestones.map((m, idx) => (
+                        <div key={m.id || idx} className="p-4 bg-white border border-[#e5e5e5] rounded-xl flex items-start justify-between gap-4">
+                          <div className="space-y-1">
+                            <p className="text-xs font-bold text-[#111111]">{m.title}</p>
+                            <p className="text-[11px] text-[#666666] leading-relaxed">{m.description}</p>
+                            <p className="text-xs font-bold text-[#10b981]">${m.amount?.toLocaleString()}</p>
+                          </div>
+                          <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                            m.status === "RELEASED" || m.status === "APPROVED"
+                              ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                              : m.status === "SUBMITTED"
+                              ? "bg-amber-50 text-amber-600 border border-amber-100 animate-pulse"
+                              : m.status === "DISPUTED"
+                              ? "bg-rose-50 text-rose-600 border border-rose-100"
+                              : "bg-zinc-50 text-zinc-600 border border-zinc-100"
+                          }`}>
+                            {m.status?.replace("_", " ")}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Modal Footer */}
+                <div className="p-4 bg-[#f9f9f9] border-t border-[#e5e5e5] flex justify-end">
+                  <button
+                    onClick={() => setSelectedContractForModal(null)}
+                    className="px-5 py-2 bg-[#111111] hover:bg-[#333333] text-white text-xs font-bold rounded-lg transition-all shadow-sm"
+                  >
+                    Close Contract
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          );
+        })()}
+      </AnimatePresence>
     </div>
   );
 }
