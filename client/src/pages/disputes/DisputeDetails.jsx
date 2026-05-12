@@ -44,7 +44,6 @@ const DisputeDetails = () => {
          });
          setDispute(response.data);
       } catch (error) {
-         console.error("Vault sync failure:", error);
          toast.error("Failed to synchronize with Resolution Vault");
       } finally {
          setLoading(false);
@@ -88,7 +87,6 @@ const DisputeDetails = () => {
 
    return (
       <div className="min-h-screen bg-[#fafafa] text-zinc-900 pb-20">
-         {/* 1. Case Info Bar */}
          <div className="w-full bg-zinc-900 text-white py-3 px-6 flex justify-between items-center overflow-hidden relative">
             <div className="flex items-center gap-4">
                <button onClick={() => navigate(-1)} className="p-1 hover:bg-white/10 rounded-lg transition-colors">
@@ -108,7 +106,6 @@ const DisputeDetails = () => {
          </div>
 
          <div className="max-w-7xl mx-auto px-6 mt-12">
-            {/* 2. Page Header */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12">
                <div className="lg:col-span-8 space-y-4">
                   <div className="flex items-center gap-3">
@@ -124,12 +121,12 @@ const DisputeDetails = () => {
                   </h1>
                   <div className="flex flex-wrap items-center gap-6 pt-2">
                      <div className="flex items-center gap-2">
-                        <User size={14} className="text-zinc-400" />
-                        <p className="text-xs font-bold text-zinc-500">Reported by: <span className="text-zinc-900">{dispute?.raisedBy?.name}</span></p>
+                         <User size={14} className="text-zinc-400" />
+                         <p className="text-xs font-bold text-zinc-500">Reported by: <span className="text-zinc-900">{dispute?.raisedBy?.name}</span></p>
                      </div>
                      <div className="flex items-center gap-2">
-                        <Clock size={14} className="text-zinc-400" />
-                        <p className="text-xs font-bold text-zinc-500">Date Reported: <span className="text-zinc-900">{new Date(dispute?.createdAt).toLocaleDateString()}</span></p>
+                         <Clock size={14} className="text-zinc-400" />
+                         <p className="text-xs font-bold text-zinc-500">Date Reported: <span className="text-zinc-900">{new Date(dispute?.createdAt).toLocaleDateString()}</span></p>
                      </div>
                   </div>
                </div>
@@ -148,10 +145,7 @@ const DisputeDetails = () => {
                </div>
             </div>
 
-            {/* 3. Case Details */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-
-               {/* Left Column: Details & Upload */}
                <div className="lg:col-span-1 space-y-8">
                   <div className="bg-zinc-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden group">
                      <div className="relative z-10 space-y-6">
@@ -225,9 +219,7 @@ const DisputeDetails = () => {
                   </div>
                </div>
 
-               {/* Right Column: Timeline & Files */}
                <div className="lg:col-span-2 space-y-10">
-
                   <div className="space-y-6 px-1">
                      <div className="flex items-center gap-3">
                         <History size={16} className="text-zinc-900" />

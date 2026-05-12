@@ -44,7 +44,6 @@ const SupportHub = () => {
       });
       setDisputes(response.data.disputes || []);
     } catch (error) {
-      console.error("Failed to fetch disputes:", error);
       showStatus("Critical synchronization failure.", 'error');
     } finally {
       setLoading(false);
@@ -73,9 +72,6 @@ const SupportHub = () => {
 
   return (
     <div className="space-y-6 pb-20">
-
-
-      {/* Search Bar */}
       <div className="relative w-full sm:w-80">
         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666666]" />
         <input
@@ -89,7 +85,6 @@ const SupportHub = () => {
 
       <div className="border-b border-[#e5e5e5]" />
 
-      {/* 1. Support Action Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
           {
@@ -176,7 +171,6 @@ const SupportHub = () => {
       <div className="space-y-4">
         <div className="space-y-2">
           <h2 className="text-lg font-bold text-[#111111]">My support tickets</h2>
-          {/* Mobile Dropdown (shown on mobile, hidden on desktop) */}
           <div className="md:hidden relative w-full pb-2">
             <select
               value={filter}
@@ -192,7 +186,6 @@ const SupportHub = () => {
             </div>
           </div>
 
-          {/* Desktop Tabs (hidden on mobile, shown on desktop) */}
           <div className="hidden md:flex border-b border-[#e5e5e5] gap-6 pb-0">
             {[
               { label: "All tickets", key: "ALL" },
@@ -272,7 +265,6 @@ const SupportHub = () => {
         </div>
       </div>
 
-      {/* 3. Contact Banner */}
       <div className="bg-[#f9f9f9] border border-[#e5e5e5] rounded-[10px] p-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-2 text-center md:text-left">
           <h2 className="text-lg font-bold text-[#111111]">Need help right now?</h2>
