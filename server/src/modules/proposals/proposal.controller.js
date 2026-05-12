@@ -1,6 +1,5 @@
 import prisma from "../../config/database.js";
 
-
 export const createProposal = async (req, res) => {
   try {
     const { projectId, amount, duration, coverLetter, milestones } = req.body;
@@ -13,7 +12,6 @@ export const createProposal = async (req, res) => {
       where: {
         projectId_freelancerId: { projectId, freelancerId }
       }
-
     });
     if (existing) {
       return res.status(400).json({ message: "You have already submitted a proposal for this project" });
@@ -65,12 +63,12 @@ export const getProposals = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 }
+
 export const getMyProposals = async (req, res) => {
   try {
     const proposals = await prisma.proposal.findMany({
       where: { freelancerId: req.user.id },
       include: { project: true }
-
     });
     res.status(200).json({ proposals });
   }
@@ -78,6 +76,7 @@ export const getMyProposals = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 }
+
 export const acceptProposals = async (req, res) => {
   try {
     const { proposalId } = req.params;
@@ -98,9 +97,7 @@ export const acceptProposals = async (req, res) => {
       return res.status(400).json({ message: "This project is no longer open for hiring" });
     }
 
-    // Use a transaction to handle the money move and record updates
     await prisma.$transaction(async (tx) => {
-      // 1. Deduct from client's wallet and move to heldAmount
       const client = await tx.user.update({
         where: { id: req.user.id },
         data: {
@@ -113,7 +110,6 @@ export const acceptProposals = async (req, res) => {
         throw new Error("Insufficient funds in your wallet");
       }
 
-      // 2. Create the Contract with the held funds
       const contract = await tx.contract.create({
         data: {
           projectId: proposal.projectId,
@@ -124,7 +120,6 @@ export const acceptProposals = async (req, res) => {
         }
       });
 
-      // 2.5 Generate relational Milestones in the database Milestone table
       let milestoneList = [];
       try {
         if (proposal.milestones) {
@@ -137,7 +132,7 @@ export const acceptProposals = async (req, res) => {
           }
         }
       } catch (err) {
-        console.error("Failed to parse milestones JSON:", err);
+        // Ignored silently
       }
 
       if (milestoneList.length > 0) {
@@ -154,7 +149,6 @@ export const acceptProposals = async (req, res) => {
           });
         }
       } else {
-        // Fallback milestone if no milestones list was specified
         await tx.milestone.create({
           data: {
             contractId: contract.id,
@@ -167,13 +161,11 @@ export const acceptProposals = async (req, res) => {
         });
       }
 
-      // 3. Mark proposal as Accepted
       await tx.proposal.update({
         where: { id: proposalId },
         data: { status: 'ACCEPTED' }
       });
 
-      // 4. Mark project as In Progress
       await tx.project.update({
         where: { id: proposal.projectId },
         data: { status: 'IN_PROGRESS' }
@@ -183,7 +175,6 @@ export const acceptProposals = async (req, res) => {
     res.status(200).json({ message: "Funds secured in escrow. Freelancer hired!" });
   }
   catch (error) {
-    console.error("Hiring error:", error);
     res.status(400).json({ message: error.message || "Failed to finalize hiring" });
   }
 }
