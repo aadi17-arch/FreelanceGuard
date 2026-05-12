@@ -29,8 +29,10 @@ export default function EscrowDashboard() {
    const { user, refreshUser } = useAuth();
 
    useEffect(() => {
-      fetchData();
-   }, []);
+      if (user) {
+         fetchData();
+      }
+   }, [user]);
 
    const fetchData = async () => {
       try {
@@ -44,7 +46,7 @@ export default function EscrowDashboard() {
          setLiveUser(profileRes.data);
          setTransactions(transactionsRes.data);
       } catch (err) {
-         console.error("Data sync error:", err);
+         // Ignored
       } finally {
          setLoading(false);
       }
@@ -91,7 +93,6 @@ export default function EscrowDashboard() {
 
    return (
       <div className="space-y-8 pb-10">
-          {/* 1. Slim Header with Interactive Forms */}
           <div className="space-y-4 pb-4">
              <div className="flex justify-end">
                 <button
@@ -163,9 +164,7 @@ export default function EscrowDashboard() {
              </AnimatePresence>
           </div>
 
-         {/* 2. Focused Balance Grid */}
          <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {/* Main Balance */}
             <div className="bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] p-[20px] flex flex-col justify-between">
                <p className="text-[12px] font-bold text-[#666666] mb-1">Available balance</p>
                <div className="flex items-baseline gap-2 mb-4">
@@ -177,7 +176,6 @@ export default function EscrowDashboard() {
                </div>
             </div>
 
-            {/* Locked Funds */}
             <div className="bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] p-[20px] flex flex-col justify-between">
                <p className="text-[12px] font-bold text-[#666666] mb-1">In active projects</p>
                <div className="flex items-baseline gap-2 mb-4">
@@ -189,7 +187,6 @@ export default function EscrowDashboard() {
                </div>
             </div>
 
-            {/* Stats Summary */}
             <div className="bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] p-[20px] flex flex-col justify-between">
                <p className="text-[12px] font-bold text-[#666666] mb-1">
                   {user?.role === "CLIENT" ? "Total spent" : "Total earned"}
@@ -209,7 +206,6 @@ export default function EscrowDashboard() {
             </div>
          </section>
 
-         {/* 3. Tight Activity Table */}
          <section className="bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] overflow-hidden">
             <div className="px-8 py-5 border-b border-[#e5e5e5] flex items-center justify-between bg-[#ffffff]">
                <h3 className="text-sm font-black text-[#111111] flex items-center gap-2">

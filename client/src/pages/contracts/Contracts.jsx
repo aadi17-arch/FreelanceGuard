@@ -32,8 +32,10 @@ export default function Contracts() {
   const [selectedContractForModal, setSelectedContractForModal] = useState(null);
 
   useEffect(() => {
-    fetchContracts();
-  }, []);
+    if (user) {
+      fetchContracts();
+    }
+  }, [user]);
 
   const fetchContracts = async () => {
     try {
@@ -72,12 +74,11 @@ export default function Contracts() {
       });
       setContracts(mapped);
     } catch (err) {
-      console.error("Failed to fetch contracts:", err);
+      // Ignored
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleReleaseMilestone = async(contractId, milestoneId) => {
     if (showDemo) {
@@ -90,14 +91,13 @@ export default function Contracts() {
 
     try {
       setLoading(true);
-      await axios.post(`/escrow/release/${milestoneId}`);
+      await axios.post(`/escrow/milestone/release/${milestoneId}`);
       toast.success("Funds released successfully!");
       await fetchContracts();
       if (refreshUser) {
         await refreshUser();
       }
     } catch (err) {
-      console.error(err);
       toast.error(err.response?.data?.message || "Failed to release funds.");
     } finally {
       setLoading(false);
@@ -138,13 +138,11 @@ export default function Contracts() {
         await refreshUser();
       }
     } catch (err) {
-      console.error(err);
       toast.error(err.response?.data?.message || "Failed to submit work deliverable.");
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleRaiseDispute = async (contractId, milestoneId) => {
     if (showDemo) {
@@ -180,17 +178,12 @@ export default function Contracts() {
         await refreshUser();
       }
     } catch (err) {
-      console.error(err);
       toast.error(err.response?.data?.message || "Failed to initiate dispute.");
     } finally {
       setLoading(false);
     }
   };
 
-
-
-
-  // Mock Contracts for Premium Preview Playgrounds
   const activeContracts = [
     {
       id: "demo-active-1",
@@ -271,14 +264,11 @@ export default function Contracts() {
 
   return (
     <div className="w-full space-y-6 pb-10 px-6 bg-[#ffffff]">
-
-      {/* Description Subtitle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <p className="text-sm font-medium text-[#666666]">
           View milestones, track secure escrow locking, and process releases
         </p>
 
-        {/* Premium Demo Toggle */}
         <button
           onClick={() => setShowDemo(!showDemo)}
           className="self-start flex items-center gap-1.5 px-3 py-1.5 bg-[#f9f9f9] hover:bg-[#111111] hover:text-white border border-[#e5e5e5] rounded-[20px] text-[10px] font-black uppercase tracking-wider text-[#666666] transition-all shadow-sm"
@@ -290,7 +280,6 @@ export default function Contracts() {
         </button>
       </div>
 
-      {/* Mobile Dropdown (shown on mobile, hidden on desktop) */}
       <div className="md:hidden relative w-full">
         <select
           value={activeTab}
@@ -305,7 +294,6 @@ export default function Contracts() {
         </div>
       </div>
 
-      {/* Desktop Tabs (hidden on mobile, shown on desktop) */}
       <div className="hidden md:flex items-center gap-6 border-b border-[#e5e5e5] pb-0">
         {[
           { id: "active", label: "Active Contracts" },
@@ -331,7 +319,6 @@ export default function Contracts() {
         ))}
       </div>
 
-      {/* Content Area */}
       <div className="min-h-[300px]">
         <AnimatePresence mode="wait">
           {loading ? (
@@ -348,7 +335,6 @@ export default function Contracts() {
               </p>
             </motion.div>
           ) : currentContracts.length === 0 ? (
-            /* Empty State Container */
             <motion.div
               key="empty-state"
               initial={{ opacity: 0, y: 10 }}
@@ -389,7 +375,6 @@ export default function Contracts() {
                 ))}
             </motion.div>
           ) : (
-            /* Contract Cards list */
             <motion.div
               key="grid"
               initial={{ opacity: 0 }}
@@ -400,7 +385,6 @@ export default function Contracts() {
               {currentContracts.map((contract) => {
                 const isExpanded = expandedContractId === contract.id;
 
-                // Fallback milestones if database milestones array is empty
                 const activeMilestones =
                   contract.milestones && contract.milestones.length > 0
                     ? contract.milestones
@@ -423,11 +407,10 @@ export default function Contracts() {
                     key={contract.id}
                     className="bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] p-[20px] space-y-4 hover:border-[#10b981] transition-all duration-300 shadow-sm"
                   >
-                    {/* Card Header: Counterparty Info & Status */}
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-[#111111] text-white flex items-center justify-center text-xs font-black">
-                          {contract.initials}
+                           {contract.initials}
                         </div>
                         <div>
                           <p className="text-xs font-bold text-[#111111]">
@@ -454,7 +437,6 @@ export default function Contracts() {
                       </span>
                     </div>
 
-                    {/* Project Title */}
                     <div className="space-y-1">
                       <h4 className="text-xs font-bold text-[#111111]">
                         {contract.title}
@@ -464,7 +446,6 @@ export default function Contracts() {
                       </p>
                     </div>
 
-                    {/* Metadata Row */}
                     <div className="grid grid-cols-2 gap-4 pt-2 border-t border-[#f9f9f9]">
                       <div className="space-y-0.5">
                         <p className="text-[10px] font-bold text-[#666666]">
@@ -484,7 +465,6 @@ export default function Contracts() {
                       </div>
                     </div>
 
-                    {/* Expand details Trigger & View Details Button */}
                     <div className="grid grid-cols-2 gap-3 pt-2">
                       <button
                         onClick={() => setSelectedContractForModal(contract)}
@@ -506,7 +486,6 @@ export default function Contracts() {
                       </button>
                     </div>
 
-                    {/* Interactive Milestones Timeline Accordion Section */}
                     <AnimatePresence>
                       {isExpanded && (
                         <motion.div
@@ -521,7 +500,6 @@ export default function Contracts() {
 
                           <div className="relative pl-6 space-y-8 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-[1.5px] before:bg-[#e5e5e5]">
                             {activeMilestones.map((m, idx) => {
-                              // Determine styling based on milestone status
                               let statusColor =
                                 "bg-zinc-200 border-zinc-300 text-zinc-500";
                               let badgeText = "Pending";
@@ -549,7 +527,6 @@ export default function Contracts() {
                                   key={m.id || idx}
                                   className="relative space-y-2"
                                 >
-                                  {/* Timeline Node Point */}
                                   <div
                                     className={`absolute -left-[21.5px] top-1.5 w-[13px] h-[13px] rounded-full border-2 bg-white flex items-center justify-center transition-all ${
                                       m.status === "RELEASED" || m.status === "APPROVED"
@@ -566,7 +543,6 @@ export default function Contracts() {
                                     />
                                   </div>
 
-                                  {/* Milestone Card details */}
                                   <div className="bg-[#f9f9f9] border border-[#e5e5e5] rounded-[8px] p-4 space-y-3">
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                       <div className="space-y-0.5">
@@ -578,7 +554,6 @@ export default function Contracts() {
                                         </p>
                                       </div>
 
-                                      {/* Status Badge */}
                                       <span
                                         className={`self-start sm:self-center flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-[20px] ${
                                           m.status === "RELEASED" || m.status === "APPROVED"
@@ -595,15 +570,12 @@ export default function Contracts() {
                                       </span>
                                     </div>
 
-                                    {/* Description */}
                                     <p className="text-[11px] text-[#666666] font-medium leading-relaxed">
                                       {m.description}
                                     </p>
 
-                                    {/* Action Buttons based on User Role & Milestone Status */}
                                     <div className="pt-2 flex flex-wrap gap-2 border-t border-[#e5e5e5]/50">
                                       {user?.role === "CLIENT" ? (
-                                        /* Client Perspective Controls */
                                         m.status === "SUBMITTED" ? (
                                           <>
                                             <button
@@ -657,8 +629,7 @@ export default function Contracts() {
                                             </span>
                                           </div>
                                         )
-                                      ) : /* Freelancer Perspective Controls */
-                                      m.status === "PENDING" ? (
+                                      ) : m.status === "PENDING" ? (
                                         <button
                                           onClick={() =>
                                             handleSubmitDeliverable(
@@ -716,7 +687,6 @@ export default function Contracts() {
         </AnimatePresence>
       </div>
 
-      {/* 4. Contract Details Overlay Modal */}
       <AnimatePresence>
         {selectedContractForModal && (() => {
           const contract = selectedContractForModal;
@@ -734,7 +704,6 @@ export default function Contracts() {
 
           return (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              {/* Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -743,14 +712,12 @@ export default function Contracts() {
                 className="absolute inset-0 bg-black/40 backdrop-blur-sm"
               />
 
-              {/* Modal Content */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
                 className="relative bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-[#e5e5e5] max-h-[90vh] flex flex-col"
               >
-                {/* Modal Header */}
                 <div className="p-6 border-b border-[#e5e5e5] flex items-center justify-between">
                   <div>
                     <span className="text-[10px] font-black uppercase tracking-wider text-[#10b981] bg-[#f0fdf4] px-2.5 py-1 rounded-full">
@@ -768,9 +735,7 @@ export default function Contracts() {
                   </button>
                 </div>
 
-                {/* Modal Body */}
                 <div className="p-6 overflow-y-auto space-y-6">
-                  {/* Parties overview */}
                   <div className="grid grid-cols-2 gap-4 bg-[#f9f9f9] p-4 rounded-xl border border-[#e5e5e5]">
                     <div>
                       <p className="text-[10px] font-bold text-[#666666]">Counterparty Name</p>
@@ -784,7 +749,6 @@ export default function Contracts() {
                     </div>
                   </div>
 
-                  {/* Milestones timeline list */}
                   <div className="space-y-4">
                     <h4 className="text-xs font-black uppercase tracking-wider text-[#666666]">
                       Milestone Settlements ({activeMilestones.length})
@@ -815,7 +779,6 @@ export default function Contracts() {
                   </div>
                 </div>
 
-                {/* Modal Footer */}
                 <div className="p-4 bg-[#f9f9f9] border-t border-[#e5e5e5] flex justify-end">
                   <button
                     onClick={() => setSelectedContractForModal(null)}
