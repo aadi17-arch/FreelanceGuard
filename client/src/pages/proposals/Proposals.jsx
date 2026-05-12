@@ -27,7 +27,9 @@ export default function Proposals() {
   const [loading, setLoading] = useState(true);
 
   React.useEffect(() => {
-    fetchData();
+    if (user) {
+      fetchData();
+    }
   }, [user]);
 
   const fetchData = async () => {
