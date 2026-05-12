@@ -145,3 +145,19 @@ a, button, input, select, textarea, [role="button"] {
 .animate-pulse-subtle {
   animation: pulse-subtle 3s ease-in-out infinite;
 }
+
+/* --- OPTIMIZED STATIC TOAST OVERRIDES --- */
+.custom-static-toast {
+  animation: toast-fade-in 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+@keyframes toast-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
