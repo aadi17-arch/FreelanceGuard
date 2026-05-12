@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { ShieldAlert, X, AlertTriangle, Send, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -31,7 +31,6 @@ const RaiseDisputeModal = ({ isOpen, onClose, milestoneId, milestoneTitle }) => 
         navigate('/disputes');
       }
     } catch (error) {
-      console.error("Dispute error:", error);
       toast.error(error.response?.data?.message || "Failed to raise dispute");
     } finally {
       setLoading(false);
@@ -43,19 +42,21 @@ const RaiseDisputeModal = ({ isOpen, onClose, milestoneId, milestoneTitle }) => 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ type: "tween", ease: "easeOut", duration: 0.15 }}
             onClick={onClose}
-            className="absolute inset-0 bg-background-primary/80 backdrop-blur-sm"
+            className="absolute inset-x-0 inset-y-0 bg-zinc-900/50"
           />
 
           {/* Modal Content */}
-          <motion.div 
-            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+          <m.div 
+            initial={{ scale: 0.95, opacity: 0, y: 10 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+            exit={{ scale: 0.95, opacity: 0, y: 10 }}
+            transition={{ type: "tween", ease: "easeOut", duration: 0.2 }}
             className="relative w-full max-w-md bg-white border border-gray-200 rounded-3xl shadow-2xl overflow-hidden"
           >
             {/* Header Glow */}
@@ -123,7 +124,7 @@ const RaiseDisputeModal = ({ isOpen, onClose, milestoneId, milestoneTitle }) => 
                 </p>
               </form>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       )}
     </AnimatePresence>

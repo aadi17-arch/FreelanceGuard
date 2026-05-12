@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { X, AlertCircle } from "lucide-react";
 
 export default function Modal({ isOpen, onClose, onConfirm, title, message, confirmText = "Confirm", cancelText = "Cancel", type = "warning" }) {
@@ -8,19 +8,21 @@ export default function Modal({ isOpen, onClose, onConfirm, title, message, conf
     <AnimatePresence>
       <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
         {/* Backdrop */}
-        <motion.div 
+        <m.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ type: "tween", ease: "easeOut", duration: 0.15 }}
           onClick={onClose}
-          className="absolute inset-0 bg-rui-dark/80 backdrop-blur-sm"
+          className="absolute inset-0 bg-rui-dark/50"
         />
 
         {/* Modal Card */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        <m.div 
+          initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          exit={{ opacity: 0, scale: 0.95, y: 10 }}
+          transition={{ type: "tween", ease: "easeOut", duration: 0.2 }}
           className="relative w-full max-w-lg bg-white rounded-[2.5rem] p-12 shadow-2xl overflow-hidden"
         >
           {/* Header */}
@@ -66,7 +68,7 @@ export default function Modal({ isOpen, onClose, onConfirm, title, message, conf
 
           {/* Decorative Detail */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-rui-gray-border/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-        </motion.div>
+        </m.div>
       </div>
     </AnimatePresence>
   );
