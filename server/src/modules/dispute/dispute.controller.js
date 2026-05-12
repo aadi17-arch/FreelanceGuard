@@ -1,13 +1,4 @@
 import prisma from "../../config/database.js";
-import fs from "fs";
-import path from "path";
-
-// Diagnostic Logging Helper
-const logDebug = (msg) => {
-  const logPath = path.join(process.cwd(), "dispute_debug.log");
-  const timestamp = new Date().toISOString();
-  fs.appendFileSync(logPath, `[${timestamp}] ${msg}\n`);
-};
 
 export const raiseDispute = async (req, res) => {
   try {
@@ -34,7 +25,6 @@ export const raiseDispute = async (req, res) => {
       }
     });
 
-    // Update milestone status to DISPUTED
     await prisma.milestone.update({
       where: { id: milestoneId },
       data: { status: "DISPUTED" }
@@ -42,22 +32,14 @@ export const raiseDispute = async (req, res) => {
 
     res.status(201).json(dispute);
   } catch (error) {
-    res.status(500).json({ message: "Server Error", error: error.message });
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
 export const getDisputes = async (req, res) => {
   try {
     const userId = req.user.id;
-    const userRole = req.user.role;
 
-    logDebug(`--- FETCH REQUEST ---`);
-    logDebug(`USER_ID: ${userId} | ROLE: ${userRole}`);
-
-    const allDisputesCount = await prisma.dispute.count();
-    logDebug(`DB TOTAL DISPUTES: ${allDisputesCount}`);
-
-    // Simplified Filter for Maximum Reliability
     const disputes = await prisma.dispute.findMany({
       where: {
         OR: [
@@ -88,20 +70,9 @@ export const getDisputes = async (req, res) => {
       orderBy: { createdAt: 'desc' }
     });
 
-    logDebug(`MATCHES FOUND: ${disputes.length}`);
-
-    res.json({
-      disputes,
-      diagnostics: {
-        userId,
-        userRole,
-        dbTotal: allDisputesCount,
-        matchCount: disputes.length
-      }
-    });
+    res.json({ disputes });
   } catch (error) {
-    logDebug(`CRITICAL ERROR: ${error.message}`);
-    res.status(500).json({ message: "Server Error", error: error.message });
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
@@ -145,8 +116,7 @@ export const getDisputeDetails = async (req, res) => {
     res.json(dispute);
   } catch (error) {
     res.status(500).json({
-      error: "Vault synchronization failure",
-      details: error.message
+      error: "Vault synchronization failure"
     });
   }
 };
@@ -172,6 +142,6 @@ export const uploadEvidence = async (req, res) => {
 
     res.status(201).json(evidence);
   } catch (error) {
-    res.status(500).json({ message: "Server Error", error: error.message });
+    res.status(500).json({ message: "Server Error" });
   }
 };
