@@ -1,4 +1,5 @@
 import prisma from "../../config/database.js";
+
 export const getUserContracts = async (req, res) => {
   try {
     const { id, role } = req.user;
@@ -28,14 +29,12 @@ export const getUserContracts = async (req, res) => {
       }
     });
     res.status(200).json(contracts);
-
-
   }
   catch (error) {
-    console.error("Fetch Contracts Error", error);
     res.status(500).json({ message: "Server Error fetching contracts" })
   }
 }
+
 export const releaseFunds = async (req, res) => {
   try {
     const { contractId } = req.params;
@@ -51,8 +50,6 @@ export const releaseFunds = async (req, res) => {
       return res.status(403).json({ message: "Invalid Access" });
     }
     const result = await prisma.$transaction(async (tx) => {
-
-      // subtracting held amount
       await tx.user.update({
         where: { id: contract.project.clientId },
         data: {
@@ -61,7 +58,6 @@ export const releaseFunds = async (req, res) => {
           }
         }
       });
-      // updating balance of freelancer
       await tx.user.update({
         where: { id: contract.freelancerId },
         data: {
@@ -70,7 +66,6 @@ export const releaseFunds = async (req, res) => {
           }
         }
       });
-      // update the status -> CONTRACT
       await tx.contract.update({
         where: { id: contractId },
         data: {
@@ -79,11 +74,9 @@ export const releaseFunds = async (req, res) => {
           }, status: "COMPLETED"
         }
       });
-      // update the status -> PROJECT
       await tx.project.update({
         where: { id: contract.projectId },
         data: {
-
           status: "COMPLETED"
         }
       });
@@ -95,16 +88,14 @@ export const releaseFunds = async (req, res) => {
         }
       });
       return { message: "Success" };
-
-
     });
     res.status(200).json(result);
   }
   catch (error) {
-    console.error("Release Funds Error", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
 export const depositToEscrow = async (req, res) => {
   try {
     const { contractId } = req.params;
@@ -121,7 +112,6 @@ export const depositToEscrow = async (req, res) => {
     });
     if (!contract) {
       return res.status(404).json({ message: "No Contract found" });
-
     }
     if (contract.status !== "PENDING") {
       return res.status(400).json({ message: "Project has already started or is already paid." });
@@ -130,7 +120,6 @@ export const depositToEscrow = async (req, res) => {
     if (client.id !== id) {
       return res.status(403).json({ message: "Invalid Access" });
     }
-    ;
 
     if (client.walletBalance < contract.totalAmount) {
       return res.status(400).json({ message: "Insufficient Funds" });
@@ -174,7 +163,6 @@ export const depositToEscrow = async (req, res) => {
 
     res.status(200).json(result);
   } catch (error) {
-    console.error("Deposite error");
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
@@ -199,7 +187,6 @@ export const addFundsToWallet = async (req, res) => {
       walletBalance: user.walletBalance
     });
   } catch (error) {
-    console.error("Add Funds Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -228,10 +215,10 @@ export const withdrawFundsFromWallet = async (req, res) => {
       walletBalance: user.walletBalance
     });
   } catch (error) {
-    console.error("Withdraw Funds Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 export const submitMilestoneWork = async (req, res) => {
   try {
     const { milestoneId } = req.params;
@@ -254,11 +241,11 @@ export const submitMilestoneWork = async (req, res) => {
       }
     });
     res.status(200).json({ message: "Milestone completed successfully.", milestone, updated });
-
   } catch (error) {
     return res.status(500).json({message:"Server Error"});
   }
 }
+
 export const approveAndReleaseMilestoneAmount = async (req, res) => {
   try {
     const { milestoneId } = req.params;
@@ -326,6 +313,7 @@ export const approveAndReleaseMilestoneAmount = async (req, res) => {
     return res.status(500).json({message:"Server Error"});
   }
 }
+
 export const getUserTransactions = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -362,7 +350,6 @@ export const getUserTransactions = async (req, res) => {
 
     res.status(200).json(transactions);
   } catch (error) {
-    console.error("Fetch transactions error:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };
