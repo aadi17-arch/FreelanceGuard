@@ -5,7 +5,6 @@ export const submitProposal = async (proposalData) => {
     const response = await axios.post('/proposal/submit', proposalData);
     return response.data;
   } catch (error) {
-    console.error("Proposal Submit Error:", error);
     throw error.response?.data?.message || 'Failed to submit proposal';
   }
 };
@@ -15,7 +14,6 @@ export const getMyProposals = async () => {
     const response = await axios.get('/proposal/my-proposals');
     return response.data;
   } catch (error) {
-    console.error("Fetch Proposals Error:", error);
     throw error.response?.data?.message || 'Failed to fetch proposals';
   }
 };
@@ -25,10 +23,10 @@ export const getClientProposals = async () => {
     const response = await axios.get('/proposal/client-proposals');
     return response.data;
   } catch (error) {
-    console.error("Fetch Client Proposals Error:", error);
     throw error.response?.data?.message || 'Failed to fetch project proposals';
   }
 };
+
 export const acceptProposal = async (proposalId) => {
   const response = await axios.post(`/proposal/accept/${proposalId}`);
   return response.data;
