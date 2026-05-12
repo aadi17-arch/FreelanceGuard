@@ -29,13 +29,14 @@ export default function Dashboard() {
    const [loading, setLoading] = useState(true);
 
    useEffect(() => {
-      fetchDashboardStats();
-   }, []);
+      if (user) {
+         fetchDashboardStats();
+      }
+   }, [user]);
 
    const fetchDashboardStats = async () => {
       try {
          setLoading(true);
-         // Synchronizing with the hardened backend stats engine
          const res = await axios.get("/projects/stats");
          const { activeProjects, pendingMilestones, openDisputes, breakdown } = res.data;
 
@@ -46,7 +47,7 @@ export default function Dashboard() {
          });
          setRecentActivity(breakdown || []);
       } catch (err) {
-         console.error("Dashboard sync error:", err);
+         // Ignored
       } finally {
          setLoading(false);
       }
@@ -54,7 +55,6 @@ export default function Dashboard() {
 
    return (
       <div className="space-y-4 pb-4">
-         {/* 1. Welcome & Primary Action */}
          <section className="grid grid-cols-1 gap-4">
             <div className="bg-[#f9f9f9] border border-[#e5e5e5] rounded-[10px] p-6 relative overflow-hidden group">
                <div className="relative z-10 space-y-4">
@@ -80,7 +80,6 @@ export default function Dashboard() {
             </div>
          </section>
 
-         {/* 2. Operational Stats Grid */}
          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
                { label: "Active contracts", subtitle: "Successfully in progress", value: stats.activeProjects || 0, icon: <BriefcaseBusiness /> },
@@ -99,7 +98,6 @@ export default function Dashboard() {
             ))}
          </section>
 
-         {/* 3. Activity & Security */}
          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2 space-y-4">
                <h3 className="text-sm font-black text-[#111111] flex items-center gap-2 px-1">
@@ -183,20 +181,20 @@ export default function Dashboard() {
                               Reliability score: 98%
                            </p>
                         </div>
-                     </div>
-                     <div className="pt-4 border-t border-[#e5e5e5] space-y-3">
-                        <div className="flex justify-between items-center text-xs font-bold">
-                           <span className="text-[#666666]">Account health</span>
-                           <span className="text-[#10b981]">Excellent</span>
-                        </div>
-                        <div className="h-1 w-full bg-[#e5e5e5] rounded-full overflow-hidden">
-                           <div className="h-full bg-[#10b981] w-[98%] rounded-full shadow-[0_0_8px_#10b981]" />
-                        </div>
-                     </div>
-                  </div>
-               )}
-            </div>
-         </div>
-      </div>
-   );
+                      </div>
+                      <div className="pt-4 border-t border-[#e5e5e5] space-y-3">
+                         <div className="flex justify-between items-center text-xs font-bold">
+                            <span className="text-[#666666]">Account health</span>
+                            <span className="text-[#10b981]">Excellent</span>
+                         </div>
+                         <div className="h-1 w-full bg-[#e5e5e5] rounded-full overflow-hidden">
+                            <div className="h-full bg-[#10b981] w-[98%] rounded-full shadow-[0_0_8px_#10b981]" />
+                         </div>
+                      </div>
+                   </div>
+                )}
+             </div>
+          </div>
+       </div>
+    );
 }
