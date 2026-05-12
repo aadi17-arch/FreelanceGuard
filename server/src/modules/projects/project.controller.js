@@ -1,5 +1,5 @@
 import prisma from "../../config/database.js";
-// create->project
+
 export const createProject = async (req, res) => {
   try {
     const { title, description, budget, category } = req.body;
@@ -25,7 +25,7 @@ export const createProject = async (req, res) => {
     return res.status(500).json({ message: "Server Error" });
   }
 }
-//get->projects
+
 export const getAllProjects = async (req, res) => {
   try {
     const projects = await prisma.project.findMany({
@@ -44,10 +44,9 @@ export const getAllProjects = async (req, res) => {
   }
   catch (error) {
     return res.status(500).json({ message: "Server Error" });
-
   }
 }
-// get->displays use specific project list
+
 export const getMyProject = async (req, res) => {
   try {
     const projects = await prisma.project.findMany({
@@ -60,7 +59,6 @@ export const getMyProject = async (req, res) => {
     return res.status(500).json({ message: "Error Fetching Your Projects" });
   }
 }
-
 
 export const getProjectStats = async (req, res) => {
   try {
@@ -119,7 +117,6 @@ export const getProjectStats = async (req, res) => {
   }
 }
 
-// get->single project by ID
 export const getProjectById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -161,11 +158,10 @@ export const getProjectById = async (req, res) => {
 
     res.status(200).json(project);
   } catch (error) {
-    console.error("Error fetching project:", error);
     return res.status(500).json({ message: "Server Error" });
   }
 }
-// Hire a freelancer and initiate contract/escrow
+
 export const hireFreelancer = async (req, res) => {
   try {
     const { projectId, freelancerId, bidAmount, milestone } = req.body;
@@ -187,9 +183,6 @@ export const hireFreelancer = async (req, res) => {
     });
 
     const result = await prisma.$transaction(async (tx) => {
-
-
-      // 2. Initialize Contract (The Escrow Vault)
       const contract = await tx.contract.create({
         data: {
           projectId,
@@ -200,8 +193,6 @@ export const hireFreelancer = async (req, res) => {
         }
       });
 
-
-      // 3. Create Initial Milestone (Required for Disputes/Payments)
       const allMilestones = await Promise.all(
         proposal.milestones.map((m) =>
           tx.milestone.create({
@@ -210,20 +201,18 @@ export const hireFreelancer = async (req, res) => {
               title: m.title,
               description: "Full project allocation secured in vault.",
               amount: parseFloat(m.amount),
-              dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days default
+              dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
               status: 'PENDING'
             }
           })
         )
       );
 
-      // 4. Update Bid Status
       await tx.bid.updateMany({
         where: { projectId, freelancerId },
         data: { status: 'ACCEPTED' }
       });
 
-      // 5. Reject other bids
       await tx.bid.updateMany({
         where: {
           projectId,
@@ -244,7 +233,6 @@ export const hireFreelancer = async (req, res) => {
       data: result
     });
   } catch (error) {
-    console.error("Hiring error:", error);
     res.status(500).json({ message: "Failed to finalize hiring protocol. Please check if the project is still open." });
   }
 };
