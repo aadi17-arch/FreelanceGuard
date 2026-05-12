@@ -62,7 +62,6 @@ export const AuthProvider = ({ children }) => {
       const res = await axios.get("/auth/profile");
       setUser(res.data);
     } catch (err) {
-      // Ignored
     }
   };
 

@@ -132,7 +132,6 @@ export const acceptProposals = async (req, res) => {
           }
         }
       } catch (err) {
-        // Ignored silently
       }
 
       if (milestoneList.length > 0) {

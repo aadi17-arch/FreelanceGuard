@@ -17,7 +17,6 @@ async function main() {
 
   const hashedPassword = await bcrypt.hash('password123', 10);
 
-  // 1. Create Users
   const client = await prisma.user.create({
     data: {
       name: 'Test Client',
@@ -38,7 +37,6 @@ async function main() {
     }
   });
 
-  // 1.5 Verify Users (KYC)
   await prisma.kYC.create({
     data: {
       userId: client.id,
@@ -59,7 +57,6 @@ async function main() {
     }
   });
 
-  // 2. Create Projects
   const project1 = await prisma.project.create({
     data: {
       title: 'Build a Modern Portfolio',
@@ -93,7 +90,6 @@ async function main() {
     }
   });
 
-  // 3. Create a starting Proposal
   await prisma.proposal.create({
     data: {
       projectId: project1.id,

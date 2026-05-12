@@ -12,7 +12,6 @@ export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Auto-refresh profile and wallet balance on route changes
   useEffect(() => {
     if (user) {
       refreshUser();

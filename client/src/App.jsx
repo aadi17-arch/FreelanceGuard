@@ -22,7 +22,6 @@ import HowItWorks from "./pages/public/HowItWorks";
 import { Zap } from "lucide-react";
 import { LazyMotion, domAnimation } from "framer-motion";
 
-// Simple Placeholder for upcoming features
 const OperationalPlaceholder = ({ title }) => (
   <div className="min-h-[400px] flex flex-col items-center justify-center gap-6">
     <div className="w-16 h-16 bg-zinc-50 rounded-[2.5rem] flex items-center justify-center text-zinc-200 shadow-inner text-2xl font-bold">

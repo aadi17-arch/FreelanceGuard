@@ -74,7 +74,6 @@ export default function Contracts() {
       });
       setContracts(mapped);
     } catch (err) {
-      // Ignored
     } finally {
       setLoading(false);
     }

@@ -70,7 +70,6 @@ export default function KYC() {
     { id: "DRIVER_LICENSE", label: "Driver's License", icon: <FileText size={16} /> },
   ];
 
-  // --- PENDING STATE ---
   if (user?.kyc?.status === "PENDING") {
     return (
       <div className="space-y-8 pb-10">
@@ -104,7 +103,6 @@ export default function KYC() {
     );
   }
 
-  // --- APPROVED STATE ---
   if (user?.kyc?.status === "APPROVED") {
     return (
       <div className="flex flex-col items-center justify-center py-20 px-6 space-y-8">
@@ -125,7 +123,6 @@ export default function KYC() {
     );
   }
 
-  // --- SUBMISSION STATE ---
   return (
     <div className="space-y-8 lg:space-y-12 pb-10">
       {/* Header & Status */}

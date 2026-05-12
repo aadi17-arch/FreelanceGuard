@@ -47,7 +47,6 @@ export default function Dashboard() {
          });
          setRecentActivity(breakdown || []);
       } catch (err) {
-         // Ignored
       } finally {
          setLoading(false);
       }

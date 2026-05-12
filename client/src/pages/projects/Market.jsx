@@ -77,7 +77,6 @@ export default function Market() {
       const res = await axios.get("/projects");
       setProjects(res.data);
     } catch (err) {
-      // Ignored
     } finally {
       setLoading(false);
     }

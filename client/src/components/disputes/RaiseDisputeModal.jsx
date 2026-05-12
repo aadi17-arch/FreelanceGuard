@@ -23,7 +23,6 @@ const RaiseDisputeModal = ({ isOpen, onClose, milestoneId, milestoneTitle }) => 
 
       toast.success("Dispute protocol initiated successfully");
       onClose();
-      // Ensure we use the singular route and check if dispute object exists
       const disputeId = response.data.dispute?.id || response.data.id;
       if (disputeId) {
         navigate(`/dispute/${disputeId}`);
