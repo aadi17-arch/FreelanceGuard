@@ -1,8 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 
-// Unified API Base URL for Mobile & Local Access
-// Dynamic API Base URL
 const API_URL = `http://${window.location.hostname}:5001/api`;
 axios.defaults.baseURL = API_URL;
 
@@ -13,7 +11,6 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
-  // Synchronize Profile on Token Change
   useEffect(() => {
     const fetchProfile = async () => {
       if (!token) {
@@ -27,7 +24,6 @@ export const AuthProvider = ({ children }) => {
         const res = await axios.get("/auth/profile");
         setUser(res.data);
       } catch (err) {
-        console.error("Auth session expired");
         logout();
       } finally {
         setLoading(false);
@@ -39,12 +35,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-
-
       const res = await axios.post("/auth/login", { email, password });
       setToken(res.data.token);
       setUser(res.data.user);
-
       localStorage.setItem("token", res.data.token);
       return res.data;
     } catch (err) {
@@ -69,7 +62,7 @@ export const AuthProvider = ({ children }) => {
       const res = await axios.get("/auth/profile");
       setUser(res.data);
     } catch (err) {
-      console.error("Failed to refresh user profile");
+      // Ignored
     }
   };
 
