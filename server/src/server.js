@@ -18,7 +18,7 @@ const app = express();
 const port = process.env.PORT || 5001;
 
 app.use(cors({
-  origin: true, // Allow all origins for dev flexibility
+  origin: true,
   credentials: true
 }));
 app.use(express.json());
@@ -29,12 +29,6 @@ const __dirname = path.dirname(__filename);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-app.use((req, res, next) => {
-  console.log(`Incoming request: ${req.method} ${req.url}`);
-  next();
-});
-
-
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/bids", bidRoutes);
@@ -44,22 +38,16 @@ app.use("/api/dispute", disputeRoutes);
 app.use("/api/milestone", milestoneRoutes);
 app.use("/api/proposal", proposalRoutes);
 
-
 app.get('/', (req, res) => {
   res.send('FreelanceGuard API is running...');
 });
 
-// Global Error Handler
 app.use((err, req, res, next) => {
-  console.error("GLOBAL ERROR:", err);
   res.status(err.status || 500).json({
-    message: err.message || "An unexpected server error occurred",
-    error: err.name || "InternalError"
+    message: "An unexpected server error occurred"
   });
 });
 
 const server = app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-}).on('error', (err) => {
-  console.error('FATAL: Server failed to start:', err);
+  console.log(`Server is running on port ${port}`);
 });
