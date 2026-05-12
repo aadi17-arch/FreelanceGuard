@@ -127,7 +127,8 @@ export const getProfile = async (req, res) => {
         walletBalance: true,
         heldAmount: true,
         createdAt: true,
-        kyc: true
+        kyc: true,
+        bio: true
       }
     });
     if (!user) {
@@ -167,6 +168,52 @@ export const getProfile = async (req, res) => {
   }
   catch (error) {
     console.error("Profile Error Details:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name, email, bio } = req.body;
+
+    if (!name || !email) {
+      return res.status(400).json({ message: "Name and Email are required" });
+    }
+
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        email,
+        NOT: { id: userId }
+      }
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ message: "Email is already in use by another account" });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { name, email, bio },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        walletBalance: true,
+        heldAmount: true,
+        createdAt: true,
+        bio: true,
+        kyc: true
+      }
+    });
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error("Update Profile Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 }

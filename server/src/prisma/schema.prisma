@@ -23,6 +23,7 @@ model User {
   evidence      Evidence[]
   proposal      Proposal[]
   kyc KYC?
+  bio           String?    @default("")
 }
 
 model Project {

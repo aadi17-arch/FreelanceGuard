@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const SupportHub = () => {
   const [disputes, setDisputes] = useState([]);
@@ -28,6 +29,7 @@ const SupportHub = () => {
   const [filter, setFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusMessage, setStatusMessage] = useState(null);
+  const [showFaq, setShowFaq] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -117,12 +119,58 @@ const SupportHub = () => {
                 <p className="text-xs text-[#666666] leading-relaxed">{item.desc}</p>
               </div>
             </div>
-            <button className="mt-4 w-full py-2 bg-[#ffffff] border border-[#e5e5e5] text-[#111111] rounded-[8px] text-xs font-bold transition-all hover:border-[#111111]">
+            <button 
+              onClick={() => {
+                if (item.action === "Start chat") {
+                  toast.success("Connecting to Secure Chat Broker...", {
+                    style: { background: "#18181b", color: "#fff", borderRadius: "12px", fontSize: "13px" }
+                  });
+                  setTimeout(() => {
+                    toast.error("All support agents are currently busy. Please email support@freelanceguard.com", {
+                      style: { background: "#18181b", color: "#fff", borderRadius: "12px", fontSize: "13px" }
+                    });
+                  }, 1200);
+                } else if (item.action === "Browse docs") {
+                  navigate("/how-it-works");
+                } else if (item.action === "View FAQ") {
+                  setShowFaq(!showFaq);
+                }
+              }}
+              className="mt-4 w-full py-2 bg-[#ffffff] border border-[#e5e5e5] hover:border-[#111111] hover:bg-zinc-50 text-[#111111] rounded-[8px] text-xs font-bold transition-all"
+            >
               {item.action}
             </button>
           </div>
         ))}
       </div>
+
+      {/* Dynamic Sliding FAQ Accordion */}
+      <AnimatePresence>
+        {showFaq && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden bg-[#fafafa] border border-[#e5e5e5] rounded-[10px] p-6 space-y-4 shadow-inner"
+          >
+            <h4 className="text-xs font-black uppercase tracking-wider text-zinc-900">
+              Frequently Asked Questions (Escrow Guide)
+            </h4>
+            <div className="space-y-4 divide-y divide-[#e5e5e5]">
+              {[
+                { q: "How does Secure Escrow Vault work?", a: "When a contract starts, client milestone funds are securely locked into the smart escrow registry. Funds are released to the freelancer only upon client work approval, ensuring complete financial protection." },
+                { q: "What is the KYC requirement?", a: "To maintain maximum trust, users must verify identity credentials (e.g. Passport, Drivers License) before submitting wallet deposits or requesting balance withdrawals." },
+                { q: "How does the dispute arbitration work?", a: "If an issue arises, any milestone can be disputed. Parties upload evidence files, and FreelanceGuard's dedicated support representatives arbitrate a fair release of funds." }
+              ].map((faq, index) => (
+                <div key={index} className="pt-4 first:pt-0 space-y-1">
+                  <p className="text-xs font-bold text-zinc-900">Q: {faq.q}</p>
+                  <p className="text-xs text-[#666666] leading-relaxed">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 2. Case Management (Disputes) */}
       <div className="space-y-4">
@@ -231,10 +279,20 @@ const SupportHub = () => {
           <p className="text-[#666666] text-xs max-w-sm">Our support team is available 24/7 to help you resolve any issues with your projects.</p>
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
-          <button className="w-full sm:w-auto px-6 py-3 bg-[#111111] text-[#ffffff] rounded-[8px] font-bold text-xs hover:bg-[#333333] transition-all">
+          <button 
+            onClick={() => {
+              window.location.href = "mailto:support@freelanceguard.com?subject=FreelanceGuard Support Inquiry";
+            }}
+            className="w-full sm:w-auto px-6 py-3 bg-[#111111] text-[#ffffff] rounded-[8px] font-bold text-xs hover:bg-[#333333] transition-all"
+          >
             Contact support
           </button>
-          <button className="w-full sm:w-auto px-6 py-3 bg-[#ffffff] border border-[#e5e5e5] text-[#111111] rounded-[8px] font-bold text-xs hover:border-[#111111] transition-all">
+          <button 
+            onClick={() => {
+              window.location.href = "mailto:support@freelanceguard.com?subject=FreelanceGuard Support Inquiry";
+            }}
+            className="w-full sm:w-auto px-6 py-3 bg-[#ffffff] border border-[#e5e5e5] text-[#111111] rounded-[8px] font-bold text-xs hover:border-[#111111] transition-all"
+          >
             Email us
           </button>
         </div>

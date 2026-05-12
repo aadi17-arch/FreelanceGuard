@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 import {
   User,
   ShieldCheck,
@@ -15,7 +16,8 @@ import {
   Settings,
   History,
   CheckCircle2,
-  FileText
+  FileText,
+  RefreshCcw
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -30,19 +32,94 @@ import {
 } from "recharts";
 
 export default function Profile() {
+  const { user, refreshUser } = useAuth();
   const [showEditModal, setShowEditModal] = useState(false);
   const [editName, setEditName] = useState("");
   const [editBio, setEditBio] = useState("");
   const [editEmail, setEditEmail] = useState("");
+  const [activities, setActivities] = useState([]);
+  const [loadingActivities, setLoadingActivities] = useState(true);
 
   useEffect(() => {
     if (user) {
       setEditName(user.name || "");
-      setEditBio(user.bio || "Experienced " + (user.role?.toLowerCase() === "client" ? "client" : "freelancer") + " focused on high-quality delivery and secure collaboration within the FreelanceGuard ecosystem.");
+      setEditBio(
+        user.bio ||
+          "Experienced " +
+            (user.role?.toLowerCase() === "client" ? "client" : "freelancer") +
+            " focused on high-quality delivery and secure collaboration within the FreelanceGuard ecosystem."
+      );
       setEditEmail(user.email || "");
     }
   }, [user]);
-  const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        setLoadingActivities(true);
+        const res = await axios.get("/escrow/transactions");
+        const recent = (res.data || []).slice(0, 4).map((tx) => {
+          const isRelease = tx.type === "RELEASE";
+          const isDeposit = tx.type === "DEPOSIT";
+
+          let title = "Payment transaction";
+          let icon = <Wallet size={14} className="text-[#10b981]" />;
+
+          if (isRelease) {
+            title =
+              user?.role === "CLIENT"
+                ? `Funds released for ${tx.contract?.project?.title || "milestone"}`
+                : `Payment received for ${tx.contract?.project?.title || "milestone"}`;
+            icon = <CheckCircle2 size={14} className="text-[#10b981]" />;
+          } else if (isDeposit) {
+            title =
+              user?.role === "CLIENT"
+                ? `Escrow deposited for ${tx.contract?.project?.title || "milestone"}`
+                : `Escrow locked for ${tx.contract?.project?.title || "milestone"}`;
+            icon = <CreditCard size={14} className="text-amber-500" />;
+          }
+
+          return {
+            title,
+            time: new Date(tx.createdAt).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit"
+            }),
+            icon
+          };
+        });
+
+        if (recent.length === 0) {
+          setActivities([
+            {
+              title: "Account secured",
+              time: "Joined FreelanceGuard",
+              icon: <User size={14} className="text-[#10b981]" />
+            }
+          ]);
+        } else {
+          setActivities(recent);
+        }
+      } catch (err) {
+        console.error("Failed to fetch recent activities:", err);
+        setActivities([
+          {
+            title: "Security verified",
+            time: "Last active today",
+            icon: <ShieldCheck size={14} className="text-[#10b981]" />
+          }
+        ]);
+      } finally {
+        setLoadingActivities(false);
+      }
+    };
+
+    if (user) {
+      fetchActivities();
+    }
+  }, [user]);
 
   return (
     <div className="w-full space-y-6 pb-20 px-6 bg-[#ffffff]">
@@ -150,21 +227,24 @@ export default function Profile() {
               </div>
 
               <div className="bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] p-4 space-y-4 shadow-sm">
-                 {[
-                   { title: "Payment received", time: "2 hours ago", icon: <Wallet size={14} className="text-[#10b981]" /> },
-                   { title: "Project milestone", time: "Yesterday", icon: <ShieldCheck size={14} className="text-[#10b981]" /> },
-                   { title: "Login verified", time: "2 days ago", icon: <User size={14} className="text-[#10b981]" /> }
-                 ].map((item, i) => (
-                   <div key={i} className="flex gap-3 items-start">
-                      <div className="w-8 h-8 rounded-[6px] bg-[#f9f9f9] border border-[#e5e5e5] flex items-center justify-center shrink-0">
-                         {item.icon}
-                      </div>
-                      <div className="space-y-0.5">
-                         <p className="text-xs font-bold text-[#111111]">{item.title}</p>
-                         <p className="text-[10px] font-medium text-[#666666]">{item.time}</p>
-                      </div>
-                   </div>
-                 ))}
+                {loadingActivities ? (
+                  <div className="py-6 flex flex-col items-center justify-center text-center space-y-2">
+                    <RefreshCcw size={14} className="text-[#10b981] animate-spin" />
+                    <p className="text-[10px] font-bold text-[#666666]">Loading timeline...</p>
+                  </div>
+                ) : (
+                  activities.map((item, i) => (
+                    <div key={i} className="flex gap-3 items-start">
+                       <div className="w-8 h-8 rounded-[6px] bg-[#f9f9f9] border border-[#e5e5e5] flex items-center justify-center shrink-0">
+                          {item.icon}
+                       </div>
+                       <div className="space-y-0.5 min-w-0">
+                          <p className="text-xs font-bold text-[#111111] truncate">{item.title}</p>
+                          <p className="text-[10px] font-medium text-[#666666]">{item.time}</p>
+                       </div>
+                    </div>
+                  ))
+                )}
               </div>
            </div>
 
@@ -205,15 +285,25 @@ export default function Profile() {
               </div>
 
               {/* Form Body */}
-              <form onSubmit={(e) => {
+              <form onSubmit={async (e) => {
                 e.preventDefault();
-                // Local State Mock Update (Will update frontend immediately)
-                setShowEditModal(false);
-                import("react-hot-toast").then((m) => {
-                  m.toast.success("Profile saved successfully!", {
+                try {
+                  await axios.put("/auth/profile", {
+                    name: editName,
+                    email: editEmail,
+                    bio: editBio
+                  });
+                  await refreshUser();
+                  setShowEditModal(false);
+                  toast.success("Profile saved successfully!", {
                     style: { background: "#18181b", color: "#fff", borderRadius: "12px", fontSize: "13px" }
                   });
-                });
+                } catch (err) {
+                  console.error(err);
+                  toast.error(err.response?.data?.message || "Failed to update profile.", {
+                    style: { background: "#18181b", color: "#fff", borderRadius: "12px", fontSize: "13px" }
+                  });
+                }
               }} className="p-6 space-y-4">
                 <div className="space-y-1">
                   <label className="text-[10px] font-bold text-[#666666] uppercase">Full Name</label>
