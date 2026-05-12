@@ -5,7 +5,6 @@ import bcrypt from "bcryptjs";
 export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
-    console.log("Register Attempt:", { name, email, role });
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All Fields Required" });
@@ -27,10 +26,6 @@ export const register = async (req, res) => {
         walletBalance: 0
       }
     });
-
-    if (!process.env.JWT_SECRET) {
-      console.error("FATAL: JWT_SECRET is missing from environment variables");
-    }
 
     const token = jwt.sign(
       {
@@ -55,15 +50,13 @@ export const register = async (req, res) => {
     });
   }
   catch (error) {
-    console.error("Register Error Details:", error);
     res.status(500).json({ message: "Server Error" });
   }
-
 }
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("Login Attempt:", { email });
 
     if (!email || !password) {
       return res.status(400).json({ message: "All Fields Required" });
@@ -78,10 +71,6 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Wrong Password" });
-    }
-
-    if (!process.env.JWT_SECRET) {
-      console.error("FATAL: JWT_SECRET is missing from environment variables");
     }
 
     const token = jwt.sign(
@@ -104,14 +93,11 @@ export const login = async (req, res) => {
         heldAmount: user.heldAmount,
         kyc: user.kyc
       }
-
     });
   }
   catch (error) {
-    console.error("Login Error Details:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
-
 }
 
 export const getProfile = async (req, res) => {
@@ -167,7 +153,6 @@ export const getProfile = async (req, res) => {
     });
   }
   catch (error) {
-    console.error("Profile Error Details:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
@@ -213,24 +198,6 @@ export const updateProfile = async (req, res) => {
       user: updatedUser
     });
   } catch (error) {
-    console.error("Update Profile Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
-  }
-}
-export const addFunds = async (req, res) => {
-  try {
-    const { amount } = req.body;
-    const userId = req.user.id;
-    const updateUser = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        walletBalance: {
-          increment: parseFloat(amount)
-        }
-      }
-    });
-    res.status(200).json({ message: "Funds added successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Failed to add funds" });
   }
 }
