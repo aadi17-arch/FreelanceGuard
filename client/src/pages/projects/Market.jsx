@@ -30,7 +30,6 @@ export default function Market() {
   const [activeFilter, setActiveFilter] = useState("all");
   const navigate = useNavigate();
 
-  // Proposal Modal State
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,7 +77,7 @@ export default function Market() {
       const res = await axios.get("/projects");
       setProjects(res.data);
     } catch (err) {
-      console.error("Market scan error:", err);
+      // Ignored
     } finally {
       setLoading(false);
     }
@@ -107,7 +106,6 @@ export default function Market() {
 
   return (
     <div className="space-y-8 pb-20">
-      {/* 1. Market Header */}
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
         <div className="relative w-full sm:w-72 group">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666666] group-focus-within:text-[#10b981] transition-colors" />
@@ -121,7 +119,6 @@ export default function Market() {
         </div>
       </div>
 
-      {/* Mobile Dropdown Quick Filters (shown on mobile, hidden on desktop) */}
       <div className="md:hidden relative w-full">
         <select
           value={activeFilter}
@@ -139,7 +136,6 @@ export default function Market() {
         </div>
       </div>
 
-      {/* Desktop Quick Filters (hidden on mobile, shown on desktop) */}
       <div className="hidden md:flex items-center gap-6 overflow-x-auto pb-2 px-1 custom-scrollbar no-scrollbar border-b border-[#e5e5e5]">
         {["All", "Development", "Design", "Marketing", "Writing"].map((filter) => (
           <button
@@ -159,7 +155,6 @@ export default function Market() {
         ))}
       </div>
 
-      {/* 3. Project Listings */}
       <div className="grid grid-cols-1 gap-4">
         {filteredProjects.length > 0 ? filteredProjects.map((proj) => (
           <Link
@@ -231,7 +226,6 @@ export default function Market() {
         )}
       </div>
 
-      {/* 4. Application Modal */}
       <AnimatePresence>
         {showApplyModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">

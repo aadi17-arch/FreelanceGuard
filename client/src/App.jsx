@@ -20,6 +20,7 @@ import TermsOfService from "./pages/legal/TermsOfService";
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
 import HowItWorks from "./pages/public/HowItWorks";
 import { Zap } from "lucide-react";
+import { LazyMotion, domAnimation } from "framer-motion";
 
 // Simple Placeholder for upcoming features
 const OperationalPlaceholder = ({ title }) => (
@@ -38,55 +39,86 @@ const OperationalPlaceholder = ({ title }) => (
 
 function App() {
   return (
-    <Router>
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-        toastOptions={{
-          style: {
-            background: '#111111',
-            color: '#ffffff',
-            borderRadius: '16px',
-            padding: '16px 24px',
-            fontSize: '11px',
-            fontWeight: '700',
-            textTransform: 'none',
-            letterSpacing: 'normal',
-            border: '1px solid rgba(255,255,255,0.1)',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
-          }
-        }}
-      />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/terms" element={<TermsOfService />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/how-it-works" element={<HowItWorks />} />
+    <LazyMotion features={domAnimation}>
+      <Router>
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          limit={5}
+          toastOptions={{
+            className: "custom-static-toast",
+            duration: 2200, // Short duration
+            style: {
+              background: '#1c1c1e', // Solid dark background
+              color: '#ffffff',
+              borderRadius: '14px',
+              padding: '12px 20px',
+              fontSize: '11px',
+              fontWeight: '700',
+              border: '1px solid #2c2c2e', // Solid dark border
+              boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+            },
+            success: {
+              style: {
+                background: '#f0fdf4', // Solid light green
+                color: '#16a34a',
+                border: '1px solid #bbf7d0', // Solid light green border
+              },
+              iconTheme: {
+                primary: '#16a34a',
+                secondary: '#ffffff',
+              },
+            },
+            error: {
+              style: {
+                background: '#fef2f2', // Solid light red
+                color: '#dc2626',
+                border: '1px solid #fecaca', // Solid light red border
+              },
+              iconTheme: {
+                primary: '#dc2626',
+                secondary: '#ffffff',
+              },
+            },
+            blank: {
+              style: {
+                background: '#fffbeb', // Solid light yellow
+                color: '#d97706',
+                border: '1px solid #fef3c7', // Solid light yellow border
+              }
+            }
+          }}
+        />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
 
-        {/* Core Operational Routes */}
-        <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><Dashboard /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/create-project" element={<ProtectedRoute allowedRoles={["CLIENT"]}><DashboardLayout><CreateProject /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/marketplace" element={<ProtectedRoute allowedRoles={["FREELANCER"]}><DashboardLayout><Market /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/project/:id" element={<ProtectedRoute><DashboardLayout><ProjectDetails /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/kyc" element={<ProtectedRoute><DashboardLayout><KYC /></DashboardLayout></ProtectedRoute>} />
-        
-        {/* Dispute & Resolution */}
-        <Route path="/disputes" element={<ProtectedRoute><DashboardLayout><DisputesList /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/dispute/:id" element={<ProtectedRoute><DashboardLayout><DisputeDetails /></DashboardLayout></ProtectedRoute>} />
+          {/* Core Operational Routes */}
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><Dashboard /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/create-project" element={<ProtectedRoute allowedRoles={["CLIENT"]}><DashboardLayout><CreateProject /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/marketplace" element={<ProtectedRoute allowedRoles={["FREELANCER"]}><DashboardLayout><Market /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/project/:id" element={<ProtectedRoute><DashboardLayout><ProjectDetails /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/escrow" element={<ProtectedRoute><DashboardLayout><EscrowDashboard /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/kyc" element={<ProtectedRoute><DashboardLayout><KYC /></DashboardLayout></ProtectedRoute>} />
+          
+          {/* Dispute & Resolution */}
+          <Route path="/disputes" element={<ProtectedRoute><DashboardLayout><DisputesList /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dispute/:id" element={<ProtectedRoute><DashboardLayout><DisputeDetails /></DashboardLayout></ProtectedRoute>} />
 
-        {/* Restored Strategic Roadmap Routes (Placeholders) */}
-        <Route path="/contracts" element={<ProtectedRoute><DashboardLayout><Contracts /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/proposals" element={<ProtectedRoute><DashboardLayout><Proposals /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/analytics" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Network Analytics" /></DashboardLayout></ProtectedRoute>} />
-        <Route path="/messages" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Secure Messaging" /></DashboardLayout></ProtectedRoute>} />
+          {/* Restored Strategic Roadmap Routes (Placeholders) */}
+          <Route path="/contracts" element={<ProtectedRoute><DashboardLayout><Contracts /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/proposals" element={<ProtectedRoute><DashboardLayout><Proposals /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/analytics" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Network Analytics" /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/messages" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Secure Messaging" /></DashboardLayout></ProtectedRoute>} />
 
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </LazyMotion>
   );
 }
 export default App;
