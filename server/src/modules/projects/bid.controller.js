@@ -9,7 +9,6 @@ export const createBid = async (req, res) => {
       return res.status(400).json({ message: "All Fields Required" });
     }
 
-    // New Protection: Check for existing bid
     const existingBid = await prisma.bid.findFirst({
       where: {
         projectId,
@@ -30,13 +29,12 @@ export const createBid = async (req, res) => {
       }
     });
     res.status(201).json({ message: "Bid Submitted Successfully", bid });
-
-
   }
   catch (error) {
     return res.status(500).json({ message: "Database Error" });
   }
 }
+
 export const getProjectBids = async (req, res) => {
   try {
     const { projectId } = req.params;
