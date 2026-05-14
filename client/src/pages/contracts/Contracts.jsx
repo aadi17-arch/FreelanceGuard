@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
-import toast from "react-hot-toast";
+import toast from '../../utils/toast';
 import {
   FileText,
   User,
@@ -708,7 +708,7 @@ export default function Contracts() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setSelectedContractForModal(null)}
-                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                className="absolute inset-0 bg-[#09090b] "
               />
 
               <motion.div
@@ -794,3 +794,8 @@ export default function Contracts() {
     </div>
   );
 }
+
+
+
+
+
