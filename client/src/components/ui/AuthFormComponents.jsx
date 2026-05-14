@@ -107,7 +107,7 @@ export const FormButton = ({
     >
       {isLoading ? (
         <div className="flex items-center gap-2">
-          <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          <div className="w-3.5 h-3.5 border-2 border-white border-t-white rounded-full animate-spin" />
           <span>Processing...</span>
         </div>
       ) : (
@@ -116,3 +116,8 @@ export const FormButton = ({
     </button>
   );
 };
+
+
+
+
+
