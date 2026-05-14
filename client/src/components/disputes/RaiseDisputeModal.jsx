@@ -3,7 +3,7 @@ import { m, AnimatePresence } from 'framer-motion';
 import { ShieldAlert, X, AlertTriangle, Send, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import toast from '../../utils/toast';
 
 const RaiseDisputeModal = ({ isOpen, onClose, milestoneId, milestoneTitle }) => {
   const [reason, setReason] = useState('');
@@ -47,7 +47,7 @@ const RaiseDisputeModal = ({ isOpen, onClose, milestoneId, milestoneTitle }) => 
             exit={{ opacity: 0 }}
             transition={{ type: "tween", ease: "easeOut", duration: 0.15 }}
             onClick={onClose}
-            className="absolute inset-x-0 inset-y-0 bg-zinc-900/50"
+            className="absolute inset-x-0 inset-y-0 bg-[#18181b]"
           />
 
           {/* Modal Content */}
@@ -131,3 +131,8 @@ const RaiseDisputeModal = ({ isOpen, onClose, milestoneId, milestoneTitle }) => 
 };
 
 export default RaiseDisputeModal;
+
+
+
+
+
