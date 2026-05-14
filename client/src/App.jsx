@@ -11,7 +11,7 @@ import Profile from "./pages/profile/profile";
 import KYC from "./pages/kyc/KYC";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import { Toaster } from "react-hot-toast";
+
 import DisputeDetails from "./pages/disputes/DisputeDetails";
 import DisputesList from "./pages/disputes/DisputesList";
 import Proposals from "./pages/proposals/Proposals";
@@ -40,54 +40,7 @@ function App() {
   return (
     <LazyMotion features={domAnimation}>
       <Router>
-        <Toaster
-          position="top-right"
-          reverseOrder={false}
-          limit={5}
-          toastOptions={{
-            className: "custom-static-toast",
-            duration: 2200, // Short duration
-            style: {
-              background: '#1c1c1e', // Solid dark background
-              color: '#ffffff',
-              borderRadius: '14px',
-              padding: '12px 20px',
-              fontSize: '11px',
-              fontWeight: '700',
-              border: '1px solid #2c2c2e', // Solid dark border
-              boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
-            },
-            success: {
-              style: {
-                background: '#f0fdf4', // Solid light green
-                color: '#16a34a',
-                border: '1px solid #bbf7d0', // Solid light green border
-              },
-              iconTheme: {
-                primary: '#16a34a',
-                secondary: '#ffffff',
-              },
-            },
-            error: {
-              style: {
-                background: '#fef2f2', // Solid light red
-                color: '#dc2626',
-                border: '1px solid #fecaca', // Solid light red border
-              },
-              iconTheme: {
-                primary: '#dc2626',
-                secondary: '#ffffff',
-              },
-            },
-            blank: {
-              style: {
-                background: '#fffbeb', // Solid light yellow
-                color: '#d97706',
-                border: '1px solid #fef3c7', // Solid light yellow border
-              }
-            }
-          }}
-        />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -121,3 +74,7 @@ function App() {
   );
 }
 export default App;
+
+
+
+
