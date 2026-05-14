@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100">
+      <header className="sticky top-0 z-50 bg-white border-b border-zinc-100 border-b border-zinc-100">
         <div className="max-w-4xl mx-auto px-4 lg:px-6 h-16 lg:h-20 flex items-center justify-between">
           <Link to="/register" className="flex items-center gap-2 text-zinc-500 hover:text-zinc-900 transition-colors group">
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -97,3 +97,8 @@ export default function PrivacyPolicy() {
     </div>
   );
 }
+
+
+
+
+
