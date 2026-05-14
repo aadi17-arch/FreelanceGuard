@@ -9,8 +9,8 @@ router.get("/", authMiddleware, getUserContracts);
 router.get("/transactions", authMiddleware, getUserTransactions);
 router.post("/release/:contractId", authMiddleware, releaseFunds);
 router.post("/deposit/:contractId", authMiddleware, depositToEscrow);
-router.post("/add-funds", authMiddleware,kycmiddleware, addFundsToWallet);
-router.post("/withdraw", authMiddleware,kycmiddleware, withdrawFundsFromWallet);
+router.post("/add-funds", authMiddleware, kycmiddleware, addFundsToWallet);
+router.post("/withdraw", authMiddleware, kycmiddleware, withdrawFundsFromWallet);
 router.post("/milestone/submit/:milestoneId",authMiddleware,submitMilestoneWork);
 router.post("/milestone/release/:milestoneId", authMiddleware, approveAndReleaseMilestoneAmount);
 
