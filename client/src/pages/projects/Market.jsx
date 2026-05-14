@@ -20,7 +20,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import { submitProposal } from "../../services/proposalService";
-import { toast } from "react-hot-toast";
+import toast from '../../utils/toast';
 
 export default function Market() {
   const { user } = useAuth();
@@ -233,7 +233,7 @@ export default function Market() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowApplyModal(false)}
-              className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#09090b] "
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -266,7 +266,7 @@ export default function Market() {
                         value={formData.amount}
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                         placeholder="0.00"
-                        className="w-full pl-9 pr-4 py-3 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/10 outline-none transition-all"
+                        className="w-full pl-9 pr-4 py-3 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-100 outline-none transition-all"
                       />
                     </div>
                   </div>
@@ -280,7 +280,7 @@ export default function Market() {
                         value={formData.duration}
                         onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                         placeholder="7"
-                        className="w-full pl-9 pr-4 py-3 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/10 outline-none transition-all"
+                        className="w-full pl-9 pr-4 py-3 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-100 outline-none transition-all"
                       />
                     </div>
                   </div>
@@ -294,7 +294,7 @@ export default function Market() {
                     value={formData.coverLetter}
                     onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
                     placeholder="Describe why you're the best fit for this project..."
-                    className="w-full px-4 py-3 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-emerald-500/10 outline-none transition-all resize-none"
+                    className="w-full px-4 py-3 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-emerald-100 outline-none transition-all resize-none"
                   />
                 </div>
 
@@ -320,3 +320,8 @@ export default function Market() {
     </div>
   );
 }
+
+
+
+
+
