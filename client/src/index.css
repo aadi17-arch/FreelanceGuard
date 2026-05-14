@@ -53,7 +53,7 @@
   }
 
   .label-caps {
-    @apply text-[10px] font-medium uppercase tracking-[0.8px] text-[var(--color-text-tertiary)];
+    @apply text-[10px] font-medium tracking-tight text-[var(--color-text-tertiary)];
   }
 
   .body-small {
@@ -78,7 +78,7 @@
   }
 
   .auth-button {
-    @apply w-full py-4 bg-rui-dark text-white font-bold text-xs uppercase tracking-wider rounded-lg hover:bg-black transition-all shadow-sm active:scale-[0.98];
+    @apply w-full py-4 bg-rui-dark text-white font-bold text-xs rounded-lg hover:bg-black transition-all shadow-sm active:scale-[0.98];
   }
 
   .font-financial {
@@ -146,18 +146,17 @@ a, button, input, select, textarea, [role="button"] {
   animation: pulse-subtle 3s ease-in-out infinite;
 }
 
-/* --- OPTIMIZED STATIC TOAST OVERRIDES --- */
-.custom-static-toast {
-  animation: toast-fade-in 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+
+
+/* --- INSTANT NOTIFICATIONS (TOP MIDDLE) --- */
+.notistack-SnackbarContainer {
+  top: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  transition: none !important;
 }
 
-@keyframes toast-fade-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(0);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+.notistack-MuiContent {
+  animation: none !important;
+  transition: none !important;
 }
