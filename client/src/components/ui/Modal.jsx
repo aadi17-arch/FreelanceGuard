@@ -14,7 +14,7 @@ export default function Modal({ isOpen, onClose, onConfirm, title, message, conf
           exit={{ opacity: 0 }}
           transition={{ type: "tween", ease: "easeOut", duration: 0.15 }}
           onClick={onClose}
-          className="absolute inset-0 bg-rui-dark/50"
+          className="absolute inset-0 bg-rui-dark"
         />
 
         {/* Modal Card */}
@@ -28,7 +28,7 @@ export default function Modal({ isOpen, onClose, onConfirm, title, message, conf
           {/* Header */}
           <div className="flex justify-between items-start mb-8">
             <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
-              type === 'warning' ? 'bg-rui-danger/10 text-rui-danger' : 'bg-[#E1F5EE] text-[#1D9E75]'
+              type === 'warning' ? 'bg-[#fef2f2] text-rui-danger' : 'bg-[#E1F5EE] text-[#1D9E75]'
             }`}>
               <AlertCircle size={28} />
             </div>
@@ -49,7 +49,7 @@ export default function Modal({ isOpen, onClose, onConfirm, title, message, conf
           <div className="flex flex-col sm:flex-row gap-4">
             <button 
               onClick={onClose}
-              className="flex-grow py-4 border-2 border-rui-gray-border/20 rounded-2xl label-caps !text-rui-gray-muted hover:bg-rui-light transition-all"
+              className="flex-grow py-4 border-2 border-zinc-100 rounded-2xl label-caps !text-rui-gray-muted hover:bg-rui-light transition-all"
             >
               {cancelText}
             </button>
@@ -73,3 +73,8 @@ export default function Modal({ isOpen, onClose, onConfirm, title, message, conf
     </AnimatePresence>
   );
 }
+
+
+
+
+
