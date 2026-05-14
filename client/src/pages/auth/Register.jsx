@@ -14,7 +14,7 @@ import {
   Eye,
   EyeOff
 } from "lucide-react";
-import toast from "react-hot-toast";
+import toast from '../../utils/toast';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -61,8 +61,8 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* Background Polish */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#f0fdf4] rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#f0fdf4] rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -240,3 +240,8 @@ export default function Register() {
     </div>
   );
 }
+
+
+
+
+
