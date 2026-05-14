@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { acceptProposal, getClientProposals, getMyProposals } from "../../services/proposalService";
-import { toast } from "react-hot-toast";
+import toast from '../../utils/toast';
 
 export default function Proposals() {
   const { user, refreshUser } = useAuth();
@@ -255,3 +255,8 @@ export default function Proposals() {
     </div>
   );
 }
+
+
+
+
+
