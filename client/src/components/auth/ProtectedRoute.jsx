@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children, allowedRoles }) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-emerald-100 border-t-emerald-500 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -22,3 +22,8 @@ export default function ProtectedRoute({ children, allowedRoles }) {
 
   return children;
 }
+
+
+
+
+
