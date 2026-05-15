@@ -1,80 +1,80 @@
-import { m, AnimatePresence } from "framer-motion";
 import { X, AlertCircle } from "lucide-react";
 
-export default function Modal({ isOpen, onClose, onConfirm, title, message, confirmText = "Confirm", cancelText = "Cancel", type = "warning" }) {
+export default function Modal({ 
+  isOpen, 
+  onClose, 
+  onConfirm, 
+  title, 
+  message, 
+  confirmText = "Confirm", 
+  cancelText = "Cancel", 
+  type = "warning",
+  children 
+}) {
   if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-        {/* Backdrop */}
-        <m.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ type: "tween", ease: "easeOut", duration: 0.15 }}
-          onClick={onClose}
-          className="absolute inset-0 bg-rui-dark"
-        />
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+      {/* Backdrop */}
+      <div 
+        onClick={onClose}
+        className="absolute inset-0 bg-zinc-900/60"
+      />
 
-        {/* Modal Card */}
-        <m.div 
-          initial={{ opacity: 0, scale: 0.95, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          transition={{ type: "tween", ease: "easeOut", duration: 0.2 }}
-          className="relative w-full max-w-lg bg-white rounded-[2.5rem] p-12 shadow-2xl overflow-hidden"
-        >
-          {/* Header */}
-          <div className="flex justify-between items-start mb-8">
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
-              type === 'warning' ? 'bg-[#fef2f2] text-rui-danger' : 'bg-[#E1F5EE] text-[#1D9E75]'
-            }`}>
-              <AlertCircle size={28} />
-            </div>
-            <button onClick={onClose} className="p-2 hover:bg-rui-light rounded-xl transition-colors">
-              <X size={20} className="text-rui-gray-muted" />
-            </button>
+      {/* Modal Card */}
+      <div className="relative w-full max-w-lg bg-white rounded-[2rem] p-10 shadow-2xl border border-zinc-200">
+        {/* Header */}
+        <div className="flex justify-between items-start mb-6">
+          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+            type === 'warning' ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'
+          }`}>
+            <AlertCircle size={24} />
           </div>
+          <button onClick={onClose} className="p-2 hover:bg-zinc-100 rounded-xl transition-colors">
+            <X size={20} className="text-zinc-400" />
+          </button>
+        </div>
 
-          {/* Content */}
-          <div className="space-y-4 mb-12">
-            <h2 className="text-3xl font-bold tracking-tighter text-rui-dark leading-tight">{title}</h2>
-            <p className="body-lead !text-rui-dark opacity-60">
+        {/* Title */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold tracking-tight text-zinc-900 leading-tight">{title}</h2>
+        </div>
+
+        {/* Children (Form) or Default Message */}
+        <div className="mb-8">
+          {children ? children : (
+            <p className="text-zinc-500 text-sm leading-relaxed">
               {message}
             </p>
-          </div>
+          )}
+        </div>
 
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4">
+        {/* Actions - Only show if NO children are provided */}
+        {!children && (
+          <div className="flex flex-col sm:flex-row gap-3">
             <button 
               onClick={onClose}
-              className="flex-grow py-4 border-2 border-zinc-100 rounded-2xl label-caps !text-rui-gray-muted hover:bg-rui-light transition-all"
+              className="flex-grow py-3 border border-zinc-200 rounded-xl text-xs font-bold uppercase tracking-widest text-zinc-500 hover:bg-zinc-50 transition-all"
             >
               {cancelText}
             </button>
             <button 
               onClick={() => {
-                onConfirm();
+                if (onConfirm) onConfirm();
                 onClose();
               }}
-              className={`flex-grow py-4 rounded-2xl label-caps !text-white shadow-xl transition-all ${
-                type === 'warning' ? 'bg-rui-danger hover:bg-rui-dark shadow-rui-danger/20' : 'bg-rui-dark hover:bg-[#1D9E75] shadow-black/10'
+              className={`flex-grow py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-white shadow-lg transition-all ${
+                type === 'warning' ? 'bg-red-500 hover:bg-red-600 shadow-red-200' : 'bg-zinc-900 hover:bg-black shadow-zinc-200'
               }`}
             >
               {confirmText}
             </button>
           </div>
+        )}
 
-          {/* Decorative Detail */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-rui-gray-border/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-        </m.div>
+        {/* Decorative Detail */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-zinc-100 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50"></div>
       </div>
-    </AnimatePresence>
+    </div>
   );
 }
-
-
-
-
-
