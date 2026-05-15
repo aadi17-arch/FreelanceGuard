@@ -46,31 +46,25 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="flex min-h-screen bg-white relative">
-      {/* 1. Sidebar: Mobile (Drawer) */}
       {isSidebarOpen && (
         <div className="fixed inset-0 z-[100] lg:hidden">
-          {/* Backdrop */}
           <div
             onClick={() => setIsSidebarOpen(false)}
             className="absolute inset-0 bg-zinc-900/50"
           />
 
-          {/* Drawer */}
           <div className="absolute top-0 left-0 h-screen z-[110]">
             <Sidebar onClose={() => setIsSidebarOpen(false)} />
           </div>
         </div>
       )}
 
-      {/* Desktop Sidebar */}
       <div className="hidden lg:block fixed top-0 left-0 h-screen z-[110]">
         <Sidebar />
       </div>
 
-      {/* 2. Main Content Area */}
       <div className="flex-grow flex flex-col lg:ml-56 min-h-screen relative w-full overflow-x-hidden">
 
-        {/* Global Header */}
         <header className="sticky top-0 z-50 bg-white border-b border-zinc-100 px-4 py-3 lg:px-8 lg:py-5 flex justify-between items-center">
           <div className="flex items-center gap-4 min-w-0">
             <button
@@ -86,9 +80,7 @@ export default function DashboardLayout({ children }) {
             </div>
           </div>
 
-          {/* Action Hub */}
           <div className="flex items-center gap-3 shrink-0">
-            {/* Wallet Balance */}
             <Link
               to="/escrow"
               className="flex items-center gap-2.5 px-3 py-1.5 md:px-4 md:py-2 rounded-xl border border-zinc-200 hover:border-emerald-500 hover:bg-zinc-50 transition-all bg-white"
@@ -143,7 +135,6 @@ export default function DashboardLayout({ children }) {
           </div>
         </header>
 
-        {/* Dynamic Page Content */}
         <main className="px-4 py-6 lg:px-8 lg:py-10 z-10 w-full overflow-x-hidden">
           <div className="w-full">
             {children}
