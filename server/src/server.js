@@ -11,6 +11,7 @@ import kycRoutes from "./modules/kyc/kyc.routes.js";
 import disputeRoutes from "./modules/dispute/dispute.routes.js";
 import milestoneRoutes from "./modules/milestone/milestone.routes.js"
 import proposalRoutes from "./modules/proposals/proposal.routes.js";
+import supportRoutes from "./modules/support/support.routes.js"
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use("/api/kyc", kycRoutes);
 app.use("/api/dispute", disputeRoutes);
 app.use("/api/milestone", milestoneRoutes);
 app.use("/api/proposal", proposalRoutes);
+app.use("/api/support", supportRoutes);
 
 app.get('/', (req, res) => {
   res.send('FreelanceGuard API is running...');
