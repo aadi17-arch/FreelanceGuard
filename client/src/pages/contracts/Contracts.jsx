@@ -270,7 +270,7 @@ export default function Contracts() {
 
         <button
           onClick={() => setShowDemo(!showDemo)}
-          className="self-start flex items-center gap-1.5 px-3 py-1.5 bg-[#f9f9f9] hover:bg-[#111111] hover:text-white border border-[#e5e5e5] rounded-[20px] text-[10px] font-black uppercase tracking-wider text-[#666666] transition-all shadow-sm"
+          className="self-start flex items-center gap-1.5 px-3 py-1.5 bg-[#f9f9f9] hover:bg-[#111111] hover:text-white border border-[#e5e5e5] rounded-[20px] text-[10px] font-black text-[#666666] transition-all shadow-sm"
         >
           <Sparkles size={10} className="text-[#10b981]" />
           <span>
@@ -493,7 +493,7 @@ export default function Contracts() {
                           exit={{ opacity: 0, height: 0 }}
                           className="overflow-hidden pt-4 border-t border-[#e5e5e5] space-y-6"
                         >
-                          <h5 className="text-[11px] font-black uppercase tracking-wider text-[#666666] px-1">
+                          <h5 className="text-[11px] font-black text-[#666666] px-1">
                             Milestone Settlement Timeline
                           </h5>
 
@@ -554,7 +554,7 @@ export default function Contracts() {
                                       </div>
 
                                       <span
-                                        className={`self-start sm:self-center flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-[20px] ${
+                                        className={`self-start sm:self-center flex items-center gap-1.5 text-[9px] font-black px-2.5 py-1 rounded-[20px] ${
                                           m.status === "RELEASED" || m.status === "APPROVED"
                                             ? "bg-[#f0fdf4] text-[#10b981]"
                                             : m.status === "SUBMITTED"
@@ -584,7 +584,7 @@ export default function Contracts() {
                                                   m.id
                                                 )
                                               }
-                                              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#10b981] hover:bg-[#0d9488] text-white rounded-[6px] text-[10px] font-black uppercase tracking-wider transition-all"
+                                              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#10b981] hover:bg-[#0d9488] text-white rounded-[6px] text-[10px] font-black transition-all"
                                             >
                                               <CheckCircle size={10} />
                                               <span>Release Escrow Funds</span>
@@ -596,7 +596,7 @@ export default function Contracts() {
                                                   m.id
                                                 )
                                               }
-                                              className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent hover:bg-rose-50 text-rose-600 hover:text-rose-700 border border-[#e5e5e5] hover:border-rose-200 rounded-[6px] text-[10px] font-black uppercase tracking-wider transition-all"
+                                              className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent hover:bg-rose-50 text-rose-600 hover:text-rose-700 border border-[#e5e5e5] hover:border-rose-200 rounded-[6px] text-[10px] font-black transition-all"
                                             >
                                               <AlertTriangle size={10} />
                                               <span>Raise Dispute</span>
@@ -636,7 +636,7 @@ export default function Contracts() {
                                               m.id
                                             )
                                           }
-                                          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#111111] hover:bg-[#10b981] text-white rounded-[6px] text-[10px] font-black uppercase tracking-wider transition-all"
+                                          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#111111] hover:bg-[#10b981] text-white rounded-[6px] text-[10px] font-black transition-all"
                                         >
                                           <Send size={10} />
                                           <span>Submit Work for Review</span>
@@ -719,7 +719,7 @@ export default function Contracts() {
               >
                 <div className="p-6 border-b border-[#e5e5e5] flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#10b981] bg-[#f0fdf4] px-2.5 py-1 rounded-full">
+                    <span className="text-[10px] font-black text-[#10b981] bg-[#f0fdf4] px-2.5 py-1 rounded-full">
                       Escrow Vault Secure
                     </span>
                     <h3 className="text-base font-black text-[#111111] mt-2">
@@ -749,7 +749,7 @@ export default function Contracts() {
                   </div>
 
                   <div className="space-y-4">
-                    <h4 className="text-xs font-black uppercase tracking-wider text-[#666666]">
+                    <h4 className="text-xs font-black text-[#666666]">
                       Milestone Settlements ({activeMilestones.length})
                     </h4>
 
