@@ -6,7 +6,8 @@ import {
    CheckCircle2,
    History,
    Plus,
-   X
+   X,
+   ChevronRight
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import toast from '../../utils/toast';
