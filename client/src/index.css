@@ -68,7 +68,6 @@
     @apply bg-white border border-[var(--color-border-tertiary)] text-[var(--color-text-primary)] px-5 py-2.5 rounded-lg text-[13px] font-medium transition-all hover:bg-[var(--color-background-secondary)];
   }
 
-  /* --- AUTH UI (Clean/Boxy) --- */
   .auth-card {
     @apply bg-white rounded-xl border border-[var(--color-border-tertiary)] p-8 md:p-10 shadow-sm;
   }
@@ -87,7 +86,6 @@
   }
 }
 
-/* Typography Utilities */
 .display-mega {
   font-size: clamp(2.5rem, 8vw, 8rem);
   font-weight: 800;
@@ -106,12 +104,10 @@
   @apply w-full max-w-7xl mx-auto px-5 md:px-10 lg:px-16;
 }
 
-/* Global Smooth Transitions - Target only interactive elements to prevent heavy style/layout recalculations on mobile browsers */
 a, button, input, select, textarea, [role="button"] {
   transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Custom Minimalist Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -146,9 +142,6 @@ a, button, input, select, textarea, [role="button"] {
   animation: pulse-subtle 3s ease-in-out infinite;
 }
 
-
-
-/* --- INSTANT NOTIFICATIONS (TOP MIDDLE) --- */
 .notistack-SnackbarContainer {
   top: 20px !important;
   left: 50% !important;
@@ -159,4 +152,49 @@ a, button, input, select, textarea, [role="button"] {
 .notistack-MuiContent {
   animation: none !important;
   transition: none !important;
+  border-radius: 0px !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  min-width: 320px !important;
+}
+
+.toast-base {
+  display: flex !important;
+  align-items: center !important;
+  padding: 12px 20px !important;
+  width: 100% !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.01em !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.toast-success {
+  background-color: #10b981 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+.toast-error {
+  background-color: #ef4444 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+.toast-info {
+  background-color: #3b82f6 !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+.toast-warning {
+  background-color: #f59e0b !important;
+  border-color: #d97706 !important;
+  color: #ffffff !important;
 }
