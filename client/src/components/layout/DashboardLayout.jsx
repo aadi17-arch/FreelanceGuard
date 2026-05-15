@@ -26,7 +26,7 @@ export default function DashboardLayout({ children }) {
     const path = location.pathname;
     const titles = {
       "/dashboard": "Dashboard",
-      "/marketplace": user?.role === "CLIENT" ? "Marketplace" : "Find projects",
+      "/marketplace": "Find projects",
       "/escrow": "Safe holding",
       "/profile": "My profile",
       "/kyc": "Verification",
@@ -81,6 +81,24 @@ export default function DashboardLayout({ children }) {
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
+            {user?.role?.toUpperCase() === "CLIENT" && (
+              <Link
+                to="/create-project"
+                className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-zinc-900 text-white text-[13px] font-bold rounded-xl hover:bg-black transition-all shadow-md"
+              >
+                Post a project
+              </Link>
+            )}
+
+            {user?.role?.toUpperCase() === "FREELANCER" && (
+              <Link
+                to="/marketplace"
+                className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white text-[13px] font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-md"
+              >
+                Find work
+              </Link>
+            )}
+
             <Link
               to="/escrow"
               className="flex items-center gap-2.5 px-3 py-1.5 md:px-4 md:py-2 rounded-xl border border-zinc-200 hover:border-emerald-500 hover:bg-zinc-50 transition-all bg-white"
@@ -99,38 +117,44 @@ export default function DashboardLayout({ children }) {
               <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full absolute top-2.5 right-2.5 border-2 border-white"></div>
             </div>
 
-            <div className="relative">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 p-1 md:p-1.5 rounded-xl border border-zinc-200 bg-white hover:border-emerald-500 transition-all"
-              >
-                <div className="w-8 h-8 lg:w-9 lg:h-9 rounded-lg bg-zinc-900 text-white flex items-center justify-center text-[11px] font-bold">
-                  {user?.name?.[0] || "A"}
-                </div>
-              </button>
+            <div className="flex items-center gap-4">
+              <div className="hidden md:flex pointer-events-none">
+                <span className="text-[11px] font-bold text-zinc-900 tracking-tight leading-none uppercase">
+                  {user?.name}
+                </span>
+              </div>
 
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-zinc-200 rounded-xl shadow-xl z-50 py-2">
-                  <Link
-                    to="/profile"
-                    onClick={() => setIsDropdownOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50"
-                  >
-                    <User size={14} />
-                    My profile
-                  </Link>
-                  <button
-                    onClick={() => {
-                      setIsDropdownOpen(false);
-                      handleLogout();
-                    }}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 w-full text-left"
-                  >
-                    <LogOut size={14} />
-                    Sign out
-                  </button>
-                </div>
-              )}
+              <div className="relative">
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-zinc-900 text-white flex items-center justify-center text-[13px] font-bold shadow-lg shadow-zinc-900/10 hover:scale-105 active:scale-95 transition-all ring-2 ring-transparent hover:ring-emerald-500/20"
+                >
+                  {user?.name?.[0] || "A"}
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-3 w-48 bg-white border border-zinc-200 rounded-xl shadow-xl z-50 py-2">
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsDropdownOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50"
+                    >
+                      <User size={14} />
+                      My profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        handleLogout();
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 w-full text-left"
+                    >
+                      <LogOut size={14} />
+                      Sign out
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </header>
