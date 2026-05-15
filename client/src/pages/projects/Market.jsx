@@ -25,11 +25,29 @@ import toast from '../../utils/toast';
 
 export default function Market() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  if (user?.role?.toUpperCase() !== "FREELANCER") {
+    return (
+      <div className="h-[60vh] flex flex-col items-center justify-center gap-4 text-center px-4">
+        <div className="w-16 h-16 bg-zinc-50 rounded-full flex items-center justify-center text-zinc-300">
+          <ShieldCheck size={32} />
+        </div>
+        <h2 className="text-xl font-bold text-zinc-900">Access Restricted</h2>
+        <p className="text-sm text-zinc-500 max-w-xs">
+          The project marketplace is exclusively for freelancers to find work.
+        </p>
+        <Link to="/dashboard" className="text-xs font-bold text-emerald-600 hover:underline">
+          Return to Dashboard
+        </Link>
+      </div>
+    );
+  }
+
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
-  const navigate = useNavigate();
 
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -220,7 +238,7 @@ export default function Market() {
               <Briefcase size={32} />
             </div>
             <p className="text-[10px] font-bold text-zinc-400">No matching projects found</p>
-            {user?.role === "CLIENT" && (
+            {user?.role?.toUpperCase() === "CLIENT" && (
                <Link to="/create-project">
                  <button className="px-6 py-2.5 bg-rui-dark text-white rounded-[10px] text-[10px] font-bold hover:bg-black transition-all">
                    Post a project
