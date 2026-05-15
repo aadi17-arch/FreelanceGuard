@@ -58,9 +58,9 @@ export default function Dashboard() {
                      </p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3">
-                     <Link to={user?.role === 'CLIENT' ? '/create-project' : '/marketplace'} className="w-full sm:w-auto">
+                     <Link to="/marketplace" className="w-full sm:w-auto">
                         <button className="w-full px-6 py-3 bg-emerald-600 border border-emerald-600 text-white rounded-[10px] text-sm font-bold transition-all hover:bg-emerald-700 flex items-center justify-center gap-2">
-                           {user?.role === 'CLIENT' ? 'Create new project' : 'Find work'}
+                           {user?.role === 'CLIENT' ? 'Marketplace' : 'Find work'}
                         </button>
                      </Link>
                      <Link to="/contracts" className="w-full sm:w-auto">
