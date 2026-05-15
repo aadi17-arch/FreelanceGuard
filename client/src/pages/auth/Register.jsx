@@ -7,10 +7,7 @@ import {
   User, 
   Mail, 
   Lock, 
-  UserCheck, 
   ArrowRight,
-  ShieldCheck,
-  Zap,
   Eye,
   EyeOff
 } from "lucide-react";
@@ -60,16 +57,11 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Background Polish */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#f0fdf4] rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#f0fdf4] rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
-
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-[460px] px-2 sm:px-0 space-y-10 relative z-10"
       >
-        {/* Brand Header */}
         <div className="flex flex-col items-center gap-6">
           <Link to="/" className="group">
              <div className="w-16 h-16 bg-zinc-900 rounded-[2rem] flex items-center justify-center shadow-2xl group-hover:rotate-6 transition-transform">
@@ -82,10 +74,8 @@ export default function Register() {
           </div>
         </div>
 
-        {/* Form Hub */}
-        <div className="bg-white border border-zinc-100 rounded-[2.5rem] p-6 sm:p-8 lg:p-10 shadow-2xl shadow-zinc-200/50">
+        <div className="bg-white border border-zinc-100 rounded-[2.5rem] p-6 sm:p-8 lg:p-10 shadow-sm">
            <form onSubmit={handleSubmit} className="space-y-6">
-             {/* Role Selector */}
              <div className="flex bg-zinc-50 p-1 rounded-2xl border border-zinc-100">
                {["FREELANCER", "CLIENT"].map((role) => (
                  <button
@@ -104,7 +94,6 @@ export default function Register() {
              </div>
 
              <div className="space-y-4">
-               {/* Full Name */}
                <div className="space-y-2">
                  <div className="flex items-center gap-2 px-1">
                    <User size={14} className="text-zinc-400" />
@@ -120,7 +109,6 @@ export default function Register() {
                  />
                </div>
 
-               {/* Email */}
                <div className="space-y-2">
                  <div className="flex items-center gap-2 px-1">
                    <Mail size={14} className="text-zinc-400" />
@@ -136,7 +124,6 @@ export default function Register() {
                  />
                </div>
 
-                {/* Password */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between px-1">
                     <div className="flex items-center gap-2">
@@ -170,7 +157,6 @@ export default function Register() {
                     </button>
                   </div>
 
-                  {/* Strength Meter Bars */}
                   <div className="flex gap-1.5 px-1 pt-1">
                     {[1, 2, 3, 4, 5].map((step) => (
                       <div 
@@ -229,7 +215,6 @@ export default function Register() {
            </form>
         </div>
 
-        {/* Redirect Hub */}
         <p className="text-center text-sm font-medium text-zinc-400">
           Already a member?{" "}
           <Link to="/login" className="text-emerald-600 font-bold hover:underline">
@@ -240,8 +225,3 @@ export default function Register() {
     </div>
   );
 }
-
-
-
-
-
