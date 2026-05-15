@@ -22,8 +22,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 flex flex-col items-center overflow-x-hidden font-body selection:bg-emerald-100">
-      
-      {/* 1. Navbar */}
       <nav className="w-full max-w-7xl mx-auto px-5 py-5 md:py-6 flex items-center justify-between z-[100] sticky top-0 bg-white border-b border-zinc-100">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center shadow-lg shadow-zinc-900/10">
@@ -32,7 +30,6 @@ export default function Home() {
           <span className="text-lg font-bold tracking-tight text-zinc-900">Freelance<span className="text-emerald-600">Guard</span></span>
         </div>
         
-        {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8 text-[13px] font-semibold text-zinc-500">
           <a href="#features" className="hover:text-zinc-900 transition-colors">Features</a>
           <Link to="/how-it-works" className="hover:text-zinc-900 transition-colors">How it works</Link>
@@ -45,7 +42,6 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* Mobile Nav Toggle */}
         <button 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="md:hidden p-2 text-zinc-600 hover:text-zinc-900"
@@ -53,7 +49,6 @@ export default function Home() {
           {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="absolute top-full left-0 w-full bg-white border-b border-zinc-100 p-6 flex flex-col gap-6 md:hidden shadow-xl z-[200]">
             <a href="#features" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-zinc-600">Features</a>
@@ -68,7 +63,6 @@ export default function Home() {
         )}
       </nav>
 
-      {/* 2. Hero Section */}
       <section className="w-full max-w-5xl mx-auto min-h-[calc(100vh-80px)] flex flex-col justify-center items-center py-20 px-6 text-center space-y-8">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
@@ -107,7 +101,6 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* 3. Stats Bar */}
       <section className="w-full border-y border-zinc-100 bg-zinc-50">
         <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 space-y-12">
           <h3 className="text-center text-[10px] md:text-xs font-bold tracking-tight text-zinc-400">Trusted by freelancers worldwide</h3>
@@ -134,7 +127,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Features Section */}
       <section className="w-full max-w-7xl mx-auto px-6 py-20 md:py-32" id="features">
         <div className="text-center space-y-4 mb-20 md:mb-24">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900">Everything you need to work safely</h2>
@@ -197,7 +189,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. How it Works */}
       <section className="w-full bg-zinc-900 py-20 md:py-32 text-white" id="how-it-works">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center space-y-4 mb-20 md:mb-24">
@@ -237,7 +228,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. Pricing Section */}
       <section className="w-full max-w-5xl mx-auto px-6 py-20 md:py-32" id="pricing">
         <div className="text-center space-y-4 mb-16 md:mb-20">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900">Simple and transparent</h2>
@@ -283,7 +273,6 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* 7. FAQ Section */}
       <section className="w-full max-w-5xl mx-auto px-6 py-20 md:py-32 border-t border-zinc-100" id="docs">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
           <div className="space-y-6">
@@ -319,7 +308,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 8. CTA Banner */}
       <section className="w-full px-5 py-20 md:py-32 max-w-7xl mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
@@ -345,7 +333,6 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* 9. Footer */}
       <footer className="w-full max-w-7xl mx-auto px-6 py-16 md:py-20 flex flex-col md:flex-row justify-between items-center gap-12 border-t border-zinc-100">
         <div className="flex flex-col items-center md:items-start gap-5">
           <div className="flex items-center gap-2.5">
