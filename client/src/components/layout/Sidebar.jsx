@@ -25,9 +25,10 @@ export default function Sidebar({ onClose }) {
 
   const navItems = [
     { name: "Home", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "Overview" },
+    { name: user?.role === "CLIENT" ? "Marketplace" : "Find work", path: "/marketplace", icon: <Search size={14} />, section: "Overview" },
     ...(user?.role === "CLIENT"
       ? [{ name: "Post a project", path: "/create-project", icon: <LayoutDashboard size={14} />, section: "Overview" }]
-      : [{ name: "Find work", path: "/marketplace", icon: <Search size={14} />, section: "Overview" }]
+      : []
     ),
     { name: "My contracts", path: "/contracts", icon: <FileText size={14} />, section: "Overview" },
     { name: "My wallet", path: "/escrow", icon: <Wallet size={14} />, section: "Finance" },
@@ -38,14 +39,18 @@ export default function Sidebar({ onClose }) {
       section: "Finance" 
     },
     { name: "Verification", path: "/kyc", icon: <ShieldCheck size={14} />, section: "Account" },
-    { name: "Help", path: "/disputes", icon: <HelpCircle size={14} />, section: "Account" },
+    { name: "Support hub", path: "/support", icon: <HelpCircle size={14} />, section: "Account" },
+    { name: "Disputes", path: "/disputes", icon: <HelpCircle size={14} />, section: "Account" },
+    ...(user?.role === "ADMIN"
+      ? [{ name: "Admin center", path: "/admin", icon: <ShieldCheck size={14} />, section: "Management" }]
+      : []
+    ),
   ];
 
-  const sections = ["Overview", "Finance", "Account"];
+  const sections = ["Overview", "Finance", "Account", ...(user?.role === "ADMIN" ? ["Management"] : [])];
 
   return (
     <aside className="h-screen w-56 bg-zinc-50 border-r border-zinc-200 flex flex-col py-6 z-[60]">
-      {/* Brand Header */}
       <div className="px-6 mb-8 flex justify-between items-center">
         <Link to="/dashboard" onClick={onClose} className="flex items-center gap-2.5">
           <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center shadow-sm">
@@ -62,10 +67,9 @@ export default function Sidebar({ onClose }) {
         </button>
       </div>
 
-      {/* Primary Action Button */}
       <div className="px-4 mb-10">
         <Link
-          to={user?.role === "CLIENT" ? "/create-project" : "/marketplace"}
+          to="/marketplace"
           onClick={onClose}
           className="w-full h-11 bg-zinc-900 hover:bg-black text-white rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm"
         >
@@ -83,7 +87,6 @@ export default function Sidebar({ onClose }) {
         </Link>
       </div>
 
-      {/* Navigation Groups */}
       <div className="flex-grow space-y-8 overflow-y-auto px-2">
         {sections.map(section => (
           <div key={section} className="space-y-2">
