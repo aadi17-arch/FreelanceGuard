@@ -26,6 +26,23 @@ export default function CreateProject() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  if (user?.role?.toUpperCase() !== "CLIENT") {
+    return (
+      <div className="h-[60vh] flex flex-col items-center justify-center gap-4 text-center px-4">
+        <div className="w-16 h-16 bg-zinc-50 rounded-full flex items-center justify-center text-zinc-300">
+          <ShieldCheck size={32} />
+        </div>
+        <h2 className="text-xl font-bold text-zinc-900">Access Restricted</h2>
+        <p className="text-sm text-zinc-500 max-w-xs">
+          Only clients can post new projects to the platform.
+        </p>
+        <Link to="/dashboard" className="text-xs font-bold text-emerald-600 hover:underline">
+          Return to Dashboard
+        </Link>
+      </div>
+    );
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -47,7 +64,6 @@ export default function CreateProject() {
 
   return (
     <div className="max-w-[600px] mx-auto space-y-4 pb-4 px-4 lg:px-0">
-      {/* Back to Dashboard Link */}
       <div>
         <Link to="/dashboard" className="inline-flex items-center gap-1.5 text-[#666666] hover:text-[#111111] transition-colors group">
           <ArrowLeft size={14} className="text-[#10b981] group-hover:-translate-x-0.5 transition-transform" />
@@ -55,10 +71,8 @@ export default function CreateProject() {
         </Link>
       </div>
 
-      {/* Main Form Container */}
       <div className="bg-[#ffffff] border border-[#e5e5e5] rounded-[12px] p-[28px] shadow-sm">
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Project Title Field */}
           <div className="space-y-1.5">
             <label className="block text-xs font-bold text-[#666666]">Project title</label>
             <input
@@ -72,7 +86,6 @@ export default function CreateProject() {
             />
           </div>
 
-          {/* Row of Category & Budget */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <label className="block text-xs font-bold text-[#666666]">Category</label>
@@ -109,7 +122,6 @@ export default function CreateProject() {
             </div>
           </div>
 
-          {/* Description */}
           <div className="space-y-1.5">
             <label className="block text-xs font-bold text-[#666666]">Project description</label>
             <textarea
@@ -123,7 +135,6 @@ export default function CreateProject() {
             />
           </div>
 
-          {/* Buttons Row */}
           <div className="flex items-center justify-between pt-2">
             <button
               type="button"
@@ -143,7 +154,6 @@ export default function CreateProject() {
         </form>
       </div>
 
-      {/* Trust Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
           { title: "Safe payments", desc: "Your money is held securely until you approve the work.", icon: <ShieldCheck size={16} className="text-[#10b981]" /> },
