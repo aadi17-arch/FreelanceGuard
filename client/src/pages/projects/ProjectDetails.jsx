@@ -92,9 +92,9 @@ export default function ProjectDetails() {
   };
 
   if (loading) return (
-    <div className="h-64 flex flex-col items-center justify-center gap-4">
-      <ShieldCheck className="w-8 h-8 text-emerald-500" />
-      <p className="text-xs font-bold text-zinc-400">Loading project...</p>
+    <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
+      <div className="w-6 h-6 border-2 border-rui-dark border-t-transparent rounded-full" />
+      <p className="text-[10px] font-bold text-zinc-400">Loading project details...</p>
     </div>
   );
 
@@ -102,8 +102,8 @@ export default function ProjectDetails() {
     <div className="space-y-6 lg:space-y-8 pb-10">
       <header className="space-y-6">
         <Link to="/marketplace" className="inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-900 transition-colors group">
-          <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-xs font-bold">Back to projects</span>
+          <ChevronLeft size={16} />
+          <span className="text-[10px] font-bold">Back to marketplace</span>
         </Link>
 
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
@@ -112,9 +112,9 @@ export default function ProjectDetails() {
               {project?.title}
             </h1>
           </div>
-          <div className="bg-zinc-900 rounded-2xl px-6 py-4 text-white shadow-sm">
-            <p className="text-xs font-bold text-zinc-400 mb-1">Project budget</p>
-            <p className="text-2xl lg:text-3xl font-bold tracking-tight text-emerald-400">${project?.budget?.toLocaleString()}</p>
+          <div className="bg-rui-dark rounded-2xl px-6 py-4 text-white shadow-sm">
+            <p className="text-[10px] font-bold text-zinc-400 mb-1">Estimated budget</p>
+            <p className="text-2xl lg:text-3xl font-bold tracking-tight text-rui-success font-financial">${project?.budget?.toLocaleString()}</p>
           </div>
         </div>
       </header>
@@ -122,7 +122,7 @@ export default function ProjectDetails() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <section className="lg:col-span-2 space-y-6">
           <div className="bg-white border border-zinc-200 rounded-[2rem] p-8 space-y-6 shadow-sm">
-            <h2 className="text-sm font-bold text-zinc-400 border-b border-zinc-50 pb-4">About this project</h2>
+            <h2 className="text-[10px] font-bold text-zinc-400 border-b border-zinc-50 pb-4">Description</h2>
             <div className="text-sm lg:text-base text-zinc-600 font-medium leading-relaxed whitespace-pre-wrap">
               {project?.description}
             </div>
@@ -143,7 +143,7 @@ export default function ProjectDetails() {
                 <Clock size={16} />
               </div>
               <div>
-                <p className="text-sm font-bold text-zinc-900">
+                <p className="text-sm font-bold text-zinc-900 font-financial">
                   {new Date(project?.createdAt).toLocaleDateString()}
                 </p>
                 <p className="text-[10px] font-bold text-zinc-400">Posted on</p>
@@ -156,34 +156,34 @@ export default function ProjectDetails() {
           {user?.role === 'FREELANCER' ? (
             <div className="space-y-4">
               {project?.contracts?.some(c => c.freelancerId === user.id) ? (
-                <div className="bg-emerald-600 rounded-[2rem] p-8 text-center space-y-4">
+                <div className="bg-rui-success rounded-[2rem] p-8 text-center space-y-4 shadow-lg shadow-emerald-100">
                   <CheckCircle2 size={32} className="mx-auto text-white" />
-                  <h3 className="text-sm font-bold text-white">Project in progress</h3>
-                  <button onClick={() => navigate('/escrow')} className="w-full py-3 bg-white text-emerald-600 rounded-xl text-xs font-bold hover:bg-zinc-50 transition-all">
+                  <h3 className="text-[10px] font-bold text-white">Project in progress</h3>
+                  <button onClick={() => navigate('/escrow')} className="w-full py-3 bg-white text-rui-success rounded-xl text-[10px] font-bold hover:bg-zinc-50 transition-all">
                     View payments
                   </button>
                 </div>
               ) : project?.bids?.some(bid => bid.freelancerId === user.id) ? (
                 <div className="bg-white border border-zinc-200 rounded-[2rem] p-8 text-center space-y-4 shadow-sm">
-                  <CheckCircle2 size={24} className="mx-auto text-emerald-500" />
-                  <h3 className="text-sm font-bold text-zinc-900">Proposal sent</h3>
-                  <p className="text-xs text-zinc-500 font-medium">We'll notify you if the client wants to move forward.</p>
+                  <CheckCircle2 size={24} className="mx-auto text-rui-success" />
+                  <h3 className="text-[10px] font-bold text-zinc-900">Proposal sent</h3>
+                  <p className="text-xs text-zinc-500 font-medium">Our system will notify you once the client reviews your offer.</p>
                 </div>
               ) : project?.status === 'OPEN' ? (
                 <div className="bg-white border border-zinc-200 rounded-[2rem] p-8 shadow-sm">
                   <div className="flex items-center gap-3 mb-6">
                     <Send size={14} className="text-zinc-900" />
-                    <h3 className="text-sm font-bold text-zinc-900">Send a proposal</h3>
+                    <h3 className="text-[10px] font-bold text-zinc-900">Send a proposal</h3>
                   </div>
 
                    <form onSubmit={handleBidSubmit} className="space-y-6">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between px-1">
-                        <label className="text-[10px] font-bold text-zinc-400">Project stages</label>
+                        <label className="text-[10px] font-bold text-zinc-400">Contract terms</label>
                         <button 
                           type="button"
                           onClick={addMilestone}
-                          className="text-[10px] font-bold text-emerald-600 hover:underline"
+                          className="text-[10px] font-bold text-rui-success hover:underline"
                         >
                           + Add stage
                         </button>
@@ -195,28 +195,28 @@ export default function ProjectDetails() {
                             <input 
                               type="text"
                               required
-                              placeholder="Stage title (e.g. Design)"
+                              placeholder="Stage title"
                               value={ms.title}
                               onChange={(e) => updateMilestone(index, 'title', e.target.value)}
-                              className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium text-zinc-900 focus:bg-white focus:border-emerald-500 transition-all outline-none"
+                              className="w-full px-4 h-12 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-bold text-zinc-900 focus:bg-white focus:border-rui-success transition-all outline-none"
                             />
                           </div>
                           <div className="w-32 relative">
-                            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-300" size={12} />
+                            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={12} />
                             <input 
                               type="number"
                               required
                               placeholder="0"
                               value={ms.amount}
                               onChange={(e) => updateMilestone(index, 'amount', e.target.value)}
-                              className="w-full pl-8 pr-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-bold text-zinc-900 focus:bg-white focus:border-emerald-500 transition-all outline-none"
+                              className="w-full pl-8 pr-4 h-12 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-bold text-zinc-900 focus:bg-white focus:border-rui-success transition-all outline-none font-financial"
                             />
                           </div>
                           {milestones.length > 1 && (
                             <button 
                               type="button"
                               onClick={() => removeMilestone(index)}
-                              className="p-3 text-zinc-300 hover:text-rose-500 transition-colors"
+                              className="h-12 w-10 flex items-center justify-center text-zinc-300 hover:text-red-500 transition-colors"
                             >
                               <X size={16} />
                             </button>
@@ -224,18 +224,18 @@ export default function ProjectDetails() {
                         </div>
                       ))}
 
-                      <div className="p-4 bg-zinc-900 rounded-2xl flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-zinc-400">Total amount</span>
-                        <span className="text-sm font-bold text-emerald-400">${calculateTotalAmount().toLocaleString()}</span>
+                      <div className="p-4 bg-rui-dark rounded-2xl flex items-center justify-between shadow-lg shadow-zinc-100">
+                        <span className="text-[10px] font-bold text-zinc-400">Total proposal</span>
+                        <span className="text-sm font-bold text-rui-success font-financial">${calculateTotalAmount().toLocaleString()}</span>
                       </div>
                     </div>
                       
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-zinc-400 px-1">Your message</label>
+                      <label className="text-[10px] font-bold text-zinc-400 px-1">Proposal message</label>
                       <textarea
                         required
                         rows={6}
-                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium text-zinc-600 focus:bg-white focus:border-emerald-500 transition-all outline-none resize-none leading-relaxed"
+                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium text-zinc-600 focus:bg-white focus:border-rui-success transition-all outline-none resize-none leading-relaxed"
                         placeholder="How will you handle this project?"
                         value={proposal}
                         onChange={(e) => setProposal(e.target.value)}
@@ -244,7 +244,7 @@ export default function ProjectDetails() {
 
                     <button
                       type="submit"
-                      className="w-full py-4 bg-zinc-900 text-white rounded-xl text-xs font-bold hover:bg-black transition-all shadow-sm"
+                      className="w-full py-4 bg-rui-dark text-white rounded-xl text-[10px] font-bold hover:bg-black transition-all shadow-lg shadow-zinc-100"
                     >
                       Send proposal
                     </button>
