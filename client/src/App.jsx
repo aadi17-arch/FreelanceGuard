@@ -53,7 +53,6 @@ function App() {
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
 
-          {/* Core Operational Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><Dashboard /></DashboardLayout></ProtectedRoute>} />
           <Route path="/create-project" element={<ProtectedRoute allowedRoles={["CLIENT"]}><DashboardLayout><CreateProject /></DashboardLayout></ProtectedRoute>} />
           <Route path="/marketplace" element={<ProtectedRoute allowedRoles={["FREELANCER", "CLIENT"]}><DashboardLayout><Market /></DashboardLayout></ProtectedRoute>} />
@@ -62,16 +61,13 @@ function App() {
           <Route path="/profile" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
           <Route path="/kyc" element={<ProtectedRoute><DashboardLayout><KYC /></DashboardLayout></ProtectedRoute>} />
           
-          {/* Support Hub */}
           <Route path="/support" element={<ProtectedRoute><DashboardLayout><SupportList /></DashboardLayout></ProtectedRoute>} />
           <Route path="/support/ticket/:id" element={<ProtectedRoute><DashboardLayout><TicketDetails /></DashboardLayout></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute allowedRoles={["ADMIN"]}><DashboardLayout><AdminSupport /></DashboardLayout></ProtectedRoute>} />
 
-          {/* Dispute & Resolution */}
           <Route path="/disputes" element={<ProtectedRoute><DashboardLayout><DisputesList /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dispute/:id" element={<ProtectedRoute><DashboardLayout><DisputeDetails /></DashboardLayout></ProtectedRoute>} />
 
-          {/* Strategic Roadmap Routes */}
           <Route path="/contracts" element={<ProtectedRoute><DashboardLayout><Contracts /></DashboardLayout></ProtectedRoute>} />
           <Route path="/proposals" element={<ProtectedRoute><DashboardLayout><Proposals /></DashboardLayout></ProtectedRoute>} />
           <Route path="/analytics" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Network Analytics" /></DashboardLayout></ProtectedRoute>} />
