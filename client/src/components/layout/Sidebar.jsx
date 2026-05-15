@@ -25,15 +25,10 @@ export default function Sidebar({ onClose }) {
 
   const navItems = [
     { name: "Home", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "Overview" },
-    { name: user?.role === "CLIENT" ? "Marketplace" : "Find work", path: "/marketplace", icon: <Search size={14} />, section: "Overview" },
-    ...(user?.role === "CLIENT"
-      ? [{ name: "Post a project", path: "/create-project", icon: <LayoutDashboard size={14} />, section: "Overview" }]
-      : []
-    ),
     { name: "My contracts", path: "/contracts", icon: <FileText size={14} />, section: "Overview" },
     { name: "My wallet", path: "/escrow", icon: <Wallet size={14} />, section: "Finance" },
     { 
-      name: user?.role === "CLIENT" ? "Received bids" : "My bids", 
+      name: user?.role?.toUpperCase() === "CLIENT" ? "Received bids" : "My bids", 
       path: "/proposals", 
       icon: <ClipboardList size={14} />, 
       section: "Finance" 
@@ -41,13 +36,13 @@ export default function Sidebar({ onClose }) {
     { name: "Verification", path: "/kyc", icon: <ShieldCheck size={14} />, section: "Account" },
     { name: "Support hub", path: "/support", icon: <HelpCircle size={14} />, section: "Account" },
     { name: "Disputes", path: "/disputes", icon: <HelpCircle size={14} />, section: "Account" },
-    ...(user?.role === "ADMIN"
+    ...(user?.role?.toUpperCase() === "ADMIN"
       ? [{ name: "Admin center", path: "/admin", icon: <ShieldCheck size={14} />, section: "Management" }]
       : []
     ),
   ];
 
-  const sections = ["Overview", "Finance", "Account", ...(user?.role === "ADMIN" ? ["Management"] : [])];
+  const sections = ["Overview", "Finance", "Account", ...(user?.role?.toUpperCase() === "ADMIN" ? ["Management"] : [])];
 
   return (
     <aside className="h-screen w-56 bg-zinc-50 border-r border-zinc-200 flex flex-col py-6 z-[60]">
@@ -65,26 +60,6 @@ export default function Sidebar({ onClose }) {
         <button onClick={onClose} className="lg:hidden p-1.5 hover:bg-zinc-100 rounded-lg transition-colors">
           <X size={16} className="text-zinc-400" />
         </button>
-      </div>
-
-      <div className="px-4 mb-10">
-        <Link
-          to="/marketplace"
-          onClick={onClose}
-          className="w-full h-11 bg-zinc-900 hover:bg-black text-white rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm"
-        >
-          {user?.role === "CLIENT" ? (
-            <>
-              <LayoutDashboard size={13} />
-              <span className="text-xs font-bold">Post a project</span>
-            </>
-          ) : (
-            <>
-              <Search size={13} />
-              <span className="text-xs font-bold">Find work</span>
-            </>
-          )}
-        </Link>
       </div>
 
       <div className="flex-grow space-y-8 overflow-y-auto px-2">
