@@ -24,6 +24,12 @@ model User {
   proposal      Proposal[]
   kyc KYC?
   bio           String?    @default("")
+
+  // Support & Notifications
+  supportTickets SupportTicket[] @relation("UserTickets")
+  assignedTickets SupportTicket[] @relation("AdminTickets")
+  supportMessages SupportMessage[]
+  notifications   Notification[]
 }
 
 model Project {
@@ -148,10 +154,49 @@ model Proposal {
   @@unique([projectId, freelancerId])
 
 }
+model SupportTicket {
+  id          String      @id @default(uuid())
+  userId      String      // The user who opened the ticket
+  adminId     String?     // The support agent assigned (optional)
+  subject     String
+  category    String      @default("GENERAL") // GENERAL, PAYMENT, TECHNICAL, DISPUTE
+  status      String      @default("OPEN")    // OPEN, IN_PROGRESS, CLOSED
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user        User        @relation("UserTickets", fields: [userId], references: [id])
+  admin       User?       @relation("AdminTickets", fields: [adminId], references: [id])
+  messages    SupportMessage[]
+}
+
+model SupportMessage {
+  id          String      @id @default(uuid())
+  ticketId    String
+  senderId    String      // Can be the User or the Admin
+  content     String
+  createdAt   DateTime    @default(now())
+
+  ticket      SupportTicket @relation(fields: [ticketId], references: [id])
+  sender      User          @relation(fields: [senderId], references: [id])
+}
+model Notification {
+  id          String      @id @default(uuid())
+  userId      String
+  title       String
+  message     String
+  type        String      @default("INFO") // INFO, SUCCESS, WARNING
+  isRead      Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+
+  user        User        @relation(fields: [userId], references: [id])
+}
+
+
 
 enum Role {
   CLIENT
   FREELANCER
+  ADMIN
 }
 
 enum ProjectStatus {
