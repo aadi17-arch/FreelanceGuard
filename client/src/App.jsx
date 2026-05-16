@@ -14,7 +14,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import SupportList from "./pages/support/SupportList";
 import TicketDetails from "./pages/support/TicketDetails";
-import AdminSupport from "./pages/admin/AdminSupport";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import DisputeDetails from "./pages/disputes/DisputeDetails";
 import DisputesList from "./pages/disputes/DisputesList";
 import Proposals from "./pages/proposals/Proposals";
@@ -63,13 +63,13 @@ function App() {
           
           <Route path="/support" element={<ProtectedRoute><DashboardLayout><SupportList /></DashboardLayout></ProtectedRoute>} />
           <Route path="/support/ticket/:id" element={<ProtectedRoute><DashboardLayout><TicketDetails /></DashboardLayout></ProtectedRoute>} />
-          <Route path="/admin" element={<ProtectedRoute allowedRoles={["ADMIN"]}><DashboardLayout><AdminSupport /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute allowedRoles={["ADMIN"]}><DashboardLayout><AdminDashboard /></DashboardLayout></ProtectedRoute>} />
 
           <Route path="/disputes" element={<ProtectedRoute><DashboardLayout><DisputesList /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dispute/:id" element={<ProtectedRoute><DashboardLayout><DisputeDetails /></DashboardLayout></ProtectedRoute>} />
 
-          <Route path="/contracts" element={<ProtectedRoute><DashboardLayout><Contracts /></DashboardLayout></ProtectedRoute>} />
-          <Route path="/proposals" element={<ProtectedRoute><DashboardLayout><Proposals /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/contracts" element={<ProtectedRoute allowedRoles={["CLIENT", "FREELANCER"]}><DashboardLayout><Contracts /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/proposals" element={<ProtectedRoute allowedRoles={["CLIENT", "FREELANCER"]}><DashboardLayout><Proposals /></DashboardLayout></ProtectedRoute>} />
           <Route path="/analytics" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Network Analytics" /></DashboardLayout></ProtectedRoute>} />
           <Route path="/messages" element={<ProtectedRoute><DashboardLayout><OperationalPlaceholder title="Secure Messaging" /></DashboardLayout></ProtectedRoute>} />
 

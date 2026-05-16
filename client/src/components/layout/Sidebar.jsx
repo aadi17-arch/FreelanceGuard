@@ -3,13 +3,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import {
   ShieldCheck,
-  LayoutDashboard,
+  Grid,
   Search,
-  Wallet,
-  FileText,
+  Zap,
+  Briefcase,
   ClipboardList,
-  HelpCircle,
-  X
+  LifeBuoy,
+  X,
+  Activity,
+  AlertTriangle
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
@@ -23,26 +25,31 @@ export default function Sidebar({ onClose }) {
     navigate("/");
   };
 
-  const navItems = [
-    { name: "Home", path: "/dashboard", icon: <LayoutDashboard size={14} />, section: "Overview" },
-    { name: "My contracts", path: "/contracts", icon: <FileText size={14} />, section: "Overview" },
-    { name: "My wallet", path: "/escrow", icon: <Wallet size={14} />, section: "Finance" },
+  const rawNavItems = [
+    { name: "Home", path: "/dashboard", icon: <Grid size={14} />, section: "Overview", hideFor: ["ADMIN"] },
+    { name: "My contracts", path: "/contracts", icon: <Briefcase size={14} />, section: "Overview", hideFor: ["ADMIN"] },
+    { name: "My wallet", path: "/escrow", icon: <Zap size={14} />, section: "Finance", hideFor: ["ADMIN"] },
     { 
       name: user?.role?.toUpperCase() === "CLIENT" ? "Received bids" : "My bids", 
       path: "/proposals", 
       icon: <ClipboardList size={14} />, 
-      section: "Finance" 
+      section: "Finance",
+      hideFor: ["ADMIN"]
     },
-    { name: "Verification", path: "/kyc", icon: <ShieldCheck size={14} />, section: "Account" },
-    { name: "Support hub", path: "/support", icon: <HelpCircle size={14} />, section: "Account" },
-    { name: "Disputes", path: "/disputes", icon: <HelpCircle size={14} />, section: "Account" },
+    { name: "Verification", path: "/kyc", icon: <ShieldCheck size={14} />, section: "Account", hideFor: ["ADMIN"] },
+    { name: "Support hub", path: "/support", icon: <LifeBuoy size={14} />, section: "Account", hideFor: ["ADMIN"] },
+    { name: "Disputes", path: "/disputes", icon: <AlertTriangle size={14} />, section: "Account", hideFor: ["ADMIN"] },
     ...(user?.role?.toUpperCase() === "ADMIN"
-      ? [{ name: "Admin center", path: "/admin", icon: <ShieldCheck size={14} />, section: "Management" }]
+      ? [{ name: "Solution center", path: "/admin", icon: <Activity size={14} />, section: "Management" }]
       : []
     ),
   ];
 
-  const sections = ["Overview", "Finance", "Account", ...(user?.role?.toUpperCase() === "ADMIN" ? ["Management"] : [])];
+  const navItems = rawNavItems.filter(item => 
+    !item.hideFor || !item.hideFor.includes(user?.role?.toUpperCase())
+  );
+
+  const sections = [...new Set(navItems.map(item => item.section))];
 
   return (
     <aside className="h-screen w-56 bg-zinc-50 border-r border-zinc-200 flex flex-col py-6 z-[60]">
@@ -96,6 +103,51 @@ export default function Sidebar({ onClose }) {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* User Profile & KYC Alert */}
+      <div className="mt-auto pt-6 px-4 space-y-4">
+        <div className="relative">
+          {(!user?.kyc || user?.kyc?.status === 'PENDING') && (
+            <div className="px-1 mb-2">
+              <Link 
+                to="/kyc" 
+                onClick={onClose}
+                className="flex items-center gap-1.5 group transition-all"
+              >
+                <div className={`w-1 h-1 rounded-full animate-pulse ${!user?.kyc ? 'bg-rose-500' : 'bg-amber-500'}`} />
+                <span className={`text-[10px] font-black uppercase tracking-[0.1em] ${!user?.kyc ? 'text-rose-600' : 'text-amber-600'}`}>
+                  {!user?.kyc ? "KYC needed" : "Verification pending"}
+                </span>
+              </Link>
+            </div>
+          )}
+
+          <div className="flex items-center justify-between p-2.5 bg-white border border-zinc-200 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2.5 min-w-0 px-1">
+              <div className="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center text-white text-xs font-black shrink-0">
+                {user?.name?.[0]}
+              </div>
+              <div className="min-w-0">
+                <p className="text-[12px] font-bold text-zinc-900 truncate">{user?.name?.split(' ')[0]}</p>
+                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">{user?.role}</p>
+              </div>
+            </div>
+            
+            {(!user?.kyc || user?.kyc?.status === 'PENDING') && (
+              <div className="w-6 h-6 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-500 shrink-0">
+                <AlertTriangle size={12} />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <button 
+          onClick={handleLogout}
+          className="w-full py-2.5 text-zinc-400 hover:text-zinc-900 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-zinc-100 rounded-xl"
+        >
+          End Session
+        </button>
       </div>
     </aside>
   );

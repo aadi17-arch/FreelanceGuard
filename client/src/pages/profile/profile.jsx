@@ -34,9 +34,7 @@ export default function Profile() {
       setEditName(user.name || "");
       setEditBio(
         user.bio ||
-          "Experienced " +
-            (user.role?.toLowerCase() === "client" ? "client" : "freelancer") +
-            " focused on high-quality delivery and secure collaboration."
+          "Professional platform administrator focused on system integrity and user resolution."
       );
       setEditEmail(user.email || "");
     }
@@ -55,16 +53,10 @@ export default function Profile() {
           let icon = <Wallet size={14} className="text-emerald-500" />;
 
           if (isRelease) {
-            title =
-              user?.role === "CLIENT"
-                ? `Payment released for ${tx.contract?.project?.title || "project"}`
-                : `Payment received for ${tx.contract?.project?.title || "project"}`;
+            title = `Payment released for ${tx.contract?.project?.title || "project"}`;
             icon = <CheckCircle2 size={14} className="text-emerald-500" />;
           } else if (isDeposit) {
-            title =
-              user?.role === "CLIENT"
-                ? `Payment held for ${tx.contract?.project?.title || "project"}`
-                : `Payment secured for ${tx.contract?.project?.title || "project"}`;
+            title = `Payment secured for ${tx.contract?.project?.title || "project"}`;
             icon = <CreditCard size={14} className="text-amber-500" />;
           }
 
@@ -126,7 +118,7 @@ export default function Profile() {
             </h1>
             <div className="flex flex-col sm:flex-row items-center gap-2 text-xs font-bold text-zinc-400">
               <span className="text-zinc-900">
-                {user?.role === "CLIENT" ? "Client" : "Freelancer"}
+                {user?.role === "ADMIN" ? "Administrator" : user?.role === "CLIENT" ? "Client" : "Freelancer"}
               </span>
               <span className="hidden sm:inline">•</span>
               <span>Joined {new Date(user?.createdAt).getFullYear()}</span>
@@ -173,7 +165,7 @@ export default function Profile() {
                  {[
                    { label: "Email", value: editEmail || user?.email },
                    { label: "User ID", value: `ID-${user?.id?.slice(-12)}`, font: "font-mono" },
-                   { label: "Account type", value: user?.role === "CLIENT" ? "Client" : "Freelancer" }
+                   { label: "Account type", value: user?.role === "ADMIN" ? "Administrator" : user?.role === "CLIENT" ? "Client" : "Freelancer" }
                  ].map((detail, i) => (
                    <div key={i} className="space-y-1">
                       <p className="text-xs font-bold text-zinc-400">{detail.label}</p>

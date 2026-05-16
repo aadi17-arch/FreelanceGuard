@@ -145,3 +145,24 @@ export const uploadEvidence = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+export const clearDispute = async (req, res) => {
+  try{const { id } = req.params;
+  const { resolution, currentStatus } = req.body;
+  const dispute=await prisma.dispute.update({
+    where:{id:id},
+    data: {
+      status: "RESOLVED",
+      resolution:resolution||"Admin final decision."
+    },
+    include:{milestone:true}
+  });
+  await prisma.milestone.update({
+    where: { id: dispute.milestoneId },
+    data:{status:"RESOLVED"}
+  });
+    res.status(200).json({message:"Case resolved and achieved",dispute});
+  }
+  catch (e) {
+    return res.status(500).json({message:"Server error"});
+  }
+}

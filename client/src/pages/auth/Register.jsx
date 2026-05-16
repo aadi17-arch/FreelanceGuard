@@ -18,7 +18,7 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    role: "FREELANCER",
+    role: "FREELANCER", // Defaults to Freelancer, but now selectable
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -76,22 +76,22 @@ export default function Register() {
 
         <div className="bg-white border border-zinc-100 rounded-[2.5rem] p-6 sm:p-8 lg:p-10 shadow-sm">
            <form onSubmit={handleSubmit} className="space-y-6">
-             <div className="flex bg-zinc-50 p-1 rounded-2xl border border-zinc-100">
-               {["FREELANCER", "CLIENT"].map((role) => (
-                 <button
-                   key={role}
-                   type="button"
-                   onClick={() => setFormData({ ...formData, role })}
-                   className={`flex-1 py-3 text-xs font-bold rounded-xl transition-all ${
-                     formData.role === role 
-                     ? "bg-white text-zinc-900 shadow-sm border border-zinc-100" 
-                     : "text-zinc-400 hover:text-zinc-600"
-                   }`}
-                 >
-                   {role === "FREELANCER" ? "I am a Freelancer" : "I am a Client"}
-                 </button>
-               ))}
-             </div>
+              <div className="flex p-1.5 bg-zinc-100/50 rounded-xl mb-8 border border-zinc-200/50">
+                {["FREELANCER", "CLIENT"].map((role) => (
+                  <button
+                    key={role}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, role })}
+                    className={`flex-1 py-3 text-xs font-bold rounded-lg transition-all active:scale-95 ${
+                      formData.role === role 
+                      ? "bg-zinc-900 text-white shadow-lg shadow-zinc-900/10" 
+                      : "text-zinc-500 hover:text-zinc-800"
+                    }`}
+                  >
+                    {role === "FREELANCER" ? "I am a Freelancer" : "I am a Client"}
+                  </button>
+                ))}
+              </div>
 
              <div className="space-y-4">
                <div className="space-y-2">

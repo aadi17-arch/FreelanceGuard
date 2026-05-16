@@ -16,17 +16,16 @@ const authMiddleware = (req, res, next) => {
     return res.status(401).json({ message: "Invalid Token Error" });
   }
 };
-export const adminMiddleware = (req, res, next) => {
+export const roleMiddleware = (allowedRoles) => (req, res, next) => {
   try {
-    if (req.user && req.user.role === 'ADMIN') {
+    if (req.user && allowedRoles.includes(req.user.role)) {
       next();
+    } else {
+      res.status(403).json({ message: `Access denied. ${allowedRoles.join(" or ")} privileges required` });
     }
-    else {
-      res.status(403).json({message:"Access denied. Admin privileges required"});
-    }
+  } catch (e) {
+    return res.status(500).json({ message: "Server error during role validation." });
   }
-  catch (e) {
-    return res.status(500).json({message:"Server error."})
-  }
-}
+};
+
 export default authMiddleware;

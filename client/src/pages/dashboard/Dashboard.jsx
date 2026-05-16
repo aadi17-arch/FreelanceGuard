@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
-import { 
-  ShieldCheck as ShieldIcon, 
-  BriefcaseBusiness as CaseIcon, 
-  Clock as ClockIcon, 
+import {
+  ShieldCheck as ShieldIcon,
+  BriefcaseBusiness as CaseIcon,
+  Clock as ClockIcon,
   AlertTriangle as AlertIcon,
   LockKeyhole as LockIcon,
   ChevronRight as ChevronIcon,
@@ -73,26 +73,41 @@ export default function Dashboard() {
             </div>
          </section>
 
-         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-               { label: "Active projects", value: stats.activeProjects || 0, icon: <CaseIcon /> },
-               { label: "Pending milestones", value: stats.pendingMilestones || 0, icon: <ClockIcon /> },
-               { label: "Open cases", value: stats.openDisputes || 0, icon: <AlertIcon /> },
+               {
+                 label: "Active projects",
+                 value: stats.activeProjects || 0,
+                 icon: <CaseIcon />,
+                 color: "bg-sky-50 text-sky-600 border-sky-100 shadow-sm shadow-sky-100/50"
+               },
+               {
+                 label: "Pending milestones",
+                 value: stats.pendingMilestones || 0,
+                 icon: <ClockIcon />,
+                 color: "bg-amber-50 text-amber-600 border-amber-100 shadow-sm shadow-amber-100/50"
+               },
+               {
+                 label: "Open cases",
+                 value: stats.openDisputes || 0,
+                 icon: <AlertIcon />,
+                 color: "bg-rose-50 text-rose-600 border-rose-100 shadow-sm shadow-rose-100/50"
+               },
             ].map((stat, i) => (
-               <div key={i} className="bg-white border border-zinc-200 rounded-[10px] p-[20px] flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-zinc-50 text-emerald-600 shrink-0">
-                     {React.cloneElement(stat.icon, { size: 18 })}
+               <div key={i} className="bg-white border border-zinc-200 rounded-xl p-5 flex items-center gap-4 transition-all hover:scale-[1.02]">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center border shrink-0 ${stat.color}`}>
+                     {React.cloneElement(stat.icon, { size: 20, strokeWidth: 2.5 })}
                   </div>
                   <div>
-                     <p className="text-[28px] font-bold text-zinc-900 tracking-tighter leading-none mb-1">{stat.value}</p>
-                     <p className="text-[12px] font-bold text-zinc-500 leading-none">{stat.label}</p>
+                     <p className="text-3xl font-black text-zinc-900 tracking-tighter leading-none mb-1">{stat.value}</p>
+                     <p className="text-[11px] font-black uppercase tracking-widest text-zinc-400 leading-none">{stat.label}</p>
                   </div>
                </div>
             ))}
-         </section>
+          </section>
 
-         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2 space-y-4">
+         <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-4">
                <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2 px-1">
                   <div className="w-1 h-4 bg-emerald-500 rounded-full" />
                   What's happening
@@ -126,68 +141,7 @@ export default function Dashboard() {
                   )}
                </div>
             </div>
-
-            <div className="space-y-4">
-               <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2 px-1">
-                  <div className="w-1 h-4 bg-emerald-500 rounded-full" />
-                  Your account
-               </h3>
-
-               {!user?.kyc ? (
-                  <div className="bg-white border border-zinc-200 rounded-[10px] p-[20px] space-y-4">
-                     <div className="space-y-2">
-                        <div className="w-10 h-10 bg-zinc-50 rounded-lg flex items-center justify-center text-rose-500">
-                           <AlertIcon size={18} />
-                        </div>
-                        <h4 className="text-sm font-bold text-rose-600">Action required</h4>
-                        <p className="text-xs text-zinc-500 font-medium leading-relaxed">
-                           Verify your identity to unlock safe holding and secure payments.
-                        </p>
-                     </div>
-                     <Link to="/kyc" className="block">
-                        <button className="w-full py-3 bg-zinc-900 text-white rounded-[10px] text-xs font-bold transition-all">
-                           Start verification
-                        </button>
-                     </Link>
-                  </div>
-               ) : user?.kyc?.status === 'PENDING' ? (
-                  <div className="bg-white border border-zinc-200 rounded-[10px] p-[20px] space-y-4">
-                     <div className="space-y-2">
-                        <div className="w-10 h-10 bg-zinc-50 rounded-lg flex items-center justify-center text-zinc-400">
-                           <ClockIcon size={18} />
-                        </div>
-                        <h4 className="text-sm font-bold text-zinc-900">Review in progress</h4>
-                        <p className="text-xs text-zinc-500 font-medium leading-relaxed">
-                           We are currently checking your documents. This usually takes less than 24 hours.
-                        </p>
-                     </div>
-                  </div>
-               ) : (
-                  <div className="bg-white border border-zinc-200 rounded-[10px] p-[20px] space-y-4">
-                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-zinc-50 text-emerald-600 rounded-lg flex items-center justify-center">
-                           <ShieldIcon size={18} />
-                        </div>
-                        <div className="min-w-0">
-                           <h4 className="text-sm font-bold text-zinc-900 mb-1">Verified account</h4>
-                           <p className="text-xs text-zinc-500 font-medium">
-                              Trust score: 98%
-                           </p>
-                        </div>
-                      </div>
-                      <div className="pt-4 border-t border-zinc-100 space-y-3">
-                         <div className="flex justify-between items-center text-xs font-bold">
-                            <span className="text-zinc-500">Account health</span>
-                            <span className="text-emerald-600">Excellent</span>
-                         </div>
-                         <div className="h-1.5 w-full bg-zinc-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-emerald-500 w-[98%] rounded-full" />
-                         </div>
-                      </div>
-                   </div>
-                )}
-             </div>
-          </div>
+         </div>
        </div>
     );
 }

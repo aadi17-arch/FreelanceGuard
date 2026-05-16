@@ -10,7 +10,8 @@ import {
   Fingerprint,
   Lock,
   Clock,
-  Camera
+  Camera,
+  ChevronDown
 } from "lucide-react";
 
 export default function Verification() {
@@ -119,116 +120,87 @@ export default function Verification() {
   }
 
   return (
-    <div className="space-y-8 lg:space-y-12 pb-10">
-      <div className="space-y-4">
+    <div className="max-w-2xl mx-auto pb-10 px-0 sm:px-4 lg:px-0">
+      <div className="space-y-4 mb-10">
         {statusMessage && (
-          <div className={`p-4 rounded-[10px] border flex items-center gap-3 ${statusMessage.type === 'success' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-rose-50 border-rose-100 text-rose-600'
+          <div className={`p-4 rounded-xl border flex items-center gap-3 ${statusMessage.type === 'success' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-rose-50 border-rose-100 text-rose-600'
             }`}>
-            <Fingerprint className="w-4 h-4 shrink-0" />
-            <span className="text-xs font-bold">{statusMessage.msg}</span>
+            <Fingerprint className="w-5 h-5 shrink-0" />
+            <span className="text-sm font-bold">{statusMessage.msg}</span>
           </div>
         )}
-
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          <span className="bg-emerald-50 text-emerald-600 rounded-full px-4 py-1.5 text-xs font-bold">
-            We usually check your ID within 24 hours
-          </span>
-        </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-10 max-w-[1000px]">
-        <div className="flex-grow max-w-2xl">
-        <div className="space-y-8">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="space-y-4">
-              <label className="text-sm font-bold text-zinc-900">1. Choose your document type</label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {docTypes.map((type) => (
-                  <button
-                    key={type.id}
-                    type="button"
-                    onClick={() => setDocumentType(type.id)}
-                    className={`flex flex-col items-center justify-center text-center p-5 rounded-xl border transition-all gap-4 ${documentType === type.id
-                        ? "bg-zinc-900 text-white border-zinc-900"
-                        : "bg-white text-zinc-900 border-zinc-200 hover:border-zinc-400"
-                      }`}
-                  >
-                    <div className={`${documentType === type.id ? 'text-white' : 'text-emerald-500'} transition-colors`}>
-                      {type.icon}
-                    </div>
-                    <span className="text-xs font-bold">{type.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <label className="text-sm font-bold text-zinc-900">2. Upload a photo of your ID</label>
-              <div
-                className={`relative border-2 border-dashed rounded-xl p-8 lg:p-12 transition-all cursor-pointer text-center ${file ? "border-emerald-500 bg-emerald-50" : "border-zinc-200 bg-zinc-50 hover:border-zinc-400"
-                  }`}
-                onClick={() => document.getElementById('file-upload').click()}
-              >
-                <input id="file-upload" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-
-                <div className="flex flex-col items-center gap-4">
-                  {preview ? (
-                    <div className="relative">
-                      <img src={preview} alt="Preview" className="w-full max-h-48 object-contain rounded-xl" />
-                      <div className="absolute top-2 right-2 p-2 bg-zinc-900 text-white rounded-lg">
-                        <Camera size={14} />
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-emerald-500 border border-zinc-100">
-                        <Camera size={20} />
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-sm font-bold text-zinc-900">Choose a photo</p>
-                        <p className="text-xs text-zinc-500">Accepted files: JPG or PNG, max 10MB</p>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading || !file}
-              className="w-full py-4 bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-black transition-all flex items-center justify-center gap-4 disabled:opacity-30"
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Step 1 */}
+        <div className="space-y-3">
+          <div className="flex flex-col gap-0.5">
+            <label className="text-sm font-bold text-zinc-900">1. Select your document</label>
+            <p className="text-[11px] font-medium text-zinc-400">Pick the ID you have with you right now.</p>
+          </div>
+          
+          <div className="relative">
+            <select
+              value={documentType}
+              onChange={(e) => setDocumentType(e.target.value)}
+              className="w-full h-12 pl-4 pr-10 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-bold text-zinc-900 appearance-none focus:outline-none focus:border-zinc-900 transition-all cursor-pointer"
             >
-              {loading ? "Sending..." : "Start verification"}
-            </button>
-          </form>
+              {docTypes.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.label}
+                </option>
+              ))}
+            </select>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+              <ChevronDown size={14} />
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className="w-full lg:w-80 space-y-4 shrink-0">
-        <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 flex items-start gap-4">
-          <div className="text-emerald-500 mt-0.5"><Lock size={18} /></div>
-          <div>
-            <p className="text-sm font-bold text-zinc-900">Safe and secure</p>
-            <p className="text-xs text-zinc-500 mt-1">Your data is fully protected.</p>
+        {/* Step 2 */}
+        <div className="space-y-3">
+          <div className="flex flex-col gap-0.5">
+            <label className="text-sm font-bold text-zinc-900">2. Photo of your ID</label>
+            <p className="text-[11px] font-medium text-zinc-400">Make sure we can see your name and photo clearly.</p>
+          </div>
+          <div
+            className={`relative border border-dashed rounded-xl p-6 sm:p-10 transition-all cursor-pointer text-center ${file ? "border-emerald-500 bg-emerald-50/30" : "border-zinc-200 bg-zinc-50/30 hover:border-zinc-400"
+              }`}
+            onClick={() => document.getElementById('file-upload').click()}
+          >
+            <input id="file-upload" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+
+            <div className="flex flex-col items-center gap-4">
+              {preview ? (
+                <div className="relative w-full max-w-[280px] mx-auto">
+                  <img src={preview} alt="Preview" className="w-full aspect-[4/3] object-cover rounded-lg shadow-sm border-2 border-white" />
+                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-zinc-900 text-white rounded-lg flex items-center justify-center shadow-md border border-white">
+                    <Camera size={14} />
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-emerald-500 border border-zinc-100">
+                    <Camera size={20} />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-zinc-900 text-center">Tap to upload</p>
+                    <p className="text-[10px] text-zinc-400 font-medium tracking-wide uppercase">JPG or PNG only</p>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
-        <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 flex items-start gap-4">
-          <div className="text-emerald-500 mt-0.5"><ShieldCheck size={18} /></div>
-          <div>
-            <p className="text-sm font-bold text-zinc-900">Your privacy</p>
-            <p className="text-xs text-zinc-500 mt-1">We never share your personal information.</p>
-          </div>
-        </div>
-        <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 flex items-start gap-4">
-          <div className="text-emerald-500 mt-0.5"><CheckCircle2 size={18} /></div>
-          <div>
-            <p className="text-sm font-bold text-zinc-900">Identity confirmed</p>
-            <p className="text-xs text-zinc-500 mt-1">Your identity is now confirmed.</p>
-          </div>
-        </div>
-      </div>
+
+        <button
+          type="submit"
+          disabled={loading || !file}
+          className="w-full py-4 bg-zinc-900 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-black transition-all flex items-center justify-center gap-3 disabled:opacity-20 active:scale-95 shadow-lg shadow-zinc-900/10"
+        >
+          {loading ? <RefreshCcw size={16} className="animate-spin" /> : "Send for review"}
+        </button>
+      </form>
     </div>
-  </div>
   );
 }

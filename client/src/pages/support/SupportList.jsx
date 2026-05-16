@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { 
-  HelpCircle, 
-  Plus, 
-  MessageSquare, 
-  Clock, 
-  CheckCircle2, 
+import {
+  HelpCircle,
+  Plus,
+  MessageSquare,
+  Clock,
+  CheckCircle2,
   AlertCircle,
   ChevronRight,
   Search
@@ -72,48 +72,31 @@ export default function SupportList() {
   };
 
   return (
-    <div className="w-full space-y-8">
+    <div className="w-full max-w-2xl mx-auto space-y-6">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 text-rui-success">
-            <HelpCircle size={16} />
-            <span className="text-[10px] font-bold tracking-widest uppercase">Support hub</span>
-          </div>
-          <h1 className="text-3xl font-bold text-zinc-900 tracking-tight">How can we help?</h1>
-          <p className="text-zinc-500 text-sm">Track your requests and talk to our team.</p>
-        </div>
+      <div className="flex items-center justify-between gap-4 border-b border-zinc-100 pb-6">
+        <h1 className="text-xl font-bold text-zinc-900 tracking-tight">Support requests</h1>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="h-11 px-6 bg-rui-dark hover:bg-black text-white rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm text-sm font-bold"
+          className="h-10 px-5 bg-zinc-900 hover:bg-black text-white rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm text-xs font-bold"
         >
-          <Plus size={16} />
+          <Plus size={14} />
           Create ticket
         </button>
       </div>
 
       {/* Tickets List */}
-      <div className="bg-white border border-zinc-200 rounded-[2rem] overflow-hidden shadow-sm">
-        <div className="p-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
-          <h2 className="text-sm font-bold text-zinc-900 uppercase tracking-widest opacity-40">Your tickets</h2>
-        </div>
-
+      <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">
         {loading ? (
-          <div className="p-12 flex flex-col items-center justify-center space-y-4">
-            <div className="w-6 h-6 border-2 border-rui-dark border-t-transparent rounded-full" />
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Loading...</p>
+          <div className="p-12 flex flex-col items-center justify-center space-y-3">
+            <div className="w-5 h-5 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : tickets.length === 0 ? (
-          <div className="p-20 flex flex-col items-center justify-center text-center space-y-4">
-            <div className="w-16 h-16 bg-zinc-50 rounded-[2.5rem] flex items-center justify-center text-zinc-200">
-              <MessageSquare size={32} />
+          <div className="p-16 flex flex-col items-center justify-center text-center space-y-3">
+            <div className="w-12 h-12 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-200">
+              <MessageSquare size={24} />
             </div>
-            <div className="space-y-1">
-              <h3 className="text-lg font-bold text-zinc-900">No active tickets</h3>
-              <p className="text-sm text-zinc-500 max-w-xs mx-auto">
-                If you encounter any issues, our support team is available 24/7 to assist you.
-              </p>
-            </div>
+            <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">No active chats</p>
           </div>
         ) : (
           <div className="divide-y divide-zinc-100">
@@ -121,34 +104,22 @@ export default function SupportList() {
               <Link
                 key={ticket.id}
                 to={`/support/ticket/${ticket.id}`}
-                className="flex items-center justify-between p-6 hover:bg-zinc-50/50 transition-colors group"
+                className="flex items-center justify-between p-4 hover:bg-zinc-50/50 transition-colors group"
               >
-                <div className="flex items-start gap-4">
-                  <div className={`mt-1 w-10 h-10 rounded-xl flex items-center justify-center border ${getStatusColor(ticket.status)}`}>
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center border shrink-0 ${getStatusColor(ticket.status)}`}>
                     {getStatusIcon(ticket.status)}
                   </div>
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{ticket.category}</span>
-                      <span className="text-[10px] text-zinc-300">•</span>
-                      <span className="text-[10px] text-zinc-400 font-medium">
-                        {new Date(ticket.updatedAt).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <h3 className="text-[15px] font-bold text-zinc-900 group-hover:text-rui-success transition-colors">
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-bold text-zinc-900 truncate">
                       {ticket.subject}
                     </h3>
-                    <p className="text-xs text-zinc-500 line-clamp-1 max-w-md">
-                      {ticket.messages?.[0]?.content || "Waiting for initial message..."}
+                    <p className="text-[10px] text-zinc-400 font-medium">
+                      Last update: {new Date(ticket.updatedAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className={`px-3 py-1 rounded-full text-[10px] font-bold border uppercase tracking-widest ${getStatusColor(ticket.status)}`}>
-                    {ticket.status}
-                  </div>
-                  <ChevronRight size={16} className="text-zinc-300 group-hover:text-zinc-900 transition-colors" />
-                </div>
+                <ChevronRight size={14} className="text-zinc-300 group-hover:text-zinc-900 transition-colors shrink-0" />
               </Link>
             ))}
           </div>
@@ -156,32 +127,32 @@ export default function SupportList() {
       </div>
 
       {/* New Ticket Modal */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="New support ticket">
-        <form onSubmit={handleCreateTicket} className="space-y-6">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create ticket">
+        <form onSubmit={handleCreateTicket} className="space-y-5 p-2">
           <div className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Subject</label>
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-zinc-400">Subject</label>
               <input
                 required
                 type="text"
                 placeholder="What do you need help with?"
                 value={newTicket.subject}
                 onChange={(e) => setNewTicket({ ...newTicket, subject: e.target.value })}
-                className="w-full h-12 bg-zinc-50 border border-zinc-200 rounded-xl px-4 text-sm focus:outline-none focus:ring-1 focus:ring-rui-success focus:border-rui-success transition-all"
+                className="w-full h-11 bg-zinc-50 border border-zinc-200 rounded-xl px-4 text-xs font-medium focus:outline-none focus:border-zinc-900 transition-all"
               />
             </div>
-            
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Category</label>
+
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-zinc-400">Category</label>
               <div className="grid grid-cols-2 gap-2">
                 {["GENERAL", "PAYMENT", "TECHNICAL", "DISPUTE"].map(cat => (
                   <button
                     key={cat}
                     type="button"
                     onClick={() => setNewTicket({ ...newTicket, category: cat })}
-                    className={`h-11 rounded-xl text-[10px] font-bold uppercase tracking-wider border transition-all ${
-                      newTicket.category === cat 
-                        ? "bg-rui-dark text-white border-rui-dark" 
+                    className={`h-10 rounded-xl text-[10px] font-bold border transition-all ${
+                      newTicket.category === cat
+                        ? "bg-zinc-900 text-white border-zinc-900"
                         : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300"
                     }`}
                   >
@@ -191,15 +162,15 @@ export default function SupportList() {
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Message</label>
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-zinc-400">Message</label>
               <textarea
                 required
                 rows={4}
-                placeholder="Tell us more about your issue..."
+                placeholder="Explain the issue clearly..."
                 value={newTicket.content}
                 onChange={(e) => setNewTicket({ ...newTicket, content: e.target.value })}
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-sm focus:outline-none focus:ring-1 focus:ring-rui-success focus:border-rui-success transition-all resize-none"
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-xs font-medium focus:outline-none focus:border-zinc-900 transition-all resize-none"
               />
             </div>
           </div>
@@ -208,16 +179,16 @@ export default function SupportList() {
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="flex-1 h-12 text-zinc-400 text-xs font-bold uppercase tracking-widest hover:text-zinc-900 transition-all"
+              className="flex-1 h-11 text-zinc-400 text-[11px] font-bold hover:text-zinc-900 transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="flex-[2] h-12 bg-rui-success hover:bg-emerald-700 disabled:bg-zinc-200 text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-emerald-100 transition-all flex items-center justify-center"
+              className="flex-[2] h-11 bg-zinc-900 hover:bg-black disabled:bg-zinc-200 text-white rounded-xl text-[11px] font-bold shadow-sm transition-all flex items-center justify-center"
             >
-              {submitting ? "Sending..." : "Send request"}
+              {submitting ? "Sending..." : "Create ticket"}
             </button>
           </div>
         </form>
