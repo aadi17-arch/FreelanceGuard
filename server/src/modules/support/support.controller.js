@@ -34,8 +34,13 @@ export const getUserTicket = async (req, res) => {
           messages: true
         }
     });
-    if (!supportTicket || (supportTicket.userId!==userId||req.user.role !== "ADMIN")) {
-      return res.status(403).json({message:"Unauthorized Access or Ticket not found."})
+    if (!supportTicket) {
+      return res.status(404).json({message:"Ticket not found."})
+    }
+
+
+    if (supportTicket.userId !== userId && req.user.role !== "ADMIN") {
+      return res.status(403).json({message:"Unauthorized Access."})
     }
     res.status(200).json(supportTicket);
   } catch (e) {

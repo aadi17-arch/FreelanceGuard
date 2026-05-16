@@ -10,11 +10,13 @@ import {
   ChevronRight,
   Search
 } from "lucide-react";
-import { getUserTickets, createTicket } from "../../services/supportService";
+import { getUserTickets, getAllTickets, createTicket } from "../../services/supportService";
 import Modal from "../../components/ui/Modal";
+import { useAuth } from "../../context/AuthContext";
 import { useSnackbar } from "notistack";
 
 export default function SupportList() {
+  const { user } = useAuth();
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,16 +24,18 @@ export default function SupportList() {
   const [submitting, setSubmitting] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
+  const isAdmin = user?.role?.toUpperCase() === "ADMIN";
+
   const fetchTickets = React.useCallback(async () => {
     try {
-      const data = await getUserTickets();
+      const data = isAdmin ? await getAllTickets() : await getUserTickets();
       setTickets(data);
     } catch (error) {
       enqueueSnackbar(error, { variant: "error" });
     } finally {
       setLoading(false);
     }
-  }, [enqueueSnackbar]);
+  }, [enqueueSnackbar, isAdmin]);
 
   useEffect(() => {
     fetchTickets();
@@ -71,18 +75,22 @@ export default function SupportList() {
     }
   };
 
+
+
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
       {/* Header Section */}
       <div className="flex items-center justify-between gap-4 border-b border-zinc-100 pb-6">
         <h1 className="text-xl font-bold text-zinc-900 tracking-tight">Support requests</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="h-10 px-5 bg-zinc-900 hover:bg-black text-white rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm text-xs font-bold"
-        >
-          <Plus size={14} />
-          Create ticket
-        </button>
+        {!isAdmin && (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="h-10 px-5 bg-zinc-900 hover:bg-black text-white rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm text-xs font-bold"
+          >
+            <Plus size={14} />
+            Create ticket
+          </button>
+        )}
       </div>
 
       {/* Tickets List */}
