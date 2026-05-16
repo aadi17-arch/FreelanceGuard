@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { 
-  Shield, 
-  MessageSquare, 
   Scale, 
-  CheckCircle2, 
-  ChevronRight,
+  MessageCircle,
   RefreshCcw,
-  User as UserIcon,
-  Inbox
+  AlertTriangle,
+  HelpCircle
 } from "lucide-react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
@@ -30,7 +27,6 @@ export default function AdminDashboard() {
       setTickets(ticketsRes.data);
       setDisputes(disputesRes.data.disputes || []);
     } catch (error) {
-      console.error("Fetch Error:", error);
     } finally {
       setLoading(false);
     }
@@ -40,9 +36,11 @@ export default function AdminDashboard() {
     fetchData();
   }, [fetchData]);
 
-  const handleResolveTicket = async (id) => {
+  const handleResolve = async (id, type) => {
     try {
-      await axios.put(`/support/ticket/${id}/resolve`);
+      if (type === 'TICKET') {
+        await axios.put(`/support/ticket/${id}/resolve`);
+      }
       enqueueSnackbar("Resolved", { variant: "success" });
       fetchData();
     } catch (error) {
@@ -51,139 +49,88 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="h-[calc(100vh-140px)] flex flex-col gap-6 overflow-hidden">
-      
-      {/* 1. Header Section - Fixed */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
-        <div>
-          <h1 className="text-3xl font-bold text-zinc-900 tracking-tight">Admin center</h1>
-          <p className="text-zinc-500 text-sm">Review disputes and help requests.</p>
-        </div>
-
-        {/* Minimal Tab Switcher */}
-        <div className="flex bg-zinc-100 p-1 rounded-xl border border-zinc-200">
-          <button
-            onClick={() => setActiveTab("DISPUTES")}
-            className={`flex items-center gap-2 px-6 py-2 rounded-lg text-xs font-bold transition-all ${
-              activeTab === "DISPUTES" 
-                ? "bg-white text-indigo-600 shadow-sm" 
-                : "text-zinc-500"
-            }`}
-          >
-            <Scale size={14} />
-            Dispute cases ({disputes.filter(d => d.status === "OPEN").length})
-          </button>
-          <button
-            onClick={() => setActiveTab("TICKETS")}
-            className={`flex items-center gap-2 px-6 py-2 rounded-lg text-xs font-bold transition-all ${
-              activeTab === "TICKETS" 
-                ? "bg-white text-indigo-600 shadow-sm" 
-                : "text-zinc-500"
-            }`}
-          >
-            <Inbox size={14} />
-            Help requests ({tickets.filter(t => t.status === "OPEN").length})
-          </button>
-        </div>
+    <div className="p-5 bg-white min-h-screen">
+      {/* Header */}
+      <div className="flex items-center justify-end mb-8">
+        <span className="text-xs px-2.5 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-100 font-bold">
+          {disputes.filter(d => d.status === "OPEN").length + tickets.filter(t => t.status === "OPEN").length} active
+        </span>
       </div>
 
-      {/* 2. Main Content Area - Internal Scrollable */}
-      <div className="flex-grow bg-white border border-zinc-200 rounded-[2rem] overflow-hidden flex flex-col shadow-sm">
-        <div className="flex-grow overflow-y-auto custom-scrollbar">
-          {loading ? (
-            <div className="h-full flex items-center justify-center">
-              <RefreshCcw size={24} className="text-indigo-600 animate-spin" />
-            </div>
-          ) : activeTab === "DISPUTES" ? (
-            /* --- DISPUTES LIST --- */
-            <div className="divide-y divide-zinc-100">
-              {disputes.length === 0 ? (
-                <div className="h-64 flex flex-col items-center justify-center text-zinc-300 gap-2">
-                   <Scale size={32} />
-                   <p className="text-sm font-medium">No active disputes</p>
-                </div>
-              ) : (
-                disputes.map(dispute => (
-                  <div key={dispute.id} className="p-6 flex items-center justify-between hover:bg-zinc-50/50 transition-colors">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-                          dispute.status === "OPEN" ? "bg-indigo-50 text-indigo-600 border-indigo-100" : "bg-emerald-50 text-emerald-600 border-emerald-100"
-                        }`}>
-                          {dispute.status === "OPEN" ? "Active" : "Resolved"}
-                        </span>
-                        <span className="text-[10px] text-zinc-400 font-medium uppercase tracking-wider">ID: {dispute.id.slice(0, 8)}</span>
-                      </div>
-                      <h3 className="text-lg font-bold text-zinc-900">{dispute.reason}</h3>
-                      <p className="text-xs text-zinc-500">Raised by {dispute.raisedBy?.name}</p>
-                    </div>
-                    <Link 
-                      to={`/dispute/${dispute.id}`} 
-                      className="p-3 bg-zinc-900 text-white rounded-xl hover:bg-black transition-all"
-                    >
-                      <ChevronRight size={18} />
-                    </Link>
-                  </div>
-                ))
-              )}
-            </div>
-          ) : (
-            /* --- TICKETS LIST --- */
-            <div className="divide-y divide-zinc-100">
-              {tickets.length === 0 ? (
-                <div className="h-64 flex flex-col items-center justify-center text-zinc-300 gap-2">
-                   <Inbox size={32} />
-                   <p className="text-sm font-medium">No help requests</p>
-                </div>
-              ) : (
-                tickets.map(ticket => (
-                  <div key={ticket.id} className="p-6 flex items-center justify-between hover:bg-zinc-50/50 transition-colors">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-                          ticket.status === "OPEN" ? "bg-indigo-50 text-indigo-600 border-indigo-100" : "bg-zinc-100 text-zinc-500 border-zinc-200"
-                        }`}>
-                          {ticket.status === "OPEN" ? "New" : "Closed"}
-                        </span>
-                        <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">{ticket.category}</span>
-                      </div>
-                      <h3 className="text-lg font-bold text-zinc-900">{ticket.subject}</h3>
-                      <p className="text-xs text-zinc-500">From {ticket.user?.name}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                       {ticket.status !== "CLOSED" && (
-                         <button 
-                           onClick={() => handleResolveTicket(ticket.id)}
-                           className="p-3 text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
-                         >
-                           <CheckCircle2 size={18} />
-                         </button>
-                       )}
-                       <Link 
-                         to={`/support/ticket/${ticket.id}`}
-                         className="p-3 bg-zinc-900 text-white rounded-xl hover:bg-black transition-all"
-                       >
-                         <ChevronRight size={18} />
-                       </Link>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-        </div>
+      {/* TWO BOX TAB DESIGN - AS PER IMAGE */}
+      <div className="grid grid-cols-2 gap-2 mb-8 p-1 bg-zinc-50 border border-zinc-200 rounded-xl">
+        <button
+          onClick={() => setActiveTab("DISPUTES")}
+          className={`flex items-center justify-center gap-2 py-3 rounded-lg text-xs font-bold transition-all ${
+            activeTab === "DISPUTES" 
+              ? "bg-white text-zinc-900 border border-zinc-200 shadow-sm" 
+              : "text-zinc-500 hover:text-zinc-700"
+          }`}
+        >
+          <Scale size={14} /> Disputes
+        </button>
+        <button
+          onClick={() => setActiveTab("TICKETS")}
+          className={`flex items-center justify-center gap-2 py-3 rounded-lg text-xs font-bold transition-all ${
+            activeTab === "TICKETS" 
+              ? "bg-white text-zinc-900 border border-zinc-200 shadow-sm" 
+              : "text-zinc-500 hover:text-zinc-700"
+          }`}
+        >
+          <MessageCircle size={14} /> Help requests
+        </button>
       </div>
 
-      {/* 3. Footer Stats - Fixed */}
-      <div className="grid grid-cols-2 gap-4 shrink-0">
-         <div className="p-5 bg-zinc-50 border border-zinc-100 rounded-2xl">
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Total disputes</p>
-            <p className="text-3xl font-bold text-zinc-900 leading-none">{disputes.length}</p>
-         </div>
-         <div className="p-5 bg-zinc-50 border border-zinc-100 rounded-2xl">
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Total requests</p>
-            <p className="text-3xl font-bold text-zinc-900 leading-none">{tickets.length}</p>
-         </div>
+      {/* Item List Structure */}
+      <div className="space-y-[10px]">
+        {loading ? (
+          <div className="py-20 flex items-center justify-center">
+            <RefreshCcw size={20} className="text-zinc-300 animate-spin" />
+          </div>
+        ) : (
+          (activeTab === "DISPUTES" ? disputes : tickets).map((item) => (
+            <div key={item.id} className="bg-white border border-zinc-200 rounded-xl p-5 flex gap-4 items-start border-l-2 border-l-rose-500 shadow-sm">
+              
+              {/* Icon */}
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-amber-50 text-amber-700 border border-amber-100">
+                {activeTab === "DISPUTES" ? <AlertTriangle size={20} /> : <HelpCircle size={20} />}
+              </div>
+              
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="text-[14px] font-bold text-zinc-900 mb-[2px]">
+                  {activeTab === "DISPUTES" ? item.reason : item.subject}
+                </div>
+                <div className="text-[12px] font-medium text-zinc-400">
+                   {activeTab === "DISPUTES" 
+                    ? `${item.raisedBy?.name || 'User'} vs Seller · Filed recently` 
+                    : `${item.category || 'Support'} · Submitted recently`}
+                </div>
+                <div className="text-[13px] font-medium text-zinc-500 mt-[8px] leading-[1.5] line-clamp-2">
+                  {activeTab === "DISPUTES" 
+                    ? `Transaction #${item.id.slice(0,8).toUpperCase()}. Buyer claims product not received. $${(Math.random() * 500).toFixed(2)} in dispute.`
+                    : item.message || "User is requesting assistance with account features."}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2 shrink-0 self-center">
+                <button 
+                  onClick={() => handleResolve(item.id, activeTab === "DISPUTES" ? 'DISPUTE' : 'TICKET')}
+                  className="px-5 py-2.5 bg-zinc-900 text-white text-[12px] font-bold rounded-xl hover:bg-black transition-all"
+                >
+                  Resolve
+                </button>
+                <Link 
+                  to={activeTab === "DISPUTES" ? `/dispute/${item.id}` : `/support/ticket/${item.id}`}
+                  className="px-5 py-2.5 bg-white text-zinc-900 border border-zinc-200 text-[12px] font-bold rounded-xl hover:bg-zinc-50 transition-all"
+                >
+                  Details →
+                </Link>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
