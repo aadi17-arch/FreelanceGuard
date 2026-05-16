@@ -27,7 +27,8 @@ export default function Market() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  if (user?.role?.toUpperCase() !== "FREELANCER") {
+  const allowedRoles = ["FREELANCER", "CLIENT"];
+  if (!allowedRoles.includes(user?.role?.toUpperCase())) {
     return (
       <div className="h-[60vh] flex flex-col items-center justify-center gap-4 text-center px-4">
         <div className="w-16 h-16 bg-zinc-50 rounded-full flex items-center justify-center text-zinc-300">
@@ -35,7 +36,7 @@ export default function Market() {
         </div>
         <h2 className="text-xl font-bold text-zinc-900">Access Restricted</h2>
         <p className="text-sm text-zinc-500 max-w-xs">
-          The project marketplace is exclusively for freelancers to find work.
+          The project marketplace is restricted to authorized platform users.
         </p>
         <Link to="/dashboard" className="text-xs font-bold text-emerald-600 hover:underline">
           Return to Dashboard
