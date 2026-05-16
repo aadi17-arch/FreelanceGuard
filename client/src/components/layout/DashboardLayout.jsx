@@ -41,8 +41,14 @@ export default function DashboardLayout({ children }) {
     if (titles[path]) return titles[path];
     if (path.startsWith("/project/")) return "Project details";
     if (path.startsWith("/dispute/")) return "Resolution center";
+    if (path.startsWith("/admin")) return "Solution center";
     return "Management";
   };
+
+  if (user?.role?.toUpperCase() === "ADMIN" && location.pathname === "/dashboard") {
+    navigate("/admin");
+    return null;
+  }
 
   return (
     <div className="flex min-h-screen bg-white relative">
@@ -130,37 +136,27 @@ export default function DashboardLayout({ children }) {
               <div className="relative">
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-zinc-900 text-white flex items-center justify-center text-[13px] font-bold shadow-lg shadow-zinc-900/10 hover:scale-105 active:scale-95 transition-all ring-2 ring-transparent hover:ring-emerald-500/20"
+                  className="w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-zinc-900 text-white flex items-center justify-center text-[13px] font-bold shadow-sm hover:bg-black transition-colors"
                 >
                   {user?.name?.[0] || "A"}
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-3 w-48 bg-white border border-zinc-200 rounded-xl shadow-xl z-50 py-2">
+                  <div className="absolute right-0 mt-3 w-48 bg-white border border-zinc-200 rounded-2xl shadow-xl z-50 py-2 overflow-hidden">
                     <Link
                       to="/profile"
                       onClick={() => setIsDropdownOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50"
+                      className="flex items-center gap-2 px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 border-b border-zinc-50"
                     >
                       <User size={14} />
                       My profile
                     </Link>
-                    {user?.role === "ADMIN" && (
-                      <Link
-                        to="/admin"
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50"
-                      >
-                        <Shield size={14} />
-                        Solution center
-                      </Link>
-                    )}
                     <button
                       onClick={() => {
                         setIsDropdownOpen(false);
                         handleLogout();
                       }}
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 w-full text-left"
+                      className="flex items-center gap-2 px-4 py-3 text-sm font-bold text-rose-600 hover:bg-rose-50 w-full text-left"
                     >
                       <LogOut size={14} />
                       Sign out
