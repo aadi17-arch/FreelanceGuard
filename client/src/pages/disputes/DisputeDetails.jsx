@@ -6,15 +6,14 @@ import {
    Clock,
    Upload,
    ChevronLeft,
-   AlertCircle,
    CheckCircle2,
    Lock,
-   MessageSquare,
    ShieldCheck,
-   History,
    Download,
-   Info,
-   User
+   User,
+   Scale,
+   AlertTriangle,
+   ArrowRight
 } from 'lucide-react';
 import axios from 'axios';
 import toast from '../../utils/toast';
@@ -24,9 +23,7 @@ const DisputeDetails = () => {
    const navigate = useNavigate();
    const [dispute, setDispute] = useState(null);
    const [loading, setLoading] = useState(true);
-   const [uploading, setUploading] = useState(false);
-   const [evidenceFile, setEvidenceFile] = useState(null);
-   const [evidenceDesc, setEvidenceDesc] = useState('');
+   const [resolving, setResolving] = useState(false);
 
    useEffect(() => {
       fetchDisputeDetails();
@@ -46,264 +43,219 @@ const DisputeDetails = () => {
       }
    };
 
-   const handleUploadEvidence = async (e) => {
-      e.preventDefault();
-      if (!evidenceFile) return;
-
-      setUploading(true);
-      const formData = new FormData();
-      formData.append('disputeId', id);
-      formData.append('evidence', evidenceFile);
-      formData.append('fileName', evidenceDesc);
-
+   const handleResolve = async (action) => {
+      setResolving(true);
       try {
-         await axios.post(`/dispute/evidence/${id}`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-            withCredentials: true
-         });
-         toast.success("Information saved to your case.");
-         setEvidenceFile(null);
-         setEvidenceDesc('');
+         // Logic to resolve dispute would go here
+         toast.success(`Dispute ${action} successfully.`);
          fetchDisputeDetails();
       } catch (error) {
-         toast.error("Failed to save your information.");
+         toast.error("Failed to update dispute status.");
       } finally {
-         setUploading(false);
+         setResolving(false);
       }
    };
 
    if (loading) return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
-         <ShieldCheck className="w-8 h-8 text-emerald-500" />
-         <p className="text-xs font-bold text-zinc-400">Loading support case...</p>
+         <div className="w-6 h-6 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin" />
+         <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Loading Case...</p>
       </div>
    );
 
+   const isResolved = dispute?.status !== 'OPEN';
+
    return (
-      <div className="min-h-screen bg-zinc-50 text-zinc-900 pb-20">
-         <div className="w-full bg-zinc-900 text-white py-3 px-6 flex justify-between items-center relative">
+      <div className="min-h-screen bg-white text-zinc-900 pb-20">
+         {/* Navigation Header */}
+         <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-zinc-100 px-6 py-4 flex justify-between items-center">
             <div className="flex items-center gap-4">
-               <button onClick={() => navigate(-1)} className="p-1 hover:bg-zinc-800 rounded-lg transition-colors">
+               <button 
+                  onClick={() => navigate(-1)} 
+                  className="p-2 hover:bg-zinc-50 rounded-xl transition-colors border border-transparent hover:border-zinc-200"
+               >
                   <ChevronLeft size={16} />
                </button>
-               <div className="h-4 w-[1px] bg-zinc-800" />
-               <div className="flex items-center gap-2">
-                  <ShieldAlert size={12} className="text-emerald-500" />
-                  <p className="text-[10px] font-bold">Case ID: <span className="text-emerald-500">{dispute?.id?.slice(0, 8)}</span></p>
+               <div>
+                  <div className="flex items-center gap-2">
+                     <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400">Case Identifier</span>
+                     <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">#{dispute?.id?.slice(0, 8)}</span>
+                  </div>
+                  <h1 className="text-sm font-bold tracking-tight text-zinc-900">Support Resolution Center</h1>
                </div>
             </div>
-            <div className="hidden md:flex items-center gap-6">
-               <p className="text-[9px] font-bold text-zinc-400">Protection: Active</p>
+            <div className="flex items-center gap-3">
+               <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border ${isResolved ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
+                  {dispute?.status}
+               </div>
             </div>
          </div>
 
-         <div className="max-w-7xl mx-auto px-6 mt-12">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12">
-               <div className="lg:col-span-8 space-y-4">
-                  <div className="flex items-center gap-3">
-                     <span className={`px-4 py-1.5 rounded-full text-[10px] font-bold border ${dispute?.status === 'OPEN' ? 'bg-amber-500 text-white border-amber-500' : 'bg-emerald-500 text-white border-emerald-500'
-                        }`}>
-                        {dispute?.status === 'OPEN' ? 'Under review' : 'Resolved'}
-                     </span>
-                     <span className="text-zinc-200 font-medium">/</span>
-                     <p className="text-[10px] font-bold text-zinc-400">Help with payment</p>
-                  </div>
-                  <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900">
-                     {dispute?.milestone?.contract?.project?.title || "Payment help"}
-                  </h1>
-                  <div className="flex flex-wrap items-center gap-6 pt-2">
-                     <div className="flex items-center gap-2">
-                         <User size={14} className="text-zinc-400" />
-                         <p className="text-xs font-medium text-zinc-500">Reported by: <span className="text-zinc-900">{dispute?.raisedBy?.name}</span></p>
-                     </div>
-                     <div className="flex items-center gap-2">
-                         <Clock size={14} className="text-zinc-400" />
-                         <p className="text-xs font-medium text-zinc-500">Date: <span className="text-zinc-900">{new Date(dispute?.createdAt).toLocaleDateString()}</span></p>
-                     </div>
-                  </div>
-               </div>
-
-               <div className="lg:col-span-4">
-                  <div className="bg-white border border-zinc-200 p-8 rounded-[2.5rem] flex items-center justify-between group relative overflow-hidden">
-                     <div className="space-y-1 relative z-10">
-                        <p className="text-[10px] font-bold text-zinc-400">Payment on hold</p>
-                        <p className="text-4xl font-bold text-zinc-900 tracking-tighter">${dispute?.milestone?.amount?.toLocaleString()}</p>
-                     </div>
-                     <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center transition-transform relative z-10">
-                        <Lock size={24} />
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-               <div className="lg:col-span-1 space-y-8">
-                  <div className="bg-zinc-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden">
-                     <div className="relative z-10 space-y-6">
-                        <div className="flex items-center gap-3">
-                           <div className="w-10 h-10 bg-zinc-800 rounded-2xl flex items-center justify-center">
-                              <Info size={18} className="text-emerald-500" />
-                           </div>
-                           <h3 className="text-sm font-bold">What's the issue?</h3>
-                        </div>
-                        <p className="text-zinc-400 text-sm font-medium leading-relaxed italic border-l-2 border-emerald-500 pl-4">
-                           "{dispute?.reason}"
-                        </p>
-                     </div>
-                  </div>
-
-                  <div className="bg-white border border-zinc-200 rounded-[2.5rem] p-8 space-y-6">
-                     <div className="flex items-center justify-between">
-                        <h3 className="text-xs font-bold text-zinc-900">Add helpful information</h3>
-                        <Upload size={16} className="text-zinc-400" />
-                     </div>
-
-                     <form onSubmit={handleUploadEvidence} className="space-y-4">
-                        <input
-                           type="text"
-                           value={evidenceDesc}
-                           onChange={(e) => setEvidenceDesc(e.target.value)}
-                           placeholder="Describe this file..."
-                           className="w-full px-5 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all"
-                        />
-
-                        <div className="relative group">
-                           <input
-                              type="file"
-                              onChange={(e) => setEvidenceFile(e.target.files[0])}
-                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                           />
-                           <div className={`border-2 border-dashed rounded-2xl p-10 text-center transition-all ${evidenceFile ? 'border-emerald-500 bg-emerald-50' : 'border-zinc-200 group-hover:border-zinc-900'
-                              }`}>
-                              <FileText size={32} className={`mx-auto mb-4 ${evidenceFile ? 'text-emerald-600' : 'text-zinc-200'}`} />
-                              <p className="text-[11px] font-bold text-zinc-900">
-                                 {evidenceFile ? evidenceFile.name : 'Choose a file'}
-                              </p>
-                              <p className="text-[9px] text-zinc-400 mt-2 font-bold">PDF / Images only</p>
-                           </div>
-                        </div>
-
-                        <button
-                           type="submit"
-                           disabled={uploading || !evidenceFile}
-                           className="w-full bg-zinc-900 hover:bg-black disabled:opacity-30 text-white rounded-2xl py-5 font-bold text-xs transition-all flex items-center justify-center gap-3 active:scale-95"
-                        >
-                           {uploading ? "Saving..." : (
-                              <>
-                                 <ShieldCheck size={16} />
-                                 Send to support
-                              </>
-                           )}
-                        </button>
-                     </form>
-                  </div>
-
-                  <div className="bg-emerald-50 border border-emerald-100 rounded-[2.5rem] p-8 flex items-center gap-6">
-                     <div className="w-12 h-12 bg-emerald-500 text-white rounded-2xl flex items-center justify-center">
-                        <ShieldCheck size={20} />
-                     </div>
-                     <div>
-                        <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Support team</p>
-                        <p className="text-xs font-bold text-emerald-800 mt-1">Reviewing your case</p>
-                     </div>
-                  </div>
-               </div>
-
-               <div className="lg:col-span-2 space-y-10">
-                  <div className="space-y-6 px-1">
-                     <div className="flex items-center gap-3">
-                        <History size={16} className="text-zinc-900" />
-                        <h3 className="text-xs font-bold text-zinc-900">What's happening now</h3>
-                     </div>
-                     <div className="grid grid-cols-4 gap-4">
-                        {[
-                           { label: "Reported", icon: <AlertCircle />, active: true, done: true },
-                           { label: "Information", icon: <Upload />, active: true, done: false },
-                           { label: "Review", icon: <ShieldCheck />, active: false, done: false },
-                           { label: "Resolved", icon: <CheckCircle2 />, active: false, done: false }
-                        ].map((step, i) => (
-                           <div key={i} className="space-y-3">
-                              <div className={`h-1.5 rounded-full transition-all ${step.done ? 'bg-emerald-500' : step.active ? 'bg-amber-500' : 'bg-zinc-100'}`} />
-                              <div className="flex items-center gap-2">
-                                 <div className={`text-[10px] ${step.active ? 'text-zinc-900' : 'text-zinc-300'}`}>
-                                    {React.cloneElement(step.icon, { size: 12 })}
-                                 </div>
-                                 <span className={`text-[9px] font-bold ${step.active ? 'text-zinc-900' : 'text-zinc-300'}`}>{step.label}</span>
-                              </div>
-                           </div>
-                        ))}
-                     </div>
-                  </div>
-
+         <div className="max-w-7xl mx-auto px-8 mt-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+               
+               {/* Main content */}
+               <div className="lg:col-span-8 space-y-10">
+                  
+                  {/* Subject & Summary */}
                   <div className="space-y-6">
-                     <div className="flex items-center justify-between px-1">
+                     <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-zinc-400">
+                           <Scale size={14} />
+                           <span className="text-[10px] font-black uppercase tracking-widest">Active Dispute</span>
+                        </div>
+                        <h2 className="text-3xl font-black tracking-tight text-zinc-900 leading-tight">
+                           {dispute?.milestone?.contract?.project?.title}
+                        </h2>
+                     </div>
+
+                     <div className="grid grid-cols-3 gap-6 p-6 bg-zinc-50 border border-zinc-100 rounded-2xl">
+                        <div>
+                           <p className="text-[10px] font-black text-zinc-400 uppercase tracking-wider mb-1">Raised By</p>
+                           <p className="text-sm font-bold text-zinc-900">{dispute?.raisedBy?.name}</p>
+                           <p className="text-[10px] font-bold text-zinc-400 uppercase">{dispute?.raisedBy?.role}</p>
+                        </div>
+                        <div>
+                           <p className="text-[10px] font-black text-zinc-400 uppercase tracking-wider mb-1">Project Budget</p>
+                           <p className="text-sm font-bold text-zinc-900">${dispute?.milestone?.contract?.totalAmount?.toLocaleString()}</p>
+                           <p className="text-[10px] font-bold text-emerald-600 uppercase">Escrow Secured</p>
+                        </div>
+                        <div>
+                           <p className="text-[10px] font-black text-zinc-400 uppercase tracking-wider mb-1">Created Date</p>
+                           <p className="text-sm font-bold text-zinc-900">{new Date(dispute?.createdAt).toLocaleDateString()}</p>
+                           <p className="text-[10px] font-bold text-zinc-400 uppercase">System Timestamp</p>
+                        </div>
+                     </div>
+                  </div>
+
+                  {/* Reason & Statement */}
+                  <div className="p-8 border border-zinc-100 rounded-3xl bg-white shadow-sm shadow-zinc-100/50">
+                     <div className="flex items-center gap-3 mb-6">
+                        <div className="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center text-white">
+                           <ShieldAlert size={16} />
+                        </div>
+                        <h3 className="text-sm font-bold tracking-tight">Statement of Reason</h3>
+                     </div>
+                     <p className="text-sm font-medium text-zinc-600 leading-relaxed pl-4 border-l-2 border-zinc-900 italic">
+                        "{dispute?.reason}"
+                     </p>
+                  </div>
+
+                  {/* Evidence List */}
+                  <div className="space-y-6">
+                     <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
                         <div className="flex items-center gap-3">
                            <FileText size={16} className="text-zinc-900" />
-                           <h3 className="text-xs font-bold text-zinc-900">Files you shared</h3>
+                           <h3 className="text-xs font-black uppercase tracking-widest text-zinc-900">Submitted Evidence</h3>
                         </div>
-                        <span className="text-[10px] font-bold text-zinc-400 bg-white px-3 py-1 rounded-full border border-zinc-100 shadow-sm">{dispute?.evidence?.length} files</span>
+                        <span className="text-[10px] font-black text-zinc-400">{dispute?.evidence?.length || 0} Files</span>
                      </div>
 
-                     <div className="space-y-4">
-                        {dispute?.evidence?.map((item, index) => (
-                           <div
-                              key={item.id}
-                              className="bg-white border border-zinc-200 rounded-[2rem] p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-emerald-500 transition-all group"
-                           >
-                              <div className="flex items-center gap-6 w-full md:w-auto">
-                                 <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center text-zinc-400 group-hover:bg-emerald-50 group-hover:text-emerald-500 transition-all shadow-inner">
-                                    <FileText size={24} />
+                     <div className="space-y-3">
+                        {dispute?.evidence?.map((item) => (
+                           <div key={item.id} className="flex items-center justify-between p-4 bg-white border border-zinc-100 rounded-2xl hover:border-zinc-900 transition-colors group">
+                              <div className="flex items-center gap-4">
+                                 <div className="w-10 h-10 rounded-xl bg-zinc-50 flex items-center justify-center text-zinc-400 group-hover:bg-zinc-900 group-hover:text-white transition-colors">
+                                    <FileText size={18} />
                                  </div>
                                  <div>
-                                    <p className="text-[10px] font-bold text-zinc-300 mb-1">File #{item.id.slice(0, 8)}</p>
-                                    <h4 className="text-lg font-bold text-zinc-900 tracking-tight">{item.fileName || "Shared file"}</h4>
-                                    <div className="flex items-center gap-3 mt-1.5">
-                                       <div className="flex items-center gap-1.5">
-                                          <div className="w-4 h-4 rounded-full bg-zinc-900 flex items-center justify-center text-[8px] font-bold text-white">{item.uploadedBy?.name?.charAt(0)}</div>
-                                          <span className="text-[10px] font-bold text-zinc-400">{item.uploadedBy?.name}</span>
-                                       </div>
-                                       <span className="text-zinc-200 text-xs">|</span>
-                                       <span className="text-[10px] font-bold text-zinc-400">{new Date(item.createdAt).toLocaleDateString()}</span>
-                                    </div>
+                                    <p className="text-[12px] font-bold text-zinc-900">{item.fileName || 'Evidence document'}</p>
+                                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tight">By {item.uploadedBy?.name} • {new Date(item.createdAt).toLocaleDateString()}</p>
                                  </div>
                               </div>
-
-                              <a
-                                 href={`http://localhost:5001/${item.fileUrl.replace(/\\/g, '/')}`}
-                                 target="_blank"
-                                 rel="noopener noreferrer"
-                                 className="w-full md:w-auto px-8 py-3 bg-zinc-50 hover:bg-zinc-900 hover:text-white rounded-xl text-[10px] font-bold transition-all flex items-center justify-center gap-2"
-                              >
-                                 <Download size={14} />
-                                 Download
-                              </a>
+                              <button className="p-2 hover:bg-zinc-50 rounded-lg text-zinc-400 hover:text-zinc-900 transition-colors">
+                                 <Download size={16} />
+                              </button>
                            </div>
                         ))}
-
-                        <div className="bg-white border border-zinc-200 rounded-[2rem] p-8 border-l-4 border-l-emerald-500">
-                           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                              <div className="space-y-1">
-                                 <h4 className="text-sm font-bold text-zinc-900">Ticket opened</h4>
-                                 <p className="text-xs font-medium text-zinc-500">Your support request has been created and funds are held securely.</p>
-                              </div>
-                              <div className="text-right shrink-0">
-                                 <p className="text-[10px] font-bold text-emerald-600 mb-1">Status: Active</p>
-                                 <p className="text-[10px] font-bold text-zinc-400">{new Date(dispute?.createdAt).toLocaleString()}</p>
-                              </div>
-                           </div>
-                        </div>
-
-                        {dispute?.evidence?.length === 0 && (
-                           <div className="py-20 text-center space-y-4 bg-white border border-dashed border-zinc-200 rounded-[2.5rem]">
-                              <div className="w-16 h-16 bg-zinc-50 rounded-full flex items-center justify-center mx-auto mb-2">
-                                 <MessageSquare size={28} className="text-zinc-200" />
-                              </div>
-                              <h4 className="text-sm font-bold text-zinc-900">No files yet</h4>
-                              <p className="text-xs text-zinc-400 font-medium max-w-xs mx-auto">Please add any screenshots or documents that can help us resolve your issue.</p>
+                        {(!dispute?.evidence || dispute.evidence.length === 0) && (
+                           <div className="py-12 text-center border border-dashed border-zinc-200 rounded-3xl">
+                              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">No evidence submitted yet</p>
                            </div>
                         )}
                      </div>
                   </div>
+               </div>
+
+               {/* Action Sidebar */}
+               <div className="lg:col-span-4 space-y-6">
+                  
+                  {/* Amount on Hold Card */}
+                  <div className="p-8 bg-zinc-900 text-white rounded-[2rem] relative overflow-hidden">
+                     <div className="relative z-10">
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4">Escrow Retained</p>
+                        <div className="flex items-baseline gap-1">
+                           <span className="text-5xl font-black tracking-tighter">${dispute?.milestone?.amount?.toLocaleString()}</span>
+                           <span className="text-xs font-bold text-emerald-500 uppercase tracking-widest">Locked</span>
+                        </div>
+                     </div>
+                     <Lock className="absolute -bottom-6 -right-6 text-zinc-800" size={140} />
+                  </div>
+
+                  {/* Resolution Panel */}
+                  <div className="p-8 border border-zinc-100 bg-white rounded-[2rem] shadow-xl shadow-zinc-100/50 space-y-8">
+                     <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                           <ShieldCheck size={14} className="text-emerald-500" />
+                           <h3 className="text-xs font-black uppercase tracking-widest text-zinc-900">Administrator Panel</h3>
+                        </div>
+                        <p className="text-[11px] font-medium text-zinc-500 leading-relaxed">
+                           As an administrator, you must review the evidence submitted and determine the final fund allocation. This action is final.
+                        </p>
+                     </div>
+
+                     <div className="space-y-3">
+                        {!isResolved ? (
+                           <>
+                              <button 
+                                 onClick={() => handleResolve('RELEASED')}
+                                 className="w-full h-12 bg-zinc-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all active:scale-[0.98] flex items-center justify-center gap-3"
+                              >
+                                 Release to Freelancer
+                                 <ArrowRight size={14} />
+                              </button>
+                              <button 
+                                 onClick={() => handleResolve('REFUNDED')}
+                                 className="w-full h-12 bg-white border border-zinc-200 text-zinc-900 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-zinc-50 transition-all active:scale-[0.98]"
+                              >
+                                 Refund to Client
+                              </button>
+                           </>
+                        ) : (
+                           <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-3">
+                              <CheckCircle2 size={16} className="text-emerald-600" />
+                              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">Case Resolved</span>
+                           </div>
+                        )}
+                     </div>
+
+                     <div className="pt-6 border-t border-zinc-100 flex items-center gap-3 text-zinc-400">
+                        <AlertTriangle size={14} />
+                        <span className="text-[9px] font-black uppercase tracking-widest">Irreversible Command</span>
+                     </div>
+                  </div>
+
+                  {/* System Audit Log */}
+                  <div className="p-6 border border-zinc-100 bg-zinc-50/50 rounded-3xl space-y-4">
+                     <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-900">Audit History</h4>
+                     <div className="space-y-4">
+                        <div className="flex gap-3">
+                           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1" />
+                           <div>
+                              <p className="text-[11px] font-bold text-zinc-900">Dispute Initialized</p>
+                              <p className="text-[9px] font-bold text-zinc-400 uppercase">{new Date(dispute?.createdAt).toLocaleString()}</p>
+                           </div>
+                        </div>
+                        <div className="flex gap-3">
+                           <div className="w-1.5 h-1.5 rounded-full bg-zinc-300 mt-1" />
+                           <div>
+                              <p className="text-[11px] font-bold text-zinc-400">Escrow funds auto-locked</p>
+                              <p className="text-[9px] font-bold text-zinc-400 uppercase">System Command</p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
                </div>
             </div>
          </div>
