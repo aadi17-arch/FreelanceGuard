@@ -96,6 +96,16 @@ async function main() {
     }
   });
 
+  await prisma.bid.create({
+    data: {
+      projectId: project1.id,
+      freelancerId: freelancer.id,
+      amount: 1450,
+      proposal: 'I have 5 years of experience in React and GSAP. I can build your portfolio to look premium and high-end.',
+      status: 'PENDING'
+    }
+  });
+
   await prisma.proposal.create({
     data: {
       projectId: project1.id,
@@ -103,7 +113,11 @@ async function main() {
       amount: 1450,
       duration: 14,
       coverLetter: 'I have 5 years of experience in React and GSAP. I can build your portfolio to look premium and high-end.',
-      status: 'PENDING'
+      status: 'PENDING',
+      milestones: [
+        { title: "Design & Concept", amount: 450 },
+        { title: "Development & Animation", amount: 1000 }
+      ]
     }
   });
 

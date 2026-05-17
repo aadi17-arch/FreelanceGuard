@@ -163,20 +163,25 @@ export default function ProjectDetails() {
                     View payments
                   </button>
                 </div>
+              ) : project?.status !== 'OPEN' ? (
+                <div className="bg-zinc-50 border border-zinc-200 rounded-[2rem] p-8 text-center space-y-2">
+                  <Lock className="mx-auto text-zinc-300" size={24} />
+                  <p className="text-xs font-bold text-zinc-400">Project closed</p>
+                </div>
               ) : project?.bids?.some(bid => bid.freelancerId === user.id) ? (
                 <div className="bg-white border border-zinc-200 rounded-[2rem] p-8 text-center space-y-4 shadow-sm">
                   <CheckCircle2 size={24} className="mx-auto text-rui-success" />
                   <h3 className="text-[10px] font-bold text-zinc-900">Proposal sent</h3>
                   <p className="text-xs text-zinc-500 font-medium">Our system will notify you once the client reviews your offer.</p>
                 </div>
-              ) : project?.status === 'OPEN' ? (
+              ) : (
                 <div className="bg-white border border-zinc-200 rounded-[2rem] p-8 shadow-sm">
                   <div className="flex items-center gap-3 mb-6">
                     <Send size={14} className="text-zinc-900" />
                     <h3 className="text-[10px] font-bold text-zinc-900">Send a proposal</h3>
                   </div>
 
-                   <form onSubmit={handleBidSubmit} className="space-y-6">
+                  <form onSubmit={handleBidSubmit} className="space-y-6">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between px-1">
                         <label className="text-[10px] font-bold text-zinc-400">Contract terms</label>
@@ -249,11 +254,6 @@ export default function ProjectDetails() {
                       Send proposal
                     </button>
                   </form>
-                </div>
-              ) : (
-                <div className="bg-zinc-50 border border-zinc-200 rounded-[2rem] p-8 text-center space-y-2">
-                  <Lock className="mx-auto text-zinc-300" size={24} />
-                  <p className="text-xs font-bold text-zinc-400">Project closed</p>
                 </div>
               )}
             </div>

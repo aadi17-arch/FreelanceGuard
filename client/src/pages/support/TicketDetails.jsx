@@ -9,7 +9,7 @@ import {
   CheckCircle2, 
   AlertCircle 
 } from "lucide-react";
-import { getTicketDetails, replyToTicket } from "../../services/supportService";
+import { getTicketDetails, replyToTicket, resolveTicket } from "../../services/supportService";
 import { useAuth } from "../../context/AuthContext";
 import { useSnackbar } from "notistack";
 
@@ -107,6 +107,25 @@ export default function TicketDetails() {
             </p>
           </div>
         </div>
+        
+        {/* Admin Resolution Action */}
+        {user?.role === "ADMIN" && ticket.status !== "CLOSED" && (
+          <button
+            onClick={async () => {
+              try {
+                await resolveTicket(ticket.id);
+                fetchTicketDetails();
+                enqueueSnackbar("Ticket resolved successfully", { variant: "success" });
+              } catch (err) {
+                enqueueSnackbar("Failed to resolve ticket", { variant: "error" });
+              }
+            }}
+            className="h-10 px-5 bg-zinc-900 hover:bg-black text-white rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm text-xs font-bold"
+          >
+            <CheckCircle2 size={14} />
+            Resolve
+          </button>
+        )}
       </div>
 
       {/* Main Conversation Area */}

@@ -19,8 +19,6 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
-import { submitProposal } from "../../services/proposalService";
-import Modal from "../../components/ui/Modal";
 import toast from '../../utils/toast';
 
 export default function Market() {
@@ -50,42 +48,7 @@ export default function Market() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
 
-  const [showApplyModal, setShowApplyModal] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    amount: "",
-    duration: "",
-    coverLetter: ""
-  });
-
-  const handleApplyClick = (e, project) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setSelectedProject(project);
-    setFormData({ ...formData, amount: project.budget || "" });
-    setShowApplyModal(true);
-  };
-
-  const handleProposalSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await submitProposal({
-        projectId: selectedProject.id,
-        amount: parseFloat(formData.amount),
-        duration: parseInt(formData.duration),
-        coverLetter: formData.coverLetter
-      });
-      toast.success("Proposal submitted successfully!");
-      setShowApplyModal(false);
-      setFormData({ amount: "", duration: "", coverLetter: "" });
-    } catch (error) {
-      toast.error(error || "Failed to submit proposal");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  // Modal state and submission logic removed - now redirects to details page as requested
 
   useEffect(() => {
     fetchProjects();
@@ -221,7 +184,11 @@ export default function Market() {
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 {user?.role === "FREELANCER" && (
                   <button
-                    onClick={(e) => handleApplyClick(e, proj)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      navigate(`/project/${proj.id}`);
+                    }}
                     className="flex-grow sm:flex-grow-0 px-6 py-2.5 bg-rui-dark text-white rounded-[10px] text-[10px] font-bold hover:bg-black transition-all"
                   >
                     Send proposal
@@ -250,76 +217,7 @@ export default function Market() {
         )}
       </div>
 
-      <Modal
-        isOpen={showApplyModal}
-        onClose={() => setShowApplyModal(false)}
-        title="Send proposal"
-        type="success"
-      >
-        <form onSubmit={handleProposalSubmit} className="space-y-6">
-          <div className="space-y-1">
-            <p className="text-[10px] font-bold text-rui-success mb-4">Project: {selectedProject?.title}</p>
-          </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-zinc-400 px-1">Your budget ($)</label>
-              <div className="relative">
-                <DollarSign size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
-                <input
-                  required
-                  type="number"
-                  value={formData.amount}
-                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                  placeholder="0.00"
-                  className="w-full pl-9 pr-4 h-12 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-bold focus:bg-white focus:border-rui-success outline-none transition-all"
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-zinc-400 px-1">Duration (Days)</label>
-              <div className="relative">
-                <Clock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
-                <input
-                  required
-                  type="number"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  placeholder="7"
-                  className="w-full pl-9 pr-4 h-12 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-bold focus:bg-white focus:border-rui-success outline-none transition-all"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-zinc-400 px-1">Proposal message</label>
-            <textarea
-              required
-              rows={4}
-              value={formData.coverLetter}
-              onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
-              placeholder="Describe why you're the best fit for this project..."
-              className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:bg-white focus:border-rui-success outline-none transition-all resize-none"
-            />
-          </div>
-
-          <button
-            disabled={isSubmitting}
-            type="submit"
-            className="w-full h-14 bg-rui-dark text-white rounded-2xl text-[10px] font-bold hover:bg-black transition-all shadow-xl shadow-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
-          >
-            {isSubmitting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Processing...
-              </>
-            ) : (
-              "Send Proposal"
-            )}
-          </button>
-        </form>
-      </Modal>
     </div>
   );
 }

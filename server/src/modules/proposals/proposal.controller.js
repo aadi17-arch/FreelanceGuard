@@ -165,14 +165,6 @@ export const acceptProposals = async (req, res) => {
         data: { status: 'ACCEPTED' }
       });
 
-      await tx.proposal.updateMany({
-        where: {
-          projectId: proposal.projectId,
-          NOT: { id: proposalId }
-        },
-        data: { status: 'REJECTED' }
-      });
-
       await tx.project.update({
         where: { id: proposal.projectId },
         data: { status: 'IN_PROGRESS' }
