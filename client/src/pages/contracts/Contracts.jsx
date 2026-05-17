@@ -23,6 +23,43 @@ import {
   HelpCircle
 } from "lucide-react";
 
+const SubmitToastContent = ({ id, onConfirm, onCancel }) => {
+  const [note, setNote] = useState("");
+  return (
+    <div className="bg-[#111111] border border-zinc-800 text-white p-3.5 flex flex-col gap-3 font-body shadow-2xl min-w-[340px] max-w-md w-full">
+      <div className="flex items-center gap-2">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse shrink-0" />
+        <p className="text-[11px] font-bold text-zinc-100 tracking-tight">
+          Are you sure you want to submit this work?
+        </p>
+      </div>
+      
+      <input
+        type="text"
+        placeholder="Enter a brief note of your work (optional)..."
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+        className="w-full px-2.5 py-1.5 bg-zinc-900/60 border border-zinc-800 focus:border-zinc-700 text-[10px] text-zinc-200 placeholder-zinc-500 rounded outline-none transition-colors"
+      />
+
+      <div className="flex justify-end gap-2 border-t border-zinc-800/80 pt-2.5">
+        <button
+          onClick={onCancel}
+          className="px-2.5 py-1 bg-transparent hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white text-[9px] font-black transition-all uppercase tracking-wider cursor-pointer"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => onConfirm(note)}
+          className="px-2.5 py-1 bg-[#10b981] hover:bg-[#0d9488] text-white text-[9px] font-black transition-all uppercase tracking-wider cursor-pointer shadow-sm"
+        >
+          Yes, Submit
+        </button>
+      </div>
+    </div>
+  );
+};
+
 export default function Contracts() {
   const { user, refreshUser } = useAuth();
   const [activeTab, setActiveTab] = useState("active");
@@ -86,52 +123,30 @@ export default function Contracts() {
       return;
     }
 
-    // Trigger a premium, flat custom confirmation notification toast
+    // Trigger custom inline confirmation with description field in the notification card itself (no prompts!)
     enqueueSnackbar("", {
       persist: true,
       anchorOrigin: { vertical: "bottom", horizontal: "right" },
       content: (key) => (
-        <div className="bg-[#111111] border border-zinc-800 text-white p-3.5 flex flex-row items-center justify-between gap-5 font-body shadow-2xl min-w-[320px] max-w-md w-full">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse shrink-0" />
-            <p className="text-[11px] font-bold text-zinc-100 tracking-tight">
-              Are you sure you want to submit this work?
-            </p>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => closeSnackbar(key)}
-              className="px-2.5 py-1 bg-transparent hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white text-[9px] font-black transition-all uppercase tracking-wider cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={async () => {
-                closeSnackbar(key); // Dismiss this toast
+        <SubmitToastContent
+          id={key}
+          onCancel={() => closeSnackbar(key)}
+          onConfirm={async (note) => {
+            closeSnackbar(key);
+            try {
+              setLoading(true);
+              await axios.post(`/milestone/submit/${milestoneId}`, { submissionNote: note || "Work completed and submitted for review." });
 
-                // Ask for the note and perform the API submission
-                const note = window.prompt("Enter a brief description/note of the completed work you are submitting:");
-                if (note === null) return;
-
-                try {
-                  setLoading(true);
-                  await axios.post(`/milestone/submit/${milestoneId}`, { submissionNote: note });
-
-                  toast.success("Work deliverable submitted for client review!");
-                  await fetchContracts();
-                  if (refreshUser) await refreshUser();
-                } catch (err) {
-                  toast.error(err.response?.data?.message || "Failed to submit work.");
-                } finally {
-                  setLoading(false);
-                }
-              }}
-              className="px-2.5 py-1 bg-[#10b981] hover:bg-[#0d9488] text-white text-[9px] font-black transition-all uppercase tracking-wider cursor-pointer shadow-sm"
-            >
-              Yes, Submit
-            </button>
-          </div>
-        </div>
+              toast.success("Work deliverable submitted for client review!");
+              await fetchContracts();
+              if (refreshUser) await refreshUser();
+            } catch (err) {
+              toast.error(err.response?.data?.message || "Failed to submit work.");
+            } finally {
+              setLoading(false);
+            }
+          }}
+        />
       )
     });
   };
