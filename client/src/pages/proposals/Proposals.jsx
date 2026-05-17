@@ -63,9 +63,21 @@ export default function Proposals() {
     }
   };
 
+  const getDisplayStatus = (proposal) => {
+    if (proposal.project?.status === "COMPLETED") {
+      return "COMPLETED";
+    }
+    if (proposal.status === "ACCEPTED") {
+      return "HIRED";
+    }
+    return proposal.status || "PENDING";
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
+      case "HIRED":
       case "ACCEPTED": return "bg-emerald-50 text-emerald-600 border-emerald-100";
+      case "COMPLETED": return "bg-zinc-100 text-zinc-700 border-zinc-200";
       case "REJECTED": return "bg-rose-50 text-rose-600 border-rose-100";
       case "UNDER_REVIEW": return "bg-blue-50 text-blue-600 border-blue-100";
       default: return "bg-zinc-50 text-zinc-400 border-zinc-100";
@@ -74,7 +86,9 @@ export default function Proposals() {
 
   const getStatusIcon = (status) => {
     switch (status) {
+      case "HIRED":
       case "ACCEPTED": return <CheckCircle2 size={12} />;
+      case "COMPLETED": return <CheckCircle2 size={12} className="text-zinc-500" />;
       case "REJECTED": return <XCircle size={12} />;
       case "UNDER_REVIEW": return <Clock size={12} />;
       default: return <Clock size={12} />;
@@ -181,9 +195,9 @@ export default function Proposals() {
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div className="space-y-4 flex-grow">
                   <div className="flex items-center gap-3">
-                    <span className={`px-2 py-1 rounded-md text-[10px] font-bold border flex items-center gap-1.5 ${getStatusColor(proposal.status)}`}>
-                      {getStatusIcon(proposal.status)}
-                      {proposal.status?.replace("_", " ") || "PENDING"}
+                    <span className={`px-2 py-1 rounded-md text-[10px] font-bold border flex items-center gap-1.5 ${getStatusColor(getDisplayStatus(proposal))}`}>
+                      {getStatusIcon(getDisplayStatus(proposal))}
+                      {getDisplayStatus(proposal)}
                     </span>
                     <span className="text-[10px] font-bold text-zinc-300 flex items-center gap-1">
                       <Clock size={10} /> Submitted {new Date(proposal.createdAt).toLocaleDateString()}
