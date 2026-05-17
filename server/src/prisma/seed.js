@@ -39,7 +39,7 @@ async function main() {
       email: 'freelancer@test.com',
       password: hashedPassword,
       role: 'FREELANCER',
-      walletBalance: 100
+      walletBalance: 0
     }
   });
 
