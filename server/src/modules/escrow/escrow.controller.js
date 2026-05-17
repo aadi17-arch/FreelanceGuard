@@ -298,6 +298,22 @@ export const approveAndReleaseMilestoneAmount = async (req, res) => {
           status:"APPROVED"
         }
       });
+      const listofMilestone = await tx.milestone.findMany({
+        where: {contractId:milestone.contractId},
+      });
+      const notApprovedMilestone = listofMilestone.filter(
+        m=>m.id !==milestoneId &&m.status!=="APPROVED"&&m.status!=="RELEASED"
+      );
+      if (notApprovedMilestone.length === 0) {
+        await tx.contract.update({
+          where:{id:milestone.contractId},
+          data:{status:"COMPLETED"}
+        });
+        await tx.project.update({
+          where:{id:milestone.contract.projectId},
+          data:{status:"COMPLETED"}
+        });
+      }
       await tx.payment.create({
         data: {
           contractId: milestone.contractId,
