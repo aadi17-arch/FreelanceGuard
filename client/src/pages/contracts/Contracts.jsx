@@ -159,6 +159,44 @@ export default function Contracts() {
   };
 
 
+  const handleReleaseMilestone = async (contractId, milestoneId) => {
+    if (showDemo) {
+      toast.success("Demo Mode: Escrow funds released to freelancer wallet successfully!", {
+        style: { background: "#18181b", color: "#fff", borderRadius: "12px", fontSize: "13px" }
+      });
+      return;
+    }
+
+    const confirmRelease = window.confirm(
+      "Are you absolutely sure you want to approve this deliverable and release the locked escrow funds to the contractor's wallet? This action is irreversible."
+    );
+    if (!confirmRelease) return;
+
+    try {
+      setLoading(true);
+      await axios.post(`/milestone/release/${milestoneId}`);
+
+      toast.success("Escrow funds successfully released to contractor's wallet!", {
+        style: {
+          background: "#10b981",
+          color: "#fff",
+          borderRadius: "12px",
+          fontSize: "13px",
+          fontWeight: "bold"
+        }
+      });
+
+      await fetchContracts();
+      if (refreshUser) {
+        await refreshUser();
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to release escrow funds.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleRaiseDispute = async (contractId, milestoneId) => {
     if (showDemo) {
       toast.success("Demo Mode: Dispute folder opened successfully!", {
