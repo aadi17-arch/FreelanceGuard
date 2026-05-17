@@ -5,6 +5,12 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('Cleaning database...');
+  await prisma.notification.deleteMany();
+  await prisma.supportMessage.deleteMany();
+  await prisma.supportTicket.deleteMany();
+  await prisma.kYC.deleteMany();
+  await prisma.evidence.deleteMany();
+  await prisma.dispute.deleteMany();
   await prisma.payment.deleteMany();
   await prisma.milestone.deleteMany();
   await prisma.contract.deleteMany();
@@ -23,7 +29,7 @@ async function main() {
       email: 'client@test.com',
       password: hashedPassword,
       role: 'CLIENT',
-      walletBalance: 5000
+      walletBalance: 75000
     }
   });
 
