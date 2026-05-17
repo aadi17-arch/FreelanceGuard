@@ -68,7 +68,7 @@ export default function Proposals() {
       return "COMPLETED";
     }
     if (proposal.status === "ACCEPTED") {
-      return "HIRED";
+      return user?.role === "FREELANCER" ? "HIRED" : "ACCEPTED";
     }
     return proposal.status || "PENDING";
   };
@@ -122,13 +122,13 @@ export default function Proposals() {
                 { key: "all", label: "All Received" },
                 { key: "pending", label: "New / Pending" },
                 { key: "review", label: "In Review" },
-                { key: "accepted", label: "Hired" }
+                { key: "accepted", label: "Accepted" }
               ]
             : [
                 { key: "all", label: "All Proposals" },
                 { key: "pending", label: "Waiting" },
                 { key: "review", label: "Under Review" },
-                { key: "accepted", label: "Accepted" }
+                { key: "accepted", label: "Hired" }
               ];
 
           return (
