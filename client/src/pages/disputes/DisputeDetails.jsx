@@ -1,3 +1,4 @@
+import { useAuth } from "../../context/AuthContext";
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -20,10 +21,29 @@ import toast from '../../utils/toast';
 
 const DisputeDetails = () => {
    const { id } = useParams();
+   const { user } = useAuth();
    const navigate = useNavigate();
    const [dispute, setDispute] = useState(null);
    const [loading, setLoading] = useState(true);
    const [resolving, setResolving] = useState(false);
+   const [selectedFile, setSelectedFile] = useState(null);
+   const [fileNotes, setFileNotes] = useState("");
+   const [uploading, setUploading] = useState(false);
+
+   const handleUploadEvidenceSubmit = async (e) => {
+      e.preventDefault();
+      if (!selectedFile) return;
+      setUploading(true);
+      try {
+         toast.success(`Evidence selected: ${selectedFile.name}`);
+         setSelectedFile(null);
+         setFileNotes("");
+      } catch (err) {
+         toast.error("Failed to select evidence.");
+      } finally {
+         setUploading(false);
+      }
+   };
 
    useEffect(() => {
       fetchDisputeDetails();
@@ -70,8 +90,8 @@ const DisputeDetails = () => {
          {/* Navigation Header */}
          <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-zinc-100 px-6 py-4 flex justify-between items-center">
             <div className="flex items-center gap-4">
-               <button 
-                  onClick={() => navigate(-1)} 
+               <button
+                  onClick={() => navigate(-1)}
                   className="p-2 hover:bg-zinc-50 rounded-xl transition-colors border border-transparent hover:border-zinc-200"
                >
                   <ChevronLeft size={16} />
@@ -91,12 +111,12 @@ const DisputeDetails = () => {
             </div>
          </div>
 
-         <div className="max-w-7xl mx-auto px-8 mt-10">
+         <div className="max-w-5xl mx-auto px-8 mt-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-               
+
                {/* Main content */}
                <div className="lg:col-span-8 space-y-10">
-                  
+
                   {/* Subject & Summary */}
                   <div className="space-y-6">
                      <div className="space-y-2">
@@ -175,11 +195,62 @@ const DisputeDetails = () => {
                         )}
                      </div>
                   </div>
+
+                  {/* Upload Evidence Section */}
+                  {!isResolved && user?.role !== 'ADMIN' && (
+                     <div className="p-6 border border-zinc-200 rounded-xl bg-white space-y-4 shadow-sm shadow-zinc-100/30">
+                        <div className="flex items-center gap-2 text-zinc-900">
+                           <Upload size={14} />
+                           <h3 className="text-xs font-black uppercase tracking-widest">Submit New Evidence</h3>
+                        </div>
+                        <form onSubmit={handleUploadEvidenceSubmit} className="space-y-3">
+                           <div className="flex items-center gap-3">
+                              <label className="cursor-pointer h-10 px-4 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 rounded-lg flex items-center justify-center gap-2 text-xs font-bold text-zinc-700 transition-all">
+                                 <Upload size={14} />
+                                 {selectedFile ? selectedFile.name : "Choose file to upload"}
+                                 <input 
+                                    type="file" 
+                                    onChange={(e) => setSelectedFile(e.target.files[0])} 
+                                    className="hidden" 
+                                 />
+                              </label>
+                              {selectedFile && (
+                                 <button 
+                                    type="button" 
+                                    onClick={() => setSelectedFile(null)} 
+                                    className="text-xs text-red-500 hover:underline font-bold"
+                                 >
+                                    Clear
+                                 </button>
+                              )}
+                           </div>
+                           
+                           <div className="space-y-1.5">
+                              <label className="block text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Evidence notes (optional)</label>
+                              <input
+                                 type="text"
+                                 placeholder="e.g. Chat logs showing delivery details..."
+                                 value={fileNotes}
+                                 onChange={(e) => setFileNotes(e.target.value)}
+                                 className="w-full text-xs bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 focus:outline-none focus:border-zinc-900 transition-all"
+                              />
+                           </div>
+
+                           <button
+                              type="submit"
+                              disabled={!selectedFile || uploading}
+                              className="h-10 px-5 bg-zinc-900 hover:bg-black text-white rounded-lg text-xs font-bold transition-all disabled:opacity-50"
+                           >
+                              {uploading ? "Uploading..." : "Submit File"}
+                           </button>
+                        </form>
+                     </div>
+                  )}
                </div>
 
                {/* Action Sidebar */}
                <div className="lg:col-span-4 space-y-6">
-                  
+
                   {/* Amount on Hold Card */}
                   <div className="p-8 bg-zinc-900 text-white rounded-[2rem] relative overflow-hidden">
                      <div className="relative z-10">
@@ -192,48 +263,61 @@ const DisputeDetails = () => {
                      <Lock className="absolute -bottom-6 -right-6 text-zinc-800" size={140} />
                   </div>
 
-                  {/* Resolution Panel */}
-                  <div className="p-8 border border-zinc-100 bg-white rounded-[2rem] shadow-xl shadow-zinc-100/50 space-y-8">
-                     <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                           <ShieldCheck size={14} className="text-emerald-500" />
-                           <h3 className="text-xs font-black uppercase tracking-widest text-zinc-900">Administrator Panel</h3>
-                        </div>
-                        <p className="text-[11px] font-medium text-zinc-500 leading-relaxed">
-                           As an administrator, you must review the evidence submitted and determine the final fund allocation. This action is final.
-                        </p>
-                     </div>
+                  {/* Resolution Panel (Role Guarded) */}
+{user?.role === 'ADMIN' ? (
+   <div className="p-8 border border-zinc-100 bg-white rounded-[2rem] shadow-xl shadow-zinc-100/50 space-y-8">
+      <div className="space-y-2">
+         <div className="flex items-center gap-2">
+            <ShieldCheck size={14} className="text-emerald-500" />
+            <h3 className="text-xs font-black uppercase tracking-widest text-zinc-900">Administrator Panel</h3>
+         </div>
+         <p className="text-[11px] font-medium text-zinc-500 leading-relaxed">
+            As an administrator, you must review the evidence submitted and determine the final fund allocation. This action is final.
+         </p>
+      </div>
 
-                     <div className="space-y-3">
-                        {!isResolved ? (
-                           <>
-                              <button 
-                                 onClick={() => handleResolve('RELEASED')}
-                                 className="w-full h-12 bg-zinc-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all active:scale-[0.98] flex items-center justify-center gap-3"
-                              >
-                                 Release to Freelancer
-                                 <ArrowRight size={14} />
-                              </button>
-                              <button 
-                                 onClick={() => handleResolve('REFUNDED')}
-                                 className="w-full h-12 bg-white border border-zinc-200 text-zinc-900 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-zinc-50 transition-all active:scale-[0.98]"
-                              >
-                                 Refund to Client
-                              </button>
-                           </>
-                        ) : (
-                           <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-3">
-                              <CheckCircle2 size={16} className="text-emerald-600" />
-                              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">Case Resolved</span>
-                           </div>
-                        )}
-                     </div>
+      <div className="space-y-3">
+         {!isResolved ? (
+            <>
+               <button
+                  onClick={() => handleResolve('RELEASED')}
+                  className="w-full h-12 bg-zinc-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all active:scale-[0.98] flex items-center justify-center gap-3"
+               >
+                  Release to Freelancer
+                  <ArrowRight size={14} />
+               </button>
+               <button
+                  onClick={() => handleResolve('REFUNDED')}
+                  className="w-full h-12 bg-white border border-zinc-200 text-zinc-900 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-zinc-50 transition-all active:scale-[0.98]"
+               >
+                  Refund to Client
+               </button>
+            </>
+         ) : (
+            <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-3">
+               <CheckCircle2 size={16} className="text-emerald-600" />
+               <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">Case Resolved</span>
+            </div>
+         )}
+      </div>
 
-                     <div className="pt-6 border-t border-zinc-100 flex items-center gap-3 text-zinc-400">
-                        <AlertTriangle size={14} />
-                        <span className="text-[9px] font-black uppercase tracking-widest">Irreversible Command</span>
-                     </div>
-                  </div>
+      <div className="pt-6 border-t border-zinc-100 flex items-center gap-3 text-zinc-400">
+         <AlertTriangle size={14} />
+         <span className="text-[9px] font-black uppercase tracking-widest">Irreversible Command</span>
+      </div>
+   </div>
+) : (
+   /* Standard User view (Client / Freelancer) */
+   <div className="p-8 border border-zinc-100 bg-white rounded-[2rem] shadow-sm space-y-4">
+      <div className="flex items-center gap-2">
+         <Clock size={14} className="text-amber-500 animate-pulse" />
+         <h3 className="text-xs font-black uppercase tracking-widest text-zinc-900 font-sans">Under Official Review</h3>
+      </div>
+      <p className="text-[11px] font-medium text-zinc-500 leading-relaxed">
+         This case has been locked and is currently being evaluated by a FreelanceGuard Administrator. You will be notified once a resolution has been completed.
+      </p>
+   </div>
+)}
 
                   {/* System Audit Log */}
                   <div className="p-6 border border-zinc-100 bg-zinc-50/50 rounded-3xl space-y-4">
