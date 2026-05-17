@@ -71,10 +71,10 @@ export default function CreateProject() {
         </Link>
       </div>
 
-      <div className="bg-[#ffffff] border border-[#e5e5e5] rounded-[12px] p-[28px] shadow-sm">
+      <div className="bg-[#ffffff] border border-[#cccccc] rounded-[12px] p-[28px] shadow-sm">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#666666]">Project title</label>
+            <label className="block text-xs font-bold text-[#333333]">Project title</label>
             <input
               type="text"
               name="title"
@@ -82,19 +82,19 @@ export default function CreateProject() {
               placeholder="Enter your project title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full text-xs font-medium text-[#111111] placeholder:text-[#aaaaaa] bg-[#ffffff] border border-[#e5e5e5] rounded-[8px] px-3 py-2 focus:outline-none focus:border-[#10b981] transition-all"
+              className="w-full text-xs font-medium text-[#111111] placeholder:text-[#aaaaaa] bg-[#ffffff] border border-[#cccccc] rounded-[8px] px-3 py-2 focus:outline-none focus:border-[#10b981] transition-all"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-[#666666]">Category</label>
+              <label className="block text-xs font-bold text-[#333333]">Category</label>
               <div className="relative">
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="w-full text-xs font-medium text-[#111111] bg-[#ffffff] border border-[#e5e5e5] rounded-[8px] px-3 py-2 appearance-none cursor-pointer focus:outline-none focus:border-[#10b981] transition-all"
+                  className="w-full text-xs font-medium text-[#111111] bg-[#ffffff] border border-[#cccccc] rounded-[8px] px-3 py-2 appearance-none cursor-pointer focus:outline-none focus:border-[#10b981] transition-all"
                 >
                   <option value="Development">Development</option>
                   <option value="Design">Design</option>
@@ -106,7 +106,7 @@ export default function CreateProject() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-[#666666]">Budget (USD)</label>
+              <label className="block text-xs font-bold text-[#333333]">Budget (USD)</label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#aaaaaa]">$</span>
                 <input
@@ -116,14 +116,14 @@ export default function CreateProject() {
                   placeholder="e.g. 500"
                   value={formData.budget}
                   onChange={handleChange}
-                  className="w-full pl-7 pr-3 py-2 text-xs font-medium text-[#111111] placeholder:text-[#aaaaaa] bg-[#ffffff] border border-[#e5e5e5] rounded-[8px] focus:outline-none focus:border-[#10b981] transition-all"
+                  className="w-full pl-7 pr-3 py-2 text-xs font-medium text-[#111111] placeholder:text-[#aaaaaa] bg-[#ffffff] border border-[#cccccc] rounded-[8px] focus:outline-none focus:border-[#10b981] transition-all"
                 />
               </div>
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#666666]">Project description</label>
+            <label className="block text-xs font-bold text-[#333333]">Project description</label>
             <textarea
               name="description"
               required
@@ -131,7 +131,7 @@ export default function CreateProject() {
               placeholder="Describe what you need, including goals and timeline"
               value={formData.description}
               onChange={handleChange}
-              className="w-full text-xs font-medium text-[#111111] placeholder:text-[#aaaaaa] bg-[#ffffff] border border-[#e5e5e5] rounded-[8px] p-3 resize-none focus:outline-none focus:border-[#10b981] transition-all"
+              className="w-full text-xs font-medium text-[#111111] placeholder:text-[#aaaaaa] bg-[#ffffff] border border-[#cccccc] rounded-[8px] p-3 resize-none focus:outline-none focus:border-[#10b981] transition-all"
             />
           </div>
 
@@ -152,21 +152,6 @@ export default function CreateProject() {
             </button>
           </div>
         </form>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {[
-          { title: "Safe payments", desc: "Your money is held securely until you approve the work.", icon: <ShieldCheck size={16} className="text-[#10b981]" /> },
-          { title: "Job agreement", desc: "A professional agreement is created automatically.", icon: <Fingerprint size={16} className="text-[#10b981]" /> }
-        ].map((item, i) => (
-          <div key={i} className="bg-[#ffffff] border border-[#e5e5e5] rounded-[10px] p-[16px] space-y-2">
-            <div className="flex items-center gap-2 text-[#111111]">
-              <div>{item.icon}</div>
-              <p className="text-xs font-bold">{item.title}</p>
-            </div>
-            <p className="text-[11px] text-[#666666] leading-relaxed">{item.desc}</p>
-          </div>
-        ))}
       </div>
     </div>
   );
