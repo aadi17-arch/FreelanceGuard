@@ -23,10 +23,10 @@ import {
   HelpCircle
 } from "lucide-react";
 
-const SubmitToastContent = ({ id, onConfirm, onCancel }) => {
+const SubmitToastContent = React.forwardRef(({ id, onConfirm, onCancel }, ref) => {
   const [note, setNote] = useState("");
   return (
-    <div className="bg-[#111111] border border-zinc-800 text-white p-3.5 flex flex-col gap-3 font-body shadow-2xl min-w-[340px] max-w-md w-full">
+    <div ref={ref} className="bg-[#111111] border border-zinc-800 text-white p-3.5 flex flex-col gap-3 font-body shadow-2xl min-w-[340px] max-w-md w-full">
       <div className="flex items-center gap-2">
         <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse shrink-0" />
         <p className="text-[11px] font-bold text-zinc-100 tracking-tight">
@@ -58,7 +58,7 @@ const SubmitToastContent = ({ id, onConfirm, onCancel }) => {
       </div>
     </div>
   );
-};
+});
 
 export default function Contracts() {
   const { user, refreshUser } = useAuth();
