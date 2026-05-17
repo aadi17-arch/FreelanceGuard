@@ -150,14 +150,6 @@ export const depositToEscrow = async (req, res) => {
         data: {
           status: "IN_PROGRESS"
         }
-      });
-      await tx.payment.create({
-        data: {
-          contractId: contract.id,
-          amount: contract.totalAmount,
-          type: "DEPOSIT"
-        }
-      });
       return { message: "SUCCESS" };
     });
 

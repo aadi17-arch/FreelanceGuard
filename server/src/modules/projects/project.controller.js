@@ -240,13 +240,6 @@ export const hireFreelancer = async (req, res) => {
         where: { id: projectId },
         data: { status: 'IN_PROGRESS' }
       });
-      await tx.payment.create({
-        data: {
-          contractId: contract.id,
-          amount: parseFloat(bidAmount),
-          type:'DEPOSIT'
-        }
-      });
       return { contract, milestone };
     });
 
