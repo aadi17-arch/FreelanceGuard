@@ -112,9 +112,9 @@ export default function ProjectDetails() {
               {project?.title}
             </h1>
           </div>
-          <div className="bg-rui-dark rounded-lg px-5 py-3.5 text-white shadow-sm border border-zinc-800">
-            <p className="text-[10px] font-bold text-zinc-400 mb-0.5">Estimated budget</p>
-            <p className="text-xl lg:text-2xl font-bold tracking-tight text-rui-success font-financial">${project?.budget?.toLocaleString()}</p>
+          <div className="bg-white rounded-lg px-5 py-3.5 border border-zinc-200 shadow-sm flex flex-col justify-center">
+            <p className="text-[10px] font-bold text-zinc-500 mb-0.5 uppercase tracking-wider">Estimated budget</p>
+            <p className="text-xl lg:text-2xl font-extrabold tracking-tight text-emerald-600 font-financial">${project?.budget?.toLocaleString()}</p>
           </div>
         </div>
       </header>
@@ -229,9 +229,9 @@ export default function ProjectDetails() {
                         </div>
                       ))}
 
-                      <div className="p-3 bg-rui-dark rounded-lg flex items-center justify-between border border-zinc-800">
-                        <span className="text-[10px] font-bold text-zinc-400">Total proposal</span>
-                        <span className="text-xs font-bold text-rui-success font-financial">${calculateTotalAmount().toLocaleString()}</span>
+                      <div className="p-3.5 bg-zinc-50 rounded-lg flex items-center justify-between border border-zinc-200">
+                        <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total proposal</span>
+                        <span className="text-xs font-extrabold text-emerald-600 font-financial">${calculateTotalAmount().toLocaleString()}</span>
                       </div>
                     </div>
                       
@@ -249,7 +249,7 @@ export default function ProjectDetails() {
 
                     <button
                       type="submit"
-                      className="w-full py-3 bg-rui-dark text-white rounded-lg text-[10px] font-bold hover:bg-black transition-all border border-zinc-800"
+                      className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border border-emerald-600 shadow-sm"
                     >
                       Send proposal
                     </button>
