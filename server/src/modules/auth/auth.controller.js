@@ -145,9 +145,22 @@ export const getProfile = async (req, res) => {
       });
       totalEarned = payments.reduce((sum, p) => sum + p.amount, 0);
     }
+    let heldAmount = user.heldAmount;
+    if (user.role === "FREELANCER") {
+      const activeContracts = await prisma.contract.findMany({
+        where: {
+          freelancerId: userId,
+          status: "ACTIVE"
+        },
+        select: { heldAmount: true }
+      });
+      heldAmount = activeContracts.reduce((sum, c) => sum + c.heldAmount, 0);
+    }
+
 
     return res.status(200).json({
       ...user,
+      heldAmount,
       totalSpent,
       totalEarned
     });

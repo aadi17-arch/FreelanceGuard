@@ -57,9 +57,9 @@ export default function SafeHoldingDashboard() {
          const isClient = user?.role === "CLIENT";
          const endpoint = isClient ? "/escrow/add-funds" : "/escrow/withdraw";
          await axios.post(endpoint, { amount: amountParsed });
-         
-         toast.success(isClient 
-            ? `Successfully added $${amountParsed.toLocaleString()} to your wallet.` 
+
+         toast.success(isClient
+            ? `Successfully added $${amountParsed.toLocaleString()} to your wallet.`
             : `Successfully requested withdrawal of $${amountParsed.toLocaleString()}.`
          );
          setFundAmount("");
@@ -104,16 +104,16 @@ export default function SafeHoldingDashboard() {
 
              {showFundForm && (
                 <div className="overflow-hidden">
-                   <form 
-                      onSubmit={handleFundAction} 
+                   <form
+                      onSubmit={handleFundAction}
                       className="bg-white border border-zinc-200 rounded-xl p-6 max-w-md ml-auto space-y-4 shadow-sm"
                    >
                       <div className="flex justify-between items-center pb-2 border-b border-zinc-50">
                          <h4 className="text-xs font-bold text-zinc-900">
                             {user?.role === "CLIENT" ? "Add funds to your wallet" : "Withdraw to your bank"}
                          </h4>
-                         <button 
-                            type="button" 
+                         <button
+                            type="button"
                             onClick={() => setShowFundForm(false)}
                             className="text-zinc-400 hover:text-zinc-900"
                          >
@@ -149,7 +149,8 @@ export default function SafeHoldingDashboard() {
           </div>
 
          <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="bg-white border border-zinc-200 rounded-xl p-6 flex flex-col justify-between">
+            { user?.role ==="CLIENT" &&
+               <div className="bg-white border border-zinc-200 rounded-xl p-6 flex flex-col justify-between">
                <p className="text-xs font-bold text-zinc-500 mb-1">Available balance</p>
                <div className="flex items-baseline gap-2 mb-4">
                   <span className="text-[28px] font-bold tracking-tight text-zinc-900">${(liveUser || user)?.walletBalance?.toLocaleString() || "0"}</span>
@@ -158,19 +159,7 @@ export default function SafeHoldingDashboard() {
                <div className="mt-auto inline-flex self-start px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-bold">
                   Ready to use
                </div>
-            </div>
-
-            <div className="bg-white border border-zinc-200 rounded-xl p-6 flex flex-col justify-between">
-               <p className="text-xs font-bold text-zinc-500 mb-1">Held in projects</p>
-               <div className="flex items-baseline gap-2 mb-4">
-                  <span className="text-[28px] font-bold tracking-tight text-zinc-900">${(liveUser || user)?.heldAmount?.toLocaleString() || "0"}</span>
-                  <span className="text-[10px] font-bold text-zinc-400">USD</span>
-               </div>
-               <div className="mt-auto inline-flex self-start px-3 py-1 bg-amber-50 text-amber-600 rounded-full text-[10px] font-bold">
-                  Secured in holding
-               </div>
-            </div>
-
+            </div>}
             <div className="bg-white border border-zinc-200 rounded-xl p-6 flex flex-col justify-between">
                <p className="text-xs font-bold text-zinc-500 mb-1">
                   {user?.role === "CLIENT" ? "Total spent" : "Total earned"}
@@ -188,6 +177,21 @@ export default function SafeHoldingDashboard() {
                   {user?.role === "CLIENT" ? "Lifetime spent" : "Lifetime earnings"}
                </div>
             </div>
+
+            <div className="bg-white border border-zinc-200 rounded-xl p-6 flex flex-col justify-between">
+               <p className="text-xs font-bold text-zinc-500 mb-1">
+                  {user?.role === "CLIENT"?"Held in projects" :"Locked in vault"}
+               </p>
+               <div className="flex items-baseline gap-2 mb-4">
+                  <span className="text-[28px] font-bold tracking-tight text-zinc-900">${(liveUser || user)?.heldAmount?.toLocaleString() || "0"}</span>
+                  <span className="text-[10px] font-bold text-zinc-400">USD</span>
+               </div>
+               <div className="mt-auto inline-flex self-start px-3 py-1 bg-amber-50 text-amber-600 rounded-full text-[10px] font-bold">
+                  Secured in holding
+               </div>
+            </div>
+
+
          </section>
 
          <section className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">
@@ -204,10 +208,10 @@ export default function SafeHoldingDashboard() {
                {transactions.length > 0 ? (
                   transactions.map((tx) => {
                       const isIncoming = tx.type === "DEPOSIT" || (tx.type === "RELEASE" && user?.role === "FREELANCER");
-                      const displayTitle = tx.type === "DEPOSIT" 
-                         ? "Added to wallet" 
-                         : tx.type === "WITHDRAWAL" 
-                         ? "Withdrawn to bank" 
+                      const displayTitle = tx.type === "DEPOSIT"
+                         ? "Added to wallet"
+                         : tx.type === "WITHDRAWAL"
+                         ? "Withdrawn to bank"
                          : tx.contract?.project?.title || tx.milestone?.title || "Project payment";
 
                       return (
