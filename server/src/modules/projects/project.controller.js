@@ -92,7 +92,7 @@ export const getProjectStats = async (req, res) => {
         status: 'OPEN'
       }
     });
- 
+
      const breakdown = await prisma.contract.findMany({
       where: {
         OR: [
@@ -183,13 +183,29 @@ export const hireFreelancer = async (req, res) => {
     });
 
     const result = await prisma.$transaction(async (tx) => {
+      const client=await tx.user.update({
+        where: { id: clientId },
+        data: {
+
+            walletBalance: {
+              decrement: parseFloat(bidAmount)
+            },
+            heldAmount: {
+              increment:parseFloat(bidAmount)
+            }
+
+        }
+      });
+      if (client.walletBalance < 0) {
+        throw new Error("Insufficient Balance");
+      }
       const contract = await tx.contract.create({
         data: {
           projectId,
           freelancerId,
           totalAmount: parseFloat(bidAmount),
-          heldAmount: 0,
-          status: 'PENDING'
+          heldAmount: parseFloat(bidAmount),
+          status: 'ACTIVE'
         }
       });
 
@@ -224,7 +240,13 @@ export const hireFreelancer = async (req, res) => {
         where: { id: projectId },
         data: { status: 'IN_PROGRESS' }
       });
-
+      await tx.payment.create({
+        data: {
+          contractId: contract.id,
+          amount: parseFloat(bidAmount),
+          type:'DEPOSIT'
+        }
+      });
       return { contract, milestone };
     });
 
