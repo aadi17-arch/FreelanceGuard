@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, variantProps } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import toast from '../../utils/toast';
+import {enqueueSnackbar,closeSnackbar} from "notistack";
 import {
   FileText,
   User,
@@ -79,69 +80,62 @@ export default function Contracts() {
     }
   };
 
-  const handleReleaseMilestone = async(contractId, milestoneId) => {
+   const handleSubmitDeliverable = (contractId, milestoneId) => {
     if (showDemo) {
-      toast.success("Demo Mode: Simulated milestone release successful!", {
-        style: { background: "#18181b", color: "#fff", borderRadius: "12px", fontSize: "13px" }
-      });
-      return;
-    }
-    if (!window.confirm("Are you sure you want to release escrow funds for this milestone? This action cannot be undone.")) return;
-
-    try {
-      setLoading(true);
-      await axios.post(`/escrow/milestone/release/${milestoneId}`);
-      toast.success("Funds released successfully!");
-      await fetchContracts();
-      if (refreshUser) {
-        await refreshUser();
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to release funds.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSubmitDeliverable = async (contractId, milestoneId) => {
-    if (showDemo) {
-      toast.success("Demo Mode: Deliverable work note submitted successfully!", {
-        style: { background: "#18181b", color: "#fff", borderRadius: "12px", fontSize: "13px" }
-      });
+      toast.success("Demo Mode: Deliverable work note submitted successfully!");
       return;
     }
 
-    const note = window.prompt("Enter a brief description/note of the completed work you are submitting:");
-    if (note === null) return;
+    // Trigger a premium, flat custom confirmation notification toast
+    enqueueSnackbar("", {
+      persist: true,
+      anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      content: (key) => (
+        <div className="bg-[#111111] border border-zinc-800 text-white p-3.5 flex flex-row items-center justify-between gap-5 font-body shadow-2xl min-w-[320px] max-w-md w-full">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse shrink-0" />
+            <p className="text-[11px] font-bold text-zinc-100 tracking-tight">
+              Are you sure you want to submit this work?
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => closeSnackbar(key)}
+              className="px-2.5 py-1 bg-transparent hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white text-[9px] font-black transition-all uppercase tracking-wider cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={async () => {
+                closeSnackbar(key); // Dismiss this toast
 
-    try {
-      setLoading(true);
-      await axios.post(`/milestone/submit/${milestoneId}`, { submissionNote: note });
+                // Ask for the note and perform the API submission
+                const note = window.prompt("Enter a brief description/note of the completed work you are submitting:");
+                if (note === null) return;
 
-      toast.success("Work deliverable submitted for client review!", {
-        style: {
-          background: "#18181b",
-          color: "#fff",
-          borderRadius: "12px",
-          fontSize: "13px",
-          fontWeight: "bold"
-        },
-        iconTheme: {
-          primary: "#10b981",
-          secondary: "#fff"
-        }
-      });
+                try {
+                  setLoading(true);
+                  await axios.post(`/milestone/submit/${milestoneId}`, { submissionNote: note });
 
-      await fetchContracts();
-      if (refreshUser) {
-        await refreshUser();
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to submit work deliverable.");
-    } finally {
-      setLoading(false);
-    }
+                  toast.success("Work deliverable submitted for client review!");
+                  await fetchContracts();
+                  if (refreshUser) await refreshUser();
+                } catch (err) {
+                  toast.error(err.response?.data?.message || "Failed to submit work.");
+                } finally {
+                  setLoading(false);
+                }
+              }}
+              className="px-2.5 py-1 bg-[#10b981] hover:bg-[#0d9488] text-white text-[9px] font-black transition-all uppercase tracking-wider cursor-pointer shadow-sm"
+            >
+              Yes, Submit
+            </button>
+          </div>
+        </div>
+      )
+    });
   };
+
 
   const handleRaiseDispute = async (contractId, milestoneId) => {
     if (showDemo) {
@@ -794,8 +788,3 @@ export default function Contracts() {
     </div>
   );
 }
-
-
-
-
-
