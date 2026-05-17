@@ -236,6 +236,21 @@ export const hireFreelancer = async (req, res) => {
         },
         data: { status: 'REJECTED' }
       });
+
+      await tx.proposal.update({
+        where: {
+          projectId_freelancerId: { projectId, freelancerId }
+        },
+        data: { status: 'ACCEPTED' }
+      });
+
+      await tx.proposal.updateMany({
+        where: {
+          projectId,
+          NOT: { freelancerId }
+        },
+        data: { status: 'REJECTED' }
+      });
       await tx.project.update({
         where: { id: projectId },
         data: { status: 'IN_PROGRESS' }
