@@ -90,7 +90,7 @@ export default function DashboardLayout({ children }) {
             {user?.role?.toUpperCase() === "CLIENT" && (
               <Link
                 to="/create-project"
-                className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-zinc-900 text-white text-[13px] font-bold rounded-xl hover:bg-black transition-all shadow-md"
+                className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-zinc-900 text-white text-[13px] font-bold rounded-lg hover:bg-black transition-all border border-zinc-900"
               >
                 Post a project
               </Link>
@@ -99,7 +99,7 @@ export default function DashboardLayout({ children }) {
             {user?.role?.toUpperCase() === "FREELANCER" && (
               <Link
                 to="/marketplace"
-                className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white text-[13px] font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-md"
+                className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white text-[13px] font-bold rounded-lg hover:bg-emerald-700 transition-all border border-emerald-600"
               >
                 Find work
               </Link>
@@ -109,9 +109,9 @@ export default function DashboardLayout({ children }) {
             {user?.role?.toUpperCase() !== "ADMIN" && (
               <Link
                 to="/escrow"
-                className="flex items-center gap-2.5 px-3 py-1.5 md:px-4 md:py-2 rounded-xl border border-zinc-200 hover:border-emerald-500 hover:bg-zinc-50 transition-all bg-white"
+                className="flex items-center gap-2.5 px-3.5 py-1.5 md:px-4 md:py-2 rounded-lg border border-zinc-200 hover:border-zinc-900 hover:bg-zinc-50 transition-all bg-white"
               >
-                <Wallet size={14} className="text-zinc-400 group-hover:text-emerald-600" />
+                <Wallet size={14} className="text-zinc-400 group-hover:text-zinc-900" />
                 <div className="flex flex-col items-start leading-none">
                   <span className="text-[8px] font-bold text-zinc-400 mb-0.5">Wallet</span>
                   <span className="text-[12px] font-bold text-zinc-900">
@@ -121,7 +121,7 @@ export default function DashboardLayout({ children }) {
               </Link>
             )}
 
-            <div className="hidden sm:flex w-10 h-10 rounded-xl border border-zinc-200 bg-white items-center justify-center cursor-pointer relative hover:bg-zinc-50 transition-colors">
+            <div className="hidden sm:flex w-10 h-10 rounded-lg border border-zinc-200 bg-white items-center justify-center cursor-pointer relative hover:bg-zinc-50 transition-colors">
               <Bell size={16} className="text-zinc-400" />
               <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full absolute top-2.5 right-2.5 border-2 border-white"></div>
             </div>
@@ -136,13 +136,13 @@ export default function DashboardLayout({ children }) {
               <div className="relative">
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-zinc-900 text-white flex items-center justify-center text-[13px] font-bold shadow-sm hover:bg-black transition-colors"
+                  className="w-10 h-10 lg:w-11 lg:h-11 rounded-lg bg-zinc-900 text-white flex items-center justify-center text-[13px] font-bold hover:bg-black transition-colors"
                 >
                   {user?.name?.[0] || "A"}
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-3 w-48 bg-white border border-zinc-200 rounded-2xl shadow-xl z-50 py-2 overflow-hidden">
+                  <div className="absolute right-0 mt-3 w-48 bg-white border border-zinc-200 rounded-lg shadow-lg z-50 py-2 overflow-hidden">
                     <Link
                       to="/profile"
                       onClick={() => setIsDropdownOpen(false)}
