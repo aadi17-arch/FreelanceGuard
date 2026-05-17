@@ -207,9 +207,11 @@ export default function SafeHoldingDashboard() {
             <div className="divide-y divide-zinc-100">
                {transactions.length > 0 ? (
                   transactions.map((tx) => {
-                      const isIncoming = tx.type === "DEPOSIT" || (tx.type === "RELEASE" && user?.role === "FREELANCER");
+                      const isIncoming = 
+                         (user?.role === "FREELANCER" && (tx.type === "RELEASE" || tx.type === "DEPOSIT")) ||
+                         (user?.role === "CLIENT" && tx.type === "REFUND");
                       const displayTitle = tx.type === "DEPOSIT"
-                         ? "Added to wallet"
+                         ? "Escrow Lock"
                          : tx.type === "WITHDRAWAL"
                          ? "Withdrawn to bank"
                          : tx.contract?.project?.title || tx.milestone?.title || "Project payment";
