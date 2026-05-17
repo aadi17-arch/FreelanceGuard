@@ -481,28 +481,10 @@ export default function Contracts() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 pt-2">
-                      <button
-                        onClick={() => toggleExpandDetails(contract.id)}
-                        className={`flex items-center justify-between px-4 py-2.5 rounded-[8px] text-xs font-bold transition-all border ${
-                          isDetailsExpanded
-                            ? "bg-[#111111] text-white border-[#111111]"
-                            : "bg-transparent text-[#111111] hover:bg-[#f9f9f9] border-[#e5e5e5]"
-                        }`}
-                      >
-                        <div className="flex items-center gap-1.5">
-                          <FileText size={13} />
-                          <span>View Details</span>
-                        </div>
-                        {isDetailsExpanded ? (
-                          <ChevronDown size={14} />
-                        ) : (
-                          <ChevronRight size={14} />
-                        )}
-                      </button>
+                    <div className="pt-2">
                       <button
                         onClick={() => toggleExpand(contract.id)}
-                        className="flex items-center justify-between px-4 py-2.5 bg-[#f9f9f9] hover:bg-[#eaeaea] text-[#111111] rounded-[8px] text-xs font-bold transition-all border border-[#e5e5e5]"
+                        className="w-full flex items-center justify-between px-4 py-2.5 bg-[#f9f9f9] hover:bg-[#eaeaea] text-[#111111] rounded-[8px] text-xs font-bold transition-all border border-[#e5e5e5]"
                       >
                         <span>Milestones ({activeMilestones.length})</span>
                         {isExpanded ? (
@@ -512,49 +494,6 @@ export default function Contracts() {
                         )}
                       </button>
                     </div>
-
-                    <AnimatePresence>
-                      {isDetailsExpanded && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden pt-4 border-t border-[#e5e5e5] space-y-4"
-                        >
-                          <h5 className="text-[11px] font-black text-[#666666] px-1">
-                            Milestone Settlements ({activeMilestones.length})
-                          </h5>
-
-                          <div className="space-y-3">
-                            {activeMilestones.map((m, idx) => (
-                              <div
-                                key={m.id || idx}
-                                className="p-4 bg-[#f9f9f9] border border-[#e5e5e5] rounded-[8px] flex items-start justify-between gap-4 hover:border-[#10b981] transition-all"
-                              >
-                                <div className="space-y-1">
-                                  <p className="text-xs font-bold text-[#111111]">{m.title}</p>
-                                  <p className="text-[11px] text-[#666666] leading-relaxed">{m.description}</p>
-                                  <p className="text-xs font-bold text-[#10b981]">${m.amount?.toLocaleString()}</p>
-                                </div>
-                                <span
-                                  className={`text-[9px] font-black px-2.5 py-0.5 rounded-[20px] shrink-0 ${
-                                    m.status === "RELEASED" || m.status === "APPROVED"
-                                      ? "bg-[#f0fdf4] text-[#10b981]"
-                                      : m.status === "SUBMITTED"
-                                      ? "bg-amber-50 text-amber-600 animate-pulse"
-                                      : m.status === "DISPUTED"
-                                      ? "bg-rose-50 text-rose-500"
-                                      : "bg-zinc-100 text-zinc-500"
-                                  }`}
-                                >
-                                  {m.status?.replace("_", " ")}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
 
                     <AnimatePresence>
                       {isExpanded && (
