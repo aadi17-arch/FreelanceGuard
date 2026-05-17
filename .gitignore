@@ -10,3 +10,10 @@ scratch/
 LOG.md
 LOG_PROTOCOL.md
 final_launch_checklist.md
+
+# Ignore all seeding and database cleaning scripts
+*seed*
+clean-db-except-users.js
+clean_and_seed.js
+seed.js
+
