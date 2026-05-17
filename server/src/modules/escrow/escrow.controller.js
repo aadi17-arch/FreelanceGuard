@@ -150,6 +150,7 @@ export const depositToEscrow = async (req, res) => {
         data: {
           status: "IN_PROGRESS"
         }
+      });
       return { message: "SUCCESS" };
     });
 
