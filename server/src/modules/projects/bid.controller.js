@@ -2,7 +2,7 @@ import prisma from "../../config/database.js";
 
 export const createBid = async (req, res) => {
   try {
-    const { projectId, amount, proposal } = req.body;
+    const { projectId, amount, proposal, milestones } = req.body;
     const freelancerId = req.user.id;
 
     if (!projectId || !amount || !proposal) {
@@ -20,17 +20,40 @@ export const createBid = async (req, res) => {
       return res.status(400).json({ message: "You have already submitted a proposal for this project." });
     }
 
-    const bid = await prisma.bid.create({
-      data: {
-        projectId,
-        freelancerId,
-        amount: parseFloat(amount),
-        proposal
-      }
+    const result = await prisma.$transaction(async (tx) => {
+      const bid = await tx.bid.create({
+        data: {
+          projectId,
+          freelancerId,
+          amount: parseFloat(amount),
+          proposal
+        }
+      });
+
+      const duration = 14;
+      const formattedMilestones = Array.isArray(milestones) && milestones.length > 0
+        ? milestones.map(m => ({ title: m.title || "Project Milestone", amount: parseFloat(m.amount) || 0 }))
+        : [{ title: "Project Milestone", amount: parseFloat(amount) }];
+
+      await tx.proposal.create({
+        data: {
+          projectId,
+          freelancerId,
+          amount: parseFloat(amount),
+          duration,
+          coverLetter: proposal,
+          status: 'PENDING',
+          milestones: formattedMilestones
+        }
+      });
+
+      return bid;
     });
-    res.status(201).json({ message: "Bid Submitted Successfully", bid });
+
+    res.status(201).json({ message: "Bid Submitted Successfully", bid: result });
   }
   catch (error) {
+    console.error("Error creating bid & proposal:", error);
     return res.status(500).json({ message: "Database Error" });
   }
 }
