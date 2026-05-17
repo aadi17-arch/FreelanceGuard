@@ -84,6 +84,17 @@ export default function Proposals() {
     }
   };
 
+  const getLeftBorderColor = (status) => {
+    switch (status) {
+      case "HIRED":
+      case "ACCEPTED": return "border-l-emerald-500";
+      case "COMPLETED": return "border-l-zinc-400";
+      case "REJECTED": return "border-l-rose-500";
+      default: return "border-l-zinc-300";
+    }
+  };
+
+
   const getStatusIcon = (status) => {
     switch (status) {
       case "HIRED":
@@ -115,20 +126,20 @@ export default function Proposals() {
             className="w-full pl-9 pr-4 py-2 bg-white border border-zinc-200 rounded-[8px] text-xs font-bold focus:outline-none focus:border-rui-success transition-all text-zinc-900 placeholder:text-zinc-400"
           />
         </div>
-        
+
         {(() => {
           const tabs = user?.role === "CLIENT"
             ? [
                 { key: "all", label: "All Received" },
                 { key: "pending", label: "New / Pending" },
-                { key: "review", label: "In Review" },
-                { key: "accepted", label: "Accepted" }
+                { key: "accepted", label: "Accepted" },
+                { key: "rejected", label: "Rejected" }
               ]
             : [
                 { key: "all", label: "All Proposals" },
                 { key: "pending", label: "Waiting" },
-                { key: "review", label: "Under Review" },
-                { key: "accepted", label: "Hired" }
+                { key: "accepted", label: "Hired" },
+                { key: "rejected", label: "Declined" }
               ];
 
           return (
@@ -158,9 +169,9 @@ export default function Proposals() {
                   >
                     {tab.label}
                     {activeTab === tab.key && (
-                      <motion.div 
+                      <motion.div
                         layoutId="proposalTab"
-                        className="absolute bottom-0 left-0 right-0 h-[3px] bg-rui-success rounded-full" 
+                        className="absolute bottom-0 left-0 right-0 h-[3px] bg-rui-success rounded-full"
                       />
                     )}
                   </button>
@@ -171,16 +182,16 @@ export default function Proposals() {
         })()}
       </div>
 
-      <div className="grid grid-cols-1 gap-4">
+      <div className="space-y-3">
         {loading ? (
-          <div className="py-20 text-center flex flex-col items-center justify-center gap-4 border border-zinc-200 rounded-[10px] bg-white">
-            <div className="w-6 h-6 border-2 border-rui-dark border-t-transparent rounded-full" />
-            <p className="text-[10px] font-bold text-zinc-400">Loading proposals...</p>
+          <div className="py-20 text-center flex flex-col items-center justify-center gap-4">
+            <div className="w-6 h-6 border-2 border-rui-dark border-t-transparent rounded-full animate-spin" />
+            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Loading proposals...</p>
           </div>
         ) : (() => {
           const filtered = proposals.filter(p => {
             const matchesTab = activeTab === "all" || p.status?.toLowerCase() === activeTab.toLowerCase();
-            const matchesSearch = !searchTerm || 
+            const matchesSearch = !searchTerm ||
               p.project?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
               p.coverLetter?.toLowerCase().includes(searchTerm.toLowerCase()) ||
               p.freelancer?.name?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -190,71 +201,67 @@ export default function Proposals() {
           return filtered.length > 0 ? filtered.map((proposal) => (
             <div
               key={proposal.id}
-              className="group bg-white border border-zinc-100 rounded-2xl p-6 hover:border-rui-success/30 transition-all duration-500"
+              className="bg-white border border-zinc-200 rounded-sm p-4 hover:border-zinc-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
             >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                <div className="space-y-4 flex-grow">
-                  <div className="flex items-center gap-3">
-                    <span className={`px-2 py-1 rounded-md text-[10px] font-bold border flex items-center gap-1.5 ${getStatusColor(getDisplayStatus(proposal))}`}>
-                      {getStatusIcon(getDisplayStatus(proposal))}
-                      {getDisplayStatus(proposal)}
-                    </span>
-                    <span className="text-[10px] font-bold text-zinc-300 flex items-center gap-1">
-                      <Clock size={10} /> Submitted {new Date(proposal.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-
-                  <div className="space-y-1">
-                    <h3 className="text-lg font-bold text-zinc-900 group-hover:text-rui-success transition-colors">
-                      {proposal.project?.title}
-                    </h3>
-                    <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400">
-                      <User size={12} />
-                      <span>{user?.role === "CLIENT" ? `From: ${proposal.freelancer?.name}` : `Sent to Client`}</span>
+              {/* Left Side: Information */}
+              <div className="min-w-0 flex-grow">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="text-sm font-bold text-zinc-900 truncate">
+                    {proposal.project?.title}
+                  </h3>
+                  <span className={`px-1.5 py-0.5 rounded-sm text-[8px] font-bold uppercase tracking-wider border ${getStatusColor(getDisplayStatus(proposal))}`}>
+                    {getDisplayStatus(proposal)}
+                  </span>
+                </div>
+                <div className="text-[11px] text-zinc-500 mt-1">
+                  Submitted {new Date(proposal.createdAt).toLocaleDateString()}
+                </div>
+                {proposal.coverLetter && (
+                  <div className="mt-2.5 bg-amber-50 border border-amber-200 p-2.5 rounded-sm max-w-2xl text-xs text-amber-900 font-medium">
+                    <div className="flex items-start gap-2">
+                      <MessageSquare size={12} className="text-amber-700 shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold text-amber-800 mr-1.5">Note:</span>
+                        <span className="italic">"{proposal.coverLetter}"</span>
+                      </div>
                     </div>
                   </div>
+                )}
+              </div>
 
-                  <p className="text-sm text-zinc-500 line-clamp-1 max-w-2xl leading-relaxed italic">
-                    "{proposal.coverLetter}"
-                  </p>
+              {/* Right Side: Price, Action, & Bottom-Right Name */}
+              <div className="flex flex-col items-end shrink-0 gap-1 text-right">
+                <div className="flex items-center gap-3">
+                  <div>
+                    <span className="text-xs text-zinc-400 font-bold mr-1">Budget:</span>
+                    <span className="text-sm font-bold text-zinc-900 font-financial">
+                      ${proposal.amount.toLocaleString()}
+                    </span>
+                  </div>
+
+                  {user?.role === "CLIENT" && proposal.status === "PENDING" && proposal.project?.status === "OPEN" && (
+                    <button
+                      onClick={() => handleAccept(proposal.id)}
+                      className="h-7 px-3 bg-zinc-900 hover:bg-black text-white rounded-sm text-[9px] font-bold uppercase tracking-wider transition-all"
+                    >
+                      Hire
+                    </button>
+                  )}
                 </div>
 
-                <div className="flex items-center justify-between lg:justify-end gap-8 pt-4 lg:pt-0 border-t lg:border-none border-zinc-50">
-                  <div className="text-right space-y-1">
-                    <p className="text-[10px] font-bold text-zinc-400">Total budget</p>
-                    <div className="flex items-center justify-end gap-0.5 text-xl font-bold text-zinc-900 tracking-tighter font-financial">
-                      <DollarSign size={14} className="text-rui-success" />
-                      {proposal.amount.toLocaleString()}
-                    </div>
-                  </div>
-
-                  <div className="text-right space-y-1">
-                    <p className="text-[10px] font-bold text-zinc-400">Delivery</p>
-                    <p className="text-xs font-bold text-zinc-900">{proposal.duration} Days</p>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    {user?.role === "CLIENT" && proposal.status === "PENDING" && proposal.project?.status === "OPEN" && (
-                      <button
-                        onClick={() => handleAccept(proposal.id)}
-                        className="px-5 py-2.5 bg-rui-success text-white hover:bg-emerald-600 rounded-xl text-[10px] font-bold transition-all shadow-lg shadow-emerald-100"
-                      >
-                        Hire freelancer
-                      </button>
-                    )}
-                    <button className="w-10 h-10 rounded-xl border border-zinc-100 flex items-center justify-center text-zinc-400 hover:bg-rui-dark hover:text-white hover:border-rui-dark transition-all shadow-sm">
-                      <MessageSquare size={16} />
-                    </button>
-                  </div>
+                <div className="text-[11px] text-zinc-500 font-medium">
+                  {user?.role === "CLIENT"
+                    ? proposal.freelancer?.name
+                    : proposal.project?.client?.name || "Client Account"}
                 </div>
               </div>
             </div>
           )) : (
-            <div className="py-20 text-center flex flex-col items-center justify-center gap-4 border border-zinc-200 rounded-[10px] bg-white">
-              <div className="text-zinc-200">
+            <div className="py-20 text-center flex flex-col items-center justify-center gap-4">
+              <div className="text-zinc-300">
                 <ClipboardList size={32} />
               </div>
-              <p className="text-[10px] font-bold text-zinc-400">No proposals found</p>
+              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">No proposals found</p>
             </div>
           );
         })()}
@@ -262,8 +269,3 @@ export default function Proposals() {
     </div>
   );
 }
-
-
-
-
-

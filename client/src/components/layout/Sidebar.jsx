@@ -32,12 +32,12 @@ export default function Sidebar({ onClose }) {
 
   const rawNavItems = [
     { name: "Home", path: "/dashboard", icon: <Grid size={14} />, section: "Overview", hideFor: ["ADMIN"] },
-    { 
-      name: user?.role?.toUpperCase() === "CLIENT" ? "Marketplace" : "Find projects", 
-      path: "/marketplace", 
-      icon: <Search size={14} />, 
-      section: "Overview", 
-      hideFor: ["ADMIN"] 
+    {
+      name: user?.role?.toUpperCase() === "CLIENT" ? "Marketplace" : "Find projects",
+      path: "/marketplace",
+      icon: <Search size={14} />,
+      section: "Overview",
+      hideFor: ["ADMIN"]
     },
     { name: "My contracts", path: "/contracts", icon: <Briefcase size={14} />, section: "Overview", hideFor: ["ADMIN"] },
     { name: "My wallet", path: "/escrow", icon: <Zap size={14} />, section: "Finance", hideFor: ["ADMIN"] },
@@ -67,7 +67,7 @@ export default function Sidebar({ onClose }) {
     <aside className="h-screen w-56 bg-zinc-50 border-r border-zinc-200 flex flex-col py-6 z-[60]">
       <div className="px-6 mb-8 flex justify-between items-center">
         <Link to={isAdmin ? "/admin" : "/dashboard"} onClick={onClose} className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center shadow-sm">
+          <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center">
             <ShieldCheck size={16} className="text-emerald-500" />
           </div>
           <div>
@@ -124,8 +124,8 @@ export default function Sidebar({ onClose }) {
             {/* KYC Alert */}
             {(!user?.kyc || user?.kyc?.status === 'PENDING') && (
               <div className="px-1 mb-2">
-                <Link 
-                  to="/kyc" 
+                <Link
+                  to="/kyc"
                   onClick={onClose}
                   className="flex items-center gap-1.5 group transition-all"
                 >
@@ -157,7 +157,7 @@ export default function Sidebar({ onClose }) {
               </div>
             )}
 
-            <button 
+            <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
               className={`w-full flex items-center justify-between p-2.5 rounded-2xl transition-colors border ${showProfileMenu ? 'bg-zinc-100 border-zinc-200 shadow-sm' : 'bg-transparent border-transparent hover:bg-white hover:border-zinc-200'}`}
             >
@@ -174,7 +174,7 @@ export default function Sidebar({ onClose }) {
                   </p>
                 </div>
               </div>
-              
+
               {(!user?.kyc || user?.kyc?.status === 'PENDING') && (
                  <div className="w-5 h-5 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 shrink-0">
                     <AlertTriangle size={10} />

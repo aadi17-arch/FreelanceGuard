@@ -60,6 +60,49 @@ const SubmitToastContent = React.forwardRef(({ id, onConfirm, onCancel }, ref) =
   );
 });
 
+const DisputeToastContent = React.forwardRef(({ id, onConfirm, onCancel }, ref) => {
+  const [reason, setReason] = useState("");
+  return (
+    <div ref={ref} className="bg-[#111111] border border-rose-900/50 text-white p-4 flex flex-col gap-3 font-body shadow-2xl min-w-[340px] max-w-md w-full rounded-none">
+      <div className="flex items-center gap-2">
+        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse shrink-0" />
+        <p className="text-[11px] font-bold text-zinc-100 tracking-tight">
+          Enter the reason for opening this escrow dispute:
+        </p>
+      </div>
+      
+      <textarea
+        placeholder="Provide a detailed explanation for our support review team..."
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        rows={3}
+        className="w-full px-2.5 py-1.5 bg-zinc-900/60 border border-zinc-800 focus:border-zinc-700 text-[10px] text-zinc-200 placeholder-zinc-500 rounded-none outline-none transition-colors resize-none"
+      />
+
+      <div className="flex justify-end gap-2 border-t border-zinc-800/80 pt-2.5">
+        <button
+          onClick={onCancel}
+          className="px-2.5 py-1 bg-transparent hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white text-[9px] font-black transition-all uppercase tracking-wider cursor-pointer rounded-none"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => {
+            if (!reason.trim()) {
+              toast.error("Please enter a dispute reason.");
+              return;
+            }
+            onConfirm(reason);
+          }}
+          className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white text-[9px] font-black transition-all uppercase tracking-wider cursor-pointer shadow-sm rounded-none"
+        >
+          Open Dispute
+        </button>
+      </div>
+    </div>
+  );
+});
+
 export default function Contracts() {
   const { user, refreshUser } = useAuth();
   const [activeTab, setActiveTab] = useState("active");
@@ -174,7 +217,7 @@ export default function Contracts() {
 
     try {
       setLoading(true);
-      await axios.post(`/milestone/release/${milestoneId}`);
+      await axios.post(`/escrow/milestone/release/${milestoneId}`);
 
       toast.success("Escrow funds successfully released to contractor's wallet!", {
         style: {
@@ -197,7 +240,7 @@ export default function Contracts() {
     }
   };
 
-  const handleRaiseDispute = async (contractId, milestoneId) => {
+  const handleRaiseDispute = (contractId, milestoneId) => {
     if (showDemo) {
       toast.success("Demo Mode: Dispute folder opened successfully!", {
         style: { background: "#18181b", color: "#fff", borderRadius: "12px", fontSize: "13px" }
@@ -205,36 +248,46 @@ export default function Contracts() {
       return;
     }
 
-    const reason = window.prompt("Please enter the reason for opening this escrow dispute:");
-    if (!reason) return;
+    enqueueSnackbar("", {
+      persist: true,
+      anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      content: (key) => (
+        <DisputeToastContent
+          id={key}
+          onCancel={() => closeSnackbar(key)}
+          onConfirm={async (reason) => {
+            closeSnackbar(key);
+            try {
+              setLoading(true);
+              await axios.post("/dispute", { milestoneId, reason });
 
-    try {
-      setLoading(true);
-      await axios.post("/dispute", { milestoneId, reason });
+              toast.success("Dispute raised. FreelanceGuard support team has been notified.", {
+                style: {
+                  background: "#18181b",
+                  color: "#fff",
+                  borderRadius: "12px",
+                  fontSize: "13px",
+                  fontWeight: "bold"
+                },
+                iconTheme: {
+                  primary: "#f43f5e",
+                  secondary: "#fff"
+                }
+              });
 
-      toast.success("Dispute raised. FreelanceGuard support team has been notified.", {
-        style: {
-          background: "#18181b",
-          color: "#fff",
-          borderRadius: "12px",
-          fontSize: "13px",
-          fontWeight: "bold"
-        },
-        iconTheme: {
-          primary: "#f43f5e",
-          secondary: "#fff"
-        }
-      });
-
-      await fetchContracts();
-      if (refreshUser) {
-        await refreshUser();
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to initiate dispute.");
-    } finally {
-      setLoading(false);
-    }
+              await fetchContracts();
+              if (refreshUser) {
+                await refreshUser();
+              }
+            } catch (err) {
+              toast.error(err.response?.data?.message || "Failed to initiate dispute.");
+            } finally {
+              setLoading(false);
+            }
+          }}
+        />
+      )
+    });
   };
 
   const activeContracts = [
@@ -668,12 +721,22 @@ export default function Contracts() {
                                             </span>
                                           </div>
                                         ) : (
-                                          <div className="flex items-center gap-1.5 text-[10px] text-rose-500 font-bold py-1">
-                                            <AlertTriangle size={12} />
-                                            <span>
-                                              Milestone is in active dispute
-                                              review.
-                                            </span>
+                                          <div className="flex flex-col gap-1.5 py-1">
+                                            <div className="flex items-center gap-1.5 text-[10px] text-rose-500 font-bold">
+                                              <AlertTriangle size={12} />
+                                              <span>
+                                                Milestone is in active dispute review.
+                                              </span>
+                                            </div>
+                                            {m.disputes && m.disputes.length > 0 && (
+                                              <Link
+                                                to={`/dispute/${m.disputes[0].id}`}
+                                                className="self-start text-[10px] font-black uppercase text-[#111111] hover:text-[#666666] underline flex items-center gap-1 mt-1"
+                                              >
+                                                <span>View Dispute Details</span>
+                                                <ArrowUpRight size={10} />
+                                              </Link>
+                                            )}
                                           </div>
                                         )
                                       ) : m.status === "PENDING" ? (
@@ -709,12 +772,23 @@ export default function Contracts() {
                                           </span>
                                         </div>
                                       ) : (
-                                        <div className="flex items-center gap-1.5 text-[10px] text-rose-500 font-bold py-1">
-                                          <AlertTriangle size={12} />
-                                          <span>
-                                            Milestone is under dispute review.
-                                            Support is reviewing.
-                                          </span>
+                                        <div className="flex flex-col gap-1.5 py-1">
+                                          <div className="flex items-center gap-1.5 text-[10px] text-rose-500 font-bold">
+                                            <AlertTriangle size={12} />
+                                            <span>Milestone is under dispute review.</span>
+                                          </div>
+                                          {m.disputes && m.disputes.length > 0 && (
+                                             <Link
+                                               to={`/dispute/${m.disputes[0].id}`}
+                                               className="self-start text-[10px] font-black uppercase text-[#111111] hover:text-[#666666] underline flex items-center gap-1 mt-1"
+                                             >
+                                               <span>View Dispute Details</span>
+                                               <ArrowUpRight size={10} />
+                                             </Link>
+                                           )}
+                                            
+                                            
+
                                         </div>
                                       )}
                                     </div>

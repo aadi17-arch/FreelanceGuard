@@ -29,36 +29,37 @@ export default function Modal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
         onClick={onClose}
-        className="absolute inset-0 bg-zinc-900/60"
+        className="absolute inset-0 bg-zinc-950/60"
       />
 
       {/* Modal Card */}
-      <div className="relative w-full max-w-lg bg-white rounded-[2rem] p-10 shadow-2xl border border-zinc-200">
+      <div className="relative w-full max-w-md bg-white rounded-sm p-6 border border-zinc-200 shadow-sm animate-fadeIn">
         {/* Header */}
-        <div className="flex justify-between items-start mb-6">
-          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
-            type === 'warning' ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'
-          }`}>
-            <AlertCircle size={24} />
+        <div className="flex justify-between items-center mb-5">
+          <div className="flex items-center gap-2">
+            <div className={`w-6 h-6 rounded-sm flex items-center justify-center shrink-0 ${
+              type === 'warning' ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'
+            }`}>
+              <AlertCircle size={13} />
+            </div>
+            <h2 className="text-sm font-black uppercase tracking-widest text-zinc-900 leading-none">{title}</h2>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-zinc-100 rounded-xl transition-colors">
-            <X size={20} className="text-zinc-400" />
+          <button 
+            onClick={onClose} 
+            className="p-1.5 hover:bg-zinc-100 rounded-sm border border-zinc-200 text-zinc-500 hover:text-zinc-900 transition-all"
+          >
+            <X size={14} />
           </button>
         </div>
 
-        {/* Title */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold tracking-tight text-zinc-900 leading-tight">{title}</h2>
-        </div>
-
         {/* Children (Form) or Default Message */}
-        <div className="mb-8">
+        <div className="mb-6">
           {children ? children : (
-            <p className="text-zinc-500 text-sm leading-relaxed">
+            <p className="text-zinc-500 text-xs leading-relaxed">
               {message}
             </p>
           )}
@@ -66,10 +67,10 @@ export default function Modal({
 
         {/* Actions - Only show if NO children are provided */}
         {!children && (
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex gap-3">
             <button 
               onClick={onClose}
-              className="flex-grow py-3 border border-zinc-200 rounded-xl text-xs font-bold uppercase tracking-widest text-zinc-500 hover:bg-zinc-50 transition-all"
+              className="flex-grow py-2 border border-zinc-200 rounded-sm text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:bg-zinc-50 transition-all"
             >
               {cancelText}
             </button>
@@ -78,17 +79,14 @@ export default function Modal({
                 if (onConfirm) onConfirm();
                 onClose();
               }}
-              className={`flex-grow py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-white shadow-lg transition-all ${
-                type === 'warning' ? 'bg-red-500 hover:bg-red-600 shadow-red-200' : 'bg-zinc-900 hover:bg-black shadow-zinc-200'
+              className={`flex-grow py-2 rounded-sm text-[10px] font-black uppercase tracking-widest text-white transition-all ${
+                type === 'warning' ? 'bg-red-600 hover:bg-red-700' : 'bg-zinc-900 hover:bg-black'
               }`}
             >
               {confirmText}
             </button>
           </div>
         )}
-
-        {/* Decorative Detail */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-zinc-100 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50"></div>
       </div>
     </div>
   );

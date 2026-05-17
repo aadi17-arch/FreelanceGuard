@@ -131,7 +131,7 @@ export default function TicketDetails() {
       {/* Main Conversation Area */}
       <div className="flex-grow flex flex-col bg-white border border-zinc-200 rounded-[2rem] overflow-hidden shadow-sm h-[calc(100vh-250px)]">
         {/* Messages List */}
-        <div className="flex-grow overflow-y-auto p-8 space-y-8 scrollbar-hide bg-zinc-50/30">
+        <div className="flex-grow overflow-y-auto p-8 space-y-8 scrollbar-hide bg-zinc-50">
           {ticket.messages.map((message) => {
             const isMe = message.senderId === user.id;
             const isAdmin = message.sender?.role === "ADMIN";

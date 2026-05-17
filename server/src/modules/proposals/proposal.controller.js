@@ -68,7 +68,13 @@ export const getMyProposals = async (req, res) => {
   try {
     const proposals = await prisma.proposal.findMany({
       where: { freelancerId: req.user.id },
-      include: { project: true }
+      include: {
+        project: {
+          include: {
+            client: true
+          }
+        }
+      }
     });
     res.status(200).json({ proposals });
   }

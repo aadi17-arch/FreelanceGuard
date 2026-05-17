@@ -168,7 +168,7 @@ export default function DashboardLayout({ children }) {
           </div>
         </header>
 
-        <main className="px-4 py-6 lg:px-8 lg:py-10 z-10 w-full overflow-x-hidden">
+        <main className="px-4 py-6 lg:px-8 lg:py-10 w-full overflow-x-hidden">
           <div className="w-full">
             {children}
           </div>

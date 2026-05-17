@@ -164,7 +164,7 @@ export default function Verification() {
             <p className="text-[11px] font-medium text-zinc-400">Make sure we can see your name and photo clearly.</p>
           </div>
           <div
-            className={`relative border border-dashed rounded-xl p-6 sm:p-10 transition-all cursor-pointer text-center ${file ? "border-emerald-500 bg-emerald-50/30" : "border-zinc-200 bg-zinc-50/30 hover:border-zinc-400"
+            className={`relative border border-dashed rounded-xl p-6 sm:p-10 transition-all cursor-pointer text-center ${file ? "border-emerald-500 bg-emerald-50" : "border-zinc-200 bg-zinc-50 hover:border-zinc-400"
               }`}
             onClick={() => document.getElementById('file-upload').click()}
           >
