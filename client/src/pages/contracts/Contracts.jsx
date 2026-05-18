@@ -20,8 +20,10 @@ import {
   Clock,
   AlertTriangle,
   Send,
-  HelpCircle
+  HelpCircle,
+  MessageSquare
 } from "lucide-react";
+import ChatWindow from "./ChatWindow";
 
 const SubmitToastContent = React.forwardRef(({ id, onConfirm, onCancel }, ref) => {
   const [note, setNote] = useState("");
@@ -112,6 +114,7 @@ export default function Contracts() {
   const [expandedContractId, setExpandedContractId] = useState(null);
   const [expandedDetailsContractId, setExpandedDetailsContractId] = useState(null);
   const [selectedContractForModal, setSelectedContractForModal] = useState(null);
+  const [chatOpenContractId, setChatOpenContractId] = useState(null);
 
   const toggleExpandDetails = (contractId) => {
     setExpandedDetailsContractId(
@@ -369,7 +372,7 @@ export default function Contracts() {
   };
 
   return (
-    <div className="w-full space-y-6 pb-10 px-6 bg-[#ffffff]">
+    <div className="w-full space-y-6 pb-10 px-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <p className="text-sm font-medium text-[#666666]">
           View milestones, track secure escrow locking, and process releases
@@ -572,7 +575,14 @@ export default function Contracts() {
                       </div>
                     </div>
 
-                    <div className="pt-2">
+                    <div className="pt-2 flex flex-col gap-2">
+                      <button
+                        onClick={() => setChatOpenContractId(contract.id)}
+                        className="w-full flex items-center justify-between px-4 py-2.5 bg-[#111111] hover:bg-black text-white rounded-[8px] text-xs font-bold transition-all shadow-sm"
+                      >
+                        <span className="flex items-center gap-2"><MessageSquare size={14} /> Open Chat</span>
+                        <ChevronRight size={14} />
+                      </button>
                       <button
                         onClick={() => toggleExpand(contract.id)}
                         className="w-full flex items-center justify-between px-4 py-2.5 bg-[#f9f9f9] hover:bg-[#eaeaea] text-[#111111] rounded-[8px] text-xs font-bold transition-all border border-[#e5e5e5]"
@@ -620,6 +630,11 @@ export default function Contracts() {
                                   "bg-rose-500 border-rose-500 text-white";
                                 badgeText = "Disputed";
                                 StatusIcon = AlertTriangle;
+                              } else if (m.status === "RESOLVED") {
+                                statusColor =
+                                  "bg-emerald-650 border-[#10b981] text-[#10b981]";
+                                badgeText = "Dispute Resolved";
+                                StatusIcon = CheckCircle;
                               }
 
                               return (
@@ -629,14 +644,14 @@ export default function Contracts() {
                                 >
                                   <div
                                     className={`absolute -left-[21.5px] top-1.5 w-[13px] h-[13px] rounded-full border-2 bg-white flex items-center justify-center transition-all ${
-                                      m.status === "RELEASED" || m.status === "APPROVED"
+                                      m.status === "RELEASED" || m.status === "APPROVED" || m.status === "RESOLVED"
                                         ? "border-[#10b981]"
                                         : "border-zinc-300"
                                     }`}
                                   >
                                     <div
                                       className={`w-[5px] h-[5px] rounded-full ${
-                                        m.status === "RELEASED" || m.status === "APPROVED"
+                                        m.status === "RELEASED" || m.status === "APPROVED" || m.status === "RESOLVED"
                                           ? "bg-[#10b981]"
                                           : "bg-zinc-300"
                                       }`}
@@ -656,7 +671,7 @@ export default function Contracts() {
 
                                       <span
                                         className={`self-start sm:self-center flex items-center gap-1.5 text-[9px] font-black px-2.5 py-1 rounded-[20px] ${
-                                          m.status === "RELEASED" || m.status === "APPROVED"
+                                          m.status === "RELEASED" || m.status === "APPROVED" || m.status === "RESOLVED"
                                             ? "bg-[#f0fdf4] text-[#10b981]"
                                             : m.status === "SUBMITTED"
                                               ? "bg-amber-50 text-amber-600"
@@ -720,6 +735,26 @@ export default function Contracts() {
                                               contractor.
                                             </span>
                                           </div>
+                                        ) : m.status === "RESOLVED" ? (
+                                          <div className="flex flex-col gap-1.5 py-1">
+                                            <div className="flex items-center gap-1.5 text-[10px] text-emerald-600 font-bold">
+                                              <CheckCircle size={12} />
+                                              <span>
+                                                {m.disputes?.[0]?.resolution?.toLowerCase().includes('released') || m.disputes?.[0]?.resolution?.toLowerCase().includes('freelancer')
+                                                  ? "Dispute resolved: Escrow funds released to contractor."
+                                                  : "Dispute resolved: Escrow funds refunded to your wallet."}
+                                              </span>
+                                            </div>
+                                            {m.disputes && m.disputes.length > 0 && (
+                                              <Link
+                                                to={`/dispute/${m.disputes[0].id}`}
+                                                className="self-start text-[10px] font-black uppercase text-[#111111] hover:text-[#666666] underline flex items-center gap-1 mt-1"
+                                              >
+                                                <span>View Case Verdict</span>
+                                                <ArrowUpRight size={10} />
+                                              </Link>
+                                            )}
+                                          </div>
                                         ) : (
                                           <div className="flex flex-col gap-1.5 py-1">
                                             <div className="flex items-center gap-1.5 text-[10px] text-rose-500 font-bold">
@@ -770,6 +805,26 @@ export default function Contracts() {
                                             Completed! Funds successfully
                                             released to your wallet.
                                           </span>
+                                        </div>
+                                      ) : m.status === "RESOLVED" ? (
+                                        <div className="flex flex-col gap-1.5 py-1">
+                                          <div className="flex items-center gap-1.5 text-[10px] text-emerald-600 font-bold">
+                                            <CheckCircle size={12} />
+                                            <span>
+                                              {m.disputes?.[0]?.resolution?.toLowerCase().includes('released') || m.disputes?.[0]?.resolution?.toLowerCase().includes('freelancer')
+                                                ? "Dispute resolved: Escrow funds released to your wallet."
+                                                : "Dispute resolved: Escrow funds refunded to client."}
+                                            </span>
+                                          </div>
+                                          {m.disputes && m.disputes.length > 0 && (
+                                            <Link
+                                              to={`/dispute/${m.disputes[0].id}`}
+                                              className="self-start text-[10px] font-black uppercase text-[#111111] hover:text-[#666666] underline flex items-center gap-1 mt-1"
+                                            >
+                                              <span>View Case Verdict</span>
+                                              <ArrowUpRight size={10} />
+                                            </Link>
+                                          )}
                                         </div>
                                       ) : (
                                         <div className="flex flex-col gap-1.5 py-1">
@@ -824,13 +879,13 @@ export default function Contracts() {
               ];
 
           return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setSelectedContractForModal(null)}
-                className="absolute inset-0 bg-[#09090b] "
+                className="absolute inset-0 bg-zinc-950/60"
               />
 
               <motion.div
@@ -884,7 +939,7 @@ export default function Contracts() {
                             <p className="text-xs font-bold text-[#10b981]">${m.amount?.toLocaleString()}</p>
                           </div>
                           <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
-                            m.status === "RELEASED" || m.status === "APPROVED"
+                            m.status === "RELEASED" || m.status === "APPROVED" || m.status === "RESOLVED"
                               ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
                               : m.status === "SUBMITTED"
                               ? "bg-amber-50 text-amber-600 border border-amber-100 animate-pulse"
@@ -913,6 +968,11 @@ export default function Contracts() {
           );
         })()}
       </AnimatePresence>
+      <ChatWindow 
+        contractId={chatOpenContractId} 
+        isOpen={!!chatOpenContractId} 
+        onClose={() => setChatOpenContractId(null)} 
+      />
     </div>
   );
 }
