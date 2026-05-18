@@ -29,7 +29,8 @@ export default function SupportList() {
   const fetchTickets = React.useCallback(async () => {
     try {
       const data = isAdmin ? await getAllTickets() : await getUserTickets();
-      setTickets(data);
+      const formalTickets = (data || []).filter(t => t.category !== 'CHAT');
+      setTickets(formalTickets);
     } catch (error) {
       enqueueSnackbar(error, { variant: "error" });
     } finally {
