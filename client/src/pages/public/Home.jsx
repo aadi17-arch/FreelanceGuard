@@ -21,11 +21,11 @@ export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 flex flex-col items-center overflow-x-hidden font-body selection:bg-emerald-100">
+    <div className="public-page min-h-screen bg-white text-zinc-900 flex flex-col items-center overflow-x-hidden font-body selection:bg-emerald-100">
       <nav className="w-full max-w-7xl mx-auto px-5 py-5 md:py-6 flex items-center justify-between z-[100] sticky top-0 bg-white border-b border-zinc-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center shadow-lg shadow-zinc-900/10">
-            <ShieldCheck size={16} className="text-emerald-500" />
+          <div className="w-8 h-8 bg-zinc-900 rounded-2xl flex items-center justify-center shadow-lg shadow-zinc-900/10">
+            <Lock size={16} className="text-emerald-500" />
           </div>
           <span className="text-lg font-bold tracking-tight text-zinc-900">Freelance<span className="text-emerald-600">Guard</span></span>
         </div>
@@ -36,7 +36,7 @@ export default function Home() {
           <a href="#pricing" className="hover:text-zinc-900 transition-colors">Pricing</a>
           <Link to="/login" className="hover:text-zinc-900 transition-colors">Sign in</Link>
           <Link to="/register">
-            <button className="bg-zinc-900 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-emerald-600 transition-all text-[13px]">
+            <button className="bg-zinc-900 text-white px-6 py-2.5 rounded-2xl font-bold hover:bg-emerald-600 transition-all text-[13px]">
               Create account
             </button>
           </Link>
@@ -56,7 +56,7 @@ export default function Home() {
             <a href="#pricing" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-zinc-600">Pricing</a>
             <hr className="border-zinc-100" />
             <Link to="/login" className="text-sm font-bold text-zinc-600">Sign in</Link>
-            <Link to="/register" className="bg-emerald-600 text-white py-4 rounded-xl font-bold text-center text-sm">
+            <Link to="/register" className="bg-emerald-600 text-white py-4 rounded-2xl font-bold text-center text-sm">
               Create account
             </Link>
           </div>
@@ -90,10 +90,10 @@ export default function Home() {
           className="flex flex-col items-center justify-center gap-4 w-full"
         >
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full justify-center">
-            <Link to="/register" className="w-full sm:w-auto px-10 py-4 bg-zinc-900 text-white rounded-xl font-bold text-[15px] hover:bg-emerald-600 transition-all flex items-center justify-center gap-2">
+            <Link to="/register" className="w-full sm:w-auto px-10 py-4 bg-zinc-900 text-white rounded-2xl font-bold text-[15px] hover:bg-emerald-600 transition-all flex items-center justify-center gap-2">
               Create free account <ArrowRight size={18} />
             </Link>
-            <Link to="/how-it-works" className="w-full sm:w-auto px-10 py-4 bg-white border border-zinc-200 text-zinc-600 rounded-xl font-bold text-[15px] hover:bg-zinc-50 transition-all flex items-center justify-center">
+            <Link to="/how-it-works" className="w-full sm:w-auto px-10 py-4 bg-white border border-zinc-200 text-zinc-600 rounded-2xl font-bold text-[15px] hover:bg-zinc-50 transition-all flex items-center justify-center">
               See how it works
             </Link>
           </div>
@@ -176,7 +176,7 @@ export default function Home() {
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 className="space-y-5"
               >
-                <div className="w-12 h-12 rounded-xl bg-zinc-50 border border-zinc-100 flex items-center justify-center text-zinc-400 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all shadow-sm">
+                <div className="w-12 h-12 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-center text-zinc-400 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all shadow-sm">
                   <Icon size={20} strokeWidth={2} />
                 </div>
                 <div className="space-y-2">
@@ -267,7 +267,7 @@ export default function Home() {
             ))}
           </ul>
           
-          <Link to="/register" className="block w-full py-4 bg-zinc-900 text-white rounded-xl font-bold text-sm hover:bg-emerald-600 transition-all shadow-lg">
+          <Link to="/register" className="block w-full py-4 bg-zinc-900 text-white rounded-2xl font-bold text-sm hover:bg-emerald-600 transition-all shadow-lg">
             Create account now
           </Link>
         </motion.div>
@@ -325,7 +325,7 @@ export default function Home() {
           </p>
           <div className="relative z-10 pt-4">
             <Link to="/register">
-              <button className="w-full sm:w-auto px-12 py-4 bg-emerald-600 text-white rounded-xl font-bold text-base hover:bg-white hover:text-zinc-900 transition-all shadow-xl">
+              <button className="w-full sm:w-auto px-12 py-4 bg-emerald-600 text-white rounded-2xl font-bold text-base hover:bg-white hover:text-zinc-900 transition-all shadow-xl">
                 Start protecting your income
               </button>
             </Link>
@@ -336,7 +336,7 @@ export default function Home() {
       <footer className="w-full max-w-7xl mx-auto px-6 py-16 md:py-20 flex flex-col md:flex-row justify-between items-center gap-12 border-t border-zinc-100">
         <div className="flex flex-col items-center md:items-start gap-5">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center shadow-lg shadow-zinc-900/10">
+            <div className="w-8 h-8 bg-zinc-900 rounded-2xl flex items-center justify-center shadow-lg shadow-zinc-900/10">
               <ShieldCheck size={16} className="text-emerald-500" />
             </div>
             <span className="text-lg font-bold tracking-tight text-zinc-900">Freelance<span className="text-emerald-600">Guard</span></span>
