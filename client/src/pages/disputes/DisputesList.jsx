@@ -29,7 +29,6 @@ const SupportHub = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState("");
   
-  // Real live chat state variables
   const [activeTicket, setActiveTicket] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
   const [loadingChat, setLoadingChat] = useState(false);
@@ -57,11 +56,9 @@ const SupportHub = () => {
     }
   };
 
-  // Fetch or refresh active support tickets
   const fetchActiveChatTicket = async () => {
     try {
       const response = await axios.get('/support/my-tickets');
-      // Find the most recent casual live chat session
       const openTicket = response.data.find(t => t.category === 'CHAT' && t.status !== 'CLOSED');
       if (openTicket) {
         const details = await axios.get(`/support/ticket/${openTicket.id}`);
@@ -76,7 +73,6 @@ const SupportHub = () => {
     }
   };
 
-  // Setup live support REST polling (3 seconds interval) when widget is opened
   useEffect(() => {
     if (!isChatOpen) return;
 
@@ -87,7 +83,6 @@ const SupportHub = () => {
     return () => clearInterval(interval);
   }, [isChatOpen]);
 
-  // Auto-scroll inside floating widget
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
@@ -99,14 +94,12 @@ const SupportHub = () => {
     setSendingChat(true);
     try {
       if (activeTicket) {
-        // Send a reply to the existing active ticket
         const response = await axios.post(`/support/reply/ticket/${activeTicket.id}`, {
           content: chatMessage
         });
         setChatMessages((prev) => [...prev, response.data]);
         setChatMessage("");
       } else {
-        // Automatically create a new casual chat session
         const response = await axios.post('/support/ticket', {
           subject: "Live Query Chat",
           category: "CHAT",
@@ -255,7 +248,7 @@ const SupportHub = () => {
               ) : (
                 chatMessages.map((msg, idx) => {
                   const isMe = msg.senderId === user?.id;
-                  const isAdmin = msg.sender?.role === "ADMIN" || !isMe; // If not me, treat as Support Admin response
+                  const isAdmin = msg.sender?.role === "ADMIN" || !isMe;
 
                   return (
                     <div key={msg.id || idx} className={`flex ${isMe ? "justify-end" : "justify-start"} w-full`}>

@@ -48,7 +48,7 @@ export default function Market() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
 
-  // Modal state and submission logic removed - now redirects to details page as requested
+
 
   useEffect(() => {
     fetchProjects();

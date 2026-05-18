@@ -176,7 +176,6 @@ export default function Contracts() {
       return;
     }
 
-    // Trigger custom inline confirmation with description field in the notification card itself (no prompts!)
     enqueueSnackbar("", {
       persist: true,
       anchorOrigin: { vertical: "bottom", horizontal: "right" },

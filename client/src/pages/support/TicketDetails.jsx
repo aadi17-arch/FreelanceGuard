@@ -54,7 +54,7 @@ export default function TicketDetails() {
     try {
       await replyToTicket(id, reply);
       setReply("");
-      fetchTicketDetails(); // Refresh messages
+      fetchTicketDetails();
     } catch (error) {
       enqueueSnackbar(error, { variant: "error" });
     } finally {

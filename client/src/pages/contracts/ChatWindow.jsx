@@ -11,7 +11,6 @@ const ChatWindow = ({ contractId, isOpen, onClose }) => {
   const [sending, setSending] = useState(false);
   const chatEndRef = useRef(null);
 
-  // Fetch chat history function
   const fetchChat = async () => {
     try {
       const response = await axios.get(`/chat/${contractId}`);
@@ -23,7 +22,6 @@ const ChatWindow = ({ contractId, isOpen, onClose }) => {
     }
   };
 
-  // 1. Initial Load & Setup REST Polling (3 seconds interval)
   useEffect(() => {
     if (!isOpen) return;
 
@@ -34,12 +32,10 @@ const ChatWindow = ({ contractId, isOpen, onClose }) => {
     return () => clearInterval(interval);
   }, [contractId, isOpen]);
 
-  // 2. Auto-scroll to latest message
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 3. Send Message
   const handleSend = async (e) => {
     e.preventDefault();
     if (!text.trim() || sending) return;

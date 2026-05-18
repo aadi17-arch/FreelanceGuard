@@ -18,7 +18,7 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    role: "FREELANCER", // Defaults to Freelancer, but now selectable
+    role: "FREELANCER",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
