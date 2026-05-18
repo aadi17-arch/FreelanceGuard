@@ -147,41 +147,35 @@ export default function Market() {
           <Link
             key={proj.id}
             to={`/project/${proj.id}`}
-            className="group bg-white border border-zinc-200 rounded-[10px] p-[20px] hover:border-rui-success transition-all duration-500 flex flex-col lg:flex-row lg:items-center gap-6"
+            className="group bg-white border border-zinc-200 rounded-xl p-5 hover:border-zinc-950 hover:shadow-sm transition-all duration-300 flex flex-col gap-4"
           >
-            <div className="flex-grow space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-zinc-50 text-zinc-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:text-rui-success transition-all duration-500 border border-zinc-100 group-hover:border-rui-success/20">
-                  <Briefcase size={18} />
-                </div>
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-400">
-                    <Clock size={10} /> {new Date(proj.createdAt).toLocaleDateString()}
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="text-lg lg:text-xl font-bold text-zinc-900 tracking-tight truncate group-hover:text-rui-success transition-colors">
-                  {proj.title}
-                </h3>
-                <p className="text-sm text-zinc-500 line-clamp-2 leading-relaxed max-w-2xl font-medium">
-                  {proj.description}
-                </p>
+            {/* Top row: Title and Date */}
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="text-md font-bold text-zinc-900 tracking-tight truncate group-hover:text-emerald-600 transition-colors">
+                {proj.title}
+              </h3>
+              <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-400 shrink-0">
+                <Clock size={11} />
+                <span>{new Date(proj.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between w-full lg:w-auto gap-6 pt-4 lg:pt-0 border-t border-zinc-100 lg:border-none">
-              <div className="flex items-center gap-8">
-                <div className="space-y-0.5">
-                  <p className="text-[10px] font-bold text-zinc-400">Estimated budget</p>
-                  <div className="flex items-center gap-0.5 font-bold text-zinc-900 text-xl lg:text-2xl tracking-tighter font-financial">
-                    <DollarSign size={16} className="text-rui-success" />
-                    {proj.budget?.toLocaleString()}
-                  </div>
+            {/* Description just below the title */}
+            <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed font-medium">
+              {proj.description}
+            </p>
+
+            {/* Bottom row: Budget and actions */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-zinc-100">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Budget:</span>
+                <div className="flex items-center gap-0.5 font-black text-emerald-600 text-sm tracking-tight">
+                  <DollarSign size={13} />
+                  {proj.budget?.toLocaleString()}
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 w-full sm:w-auto">
+              <div className="flex items-center gap-3">
                 {user?.role === "FREELANCER" && (
                   <button
                     onClick={(e) => {
@@ -189,13 +183,13 @@ export default function Market() {
                       e.stopPropagation();
                       navigate(`/project/${proj.id}`);
                     }}
-                    className="flex-grow sm:flex-grow-0 px-6 py-2.5 bg-rui-dark text-white rounded-[10px] text-[10px] font-bold hover:bg-black transition-all"
+                    className="px-5 py-2 bg-zinc-900 text-white rounded-lg text-[10px] font-bold hover:bg-black transition-all"
                   >
                     Send proposal
                   </button>
                 )}
-                <div className="w-10 h-10 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 group-hover:bg-rui-dark group-hover:text-white group-hover:border-rui-dark transition-all duration-500">
-                  <ChevronRight size={18} />
+                <div className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 group-hover:bg-zinc-950 group-hover:text-white group-hover:border-zinc-950 transition-all duration-300">
+                  <ChevronRight size={14} />
                 </div>
               </div>
             </div>
