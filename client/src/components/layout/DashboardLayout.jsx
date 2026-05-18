@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import { useAuth } from "../../context/AuthContext";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { LogOut, Menu, X, Bell, User, Wallet, Shield } from "lucide-react";
+import { LogOut, Menu, Bell, User, Wallet } from "lucide-react";
 
 export default function DashboardLayout({ children }) {
   const { user, logout, refreshUser } = useAuth();

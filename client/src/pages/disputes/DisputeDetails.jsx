@@ -9,10 +9,8 @@ import {
    ChevronLeft,
    CheckCircle2,
    Lock,
-   ShieldCheck,
    Download,
    User,
-   Scale,
    AlertTriangle,
    ArrowRight
 } from 'lucide-react';

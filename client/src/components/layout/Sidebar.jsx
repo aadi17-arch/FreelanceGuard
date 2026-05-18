@@ -8,7 +8,6 @@ import {
   Zap,
   Briefcase,
   ClipboardList,
-  LifeBuoy,
   X,
   Activity,
   AlertTriangle,
