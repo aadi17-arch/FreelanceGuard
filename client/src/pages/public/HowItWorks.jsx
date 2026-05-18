@@ -52,17 +52,17 @@ export default function HowItWorks() {
   ];
 
   return (
-    <div className="min-h-screen bg-white font-body overflow-x-hidden">
+    <div className="public-page min-h-screen bg-white font-body overflow-x-hidden">
       {/* Navigation */}
       <nav className="px-4 py-5 md:px-6 md:py-6 flex justify-between items-center max-w-7xl mx-auto border-b border-zinc-100">
         <Link to="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center shadow-lg shadow-zinc-900/10">
+          <div className="w-8 h-8 bg-zinc-900 rounded-xl flex items-center justify-center shadow-lg shadow-zinc-900/10">
             <ShieldCheck size={16} className="text-emerald-500" />
           </div>
           <span className="text-lg font-bold tracking-tight text-zinc-900">Freelance<span className="text-emerald-600">Guard</span></span>
         </Link>
         <Link to="/login">
-          <button className="px-5 py-2 bg-zinc-900 text-white rounded-lg text-[11px] font-bold hover:bg-zinc-800 transition-all">
+          <button className="px-5 py-2 bg-zinc-900 text-white rounded-2xl text-[11px] font-bold hover:bg-zinc-800 transition-all">
             Sign in
           </button>
         </Link>
@@ -99,9 +99,9 @@ export default function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
-              className="bg-white p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-[2rem] border border-zinc-200 shadow-sm space-y-6"
+              className="bg-white p-6 md:p-8 lg:p-10 rounded-[2.5rem] border border-zinc-200 shadow-sm space-y-6"
             >
-              <div className={`w-12 h-12 md:w-14 md:h-14 ${step.color} rounded-xl flex items-center justify-center shadow-sm`}>
+              <div className={`w-12 h-12 md:w-14 md:h-14 ${step.color} rounded-2xl flex items-center justify-center shadow-sm`}>
                 {step.icon}
               </div>
               <div className="space-y-3">
@@ -135,7 +135,7 @@ export default function HowItWorks() {
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 className="flex gap-4 md:gap-6 items-start"
               >
-                <div className="w-10 h-10 bg-zinc-50 border border-zinc-100 rounded-lg flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 bg-zinc-50 border border-zinc-100 rounded-2xl flex items-center justify-center shrink-0">
                   {f.icon}
                 </div>
                 <div className="space-y-1.5 min-w-0">
@@ -153,10 +153,10 @@ export default function HowItWorks() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="bg-zinc-900 rounded-2xl md:rounded-[2.5rem] p-8 md:p-12 lg:p-16 text-white space-y-8 md:space-y-10 shadow-2xl relative overflow-hidden"
+          className="bg-zinc-900 rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-12 lg:p-16 text-white space-y-8 md:space-y-10 shadow-2xl relative overflow-hidden"
         >
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-emerald-600 rounded-2xl flex items-center justify-center">
               <ShieldCheck size={20} />
             </div>
             <div className="min-w-0">
@@ -184,19 +184,19 @@ export default function HowItWorks() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-emerald-600 rounded-2xl md:rounded-[2.5rem] p-8 md:p-14 lg:p-20 space-y-8 md:space-y-10"
+          className="bg-emerald-600 rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-14 lg:p-20 space-y-8 md:space-y-10"
         >
           <h2 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
             Ready to start working <br className="hidden md:block" /> without the worry?
           </h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-5">
             <Link to="/register" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto px-10 py-4 bg-white text-emerald-700 rounded-xl text-xs font-bold hover:bg-zinc-50 transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/10">
+              <button className="w-full sm:w-auto px-10 py-4 bg-white text-emerald-700 rounded-2xl text-xs font-bold hover:bg-zinc-50 transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/10">
                 Create your account <ArrowRight size={14} />
               </button>
             </Link>
             <Link to="/marketplace" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto px-10 py-4 bg-emerald-700 text-white rounded-xl text-xs font-bold hover:bg-emerald-800 transition-colors border border-emerald-500/20">
+              <button className="w-full sm:w-auto px-10 py-4 bg-emerald-700 text-white rounded-2xl text-xs font-bold hover:bg-emerald-800 transition-colors border border-emerald-500/20">
                 Browse projects
               </button>
             </Link>
