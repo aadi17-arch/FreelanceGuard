@@ -49,7 +49,6 @@ export default function Sidebar({ onClose }) {
       hideFor: ["ADMIN"]
     },
     { name: "Verification", path: "/kyc", icon: <ShieldCheck size={14} />, section: "Account", hideFor: ["ADMIN"] },
-    { name: "Support hub", path: "/support", icon: <LifeBuoy size={14} />, section: "Account", hideFor: ["ADMIN"] },
     { name: "Disputes", path: "/disputes", icon: <AlertTriangle size={14} />, section: "Account", hideFor: ["ADMIN"] },
     ...(isAdmin
       ? [{ name: "Solution center", path: "/admin", icon: <Activity size={14} />, section: "Management" }]
