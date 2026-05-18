@@ -318,5 +318,4 @@ const SupportHub = () => {
   );
 };
 
-
 export default SupportHub;

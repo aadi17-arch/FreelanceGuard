@@ -3,7 +3,6 @@ import { depositToEscrow, getUserContracts, releaseFunds, addFundsToWallet, with
 import authMiddleware, { roleMiddleware } from "../auth/auth.middleware.js";
 import kycmiddleware from "../kyc/kyc.middleware.js";
 
-
 const router = express.Router();
 router.get("/", authMiddleware, getUserContracts);
 router.get("/transactions", authMiddleware, getUserTransactions);

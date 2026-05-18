@@ -94,7 +94,6 @@ export default function Proposals() {
     }
   };
 
-
   const getStatusIcon = (status) => {
     switch (status) {
       case "HIRED":

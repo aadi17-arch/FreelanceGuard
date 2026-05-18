@@ -202,7 +202,6 @@ model ChatMessage {
   sender     User     @relation(fields: [senderId], references: [id])
 }
 
-
 enum Role {
   CLIENT
   FREELANCER

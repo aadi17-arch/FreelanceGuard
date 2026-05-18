@@ -299,7 +299,6 @@ const DisputeDetails = () => {
                            )}
                         </div>
 
-
                      </div>
                   </div>
                )}

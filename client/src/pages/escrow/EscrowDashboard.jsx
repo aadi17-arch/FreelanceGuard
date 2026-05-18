@@ -191,7 +191,6 @@ export default function SafeHoldingDashboard() {
                </div>
             </div>
 
-
          </section>
 
          <section className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">

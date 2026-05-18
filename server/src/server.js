@@ -14,7 +14,6 @@ import proposalRoutes from "./modules/proposals/proposal.routes.js";
 import supportRoutes from "./modules/support/support.routes.js"
 import chatRoutes from "./modules/chat/chat.routes.js";
 
-
 dotenv.config();
 
 const app = express();

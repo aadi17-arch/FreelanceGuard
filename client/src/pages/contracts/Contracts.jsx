@@ -204,7 +204,6 @@ export default function Contracts() {
     });
   };
 
-
   const handleReleaseMilestone = async (contractId, milestoneId) => {
     if (showDemo) {
       toast.success("Demo Mode: Escrow funds released to freelancer wallet successfully!", {

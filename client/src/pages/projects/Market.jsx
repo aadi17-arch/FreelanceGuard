@@ -211,7 +211,6 @@ export default function Market() {
         )}
       </div>
 
-
     </div>
   );
 }

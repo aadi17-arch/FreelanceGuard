@@ -131,8 +131,3 @@ const RaiseDisputeModal = ({ isOpen, onClose, milestoneId, milestoneTitle }) => 
 };
 
 export default RaiseDisputeModal;
-
-
-
-
-

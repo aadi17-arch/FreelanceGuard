@@ -60,5 +60,4 @@ export const sendNewMessage = async (req, res) => {
     return res.status(500).json({ message: "Failed to send message." });
   }
 
-
 }

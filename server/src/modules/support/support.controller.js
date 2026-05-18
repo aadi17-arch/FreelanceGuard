@@ -1,4 +1,3 @@
-
 import prisma from "../../config/database.js";
 
 export const createTicket = async (req, res) => {
@@ -37,7 +36,6 @@ export const getUserTicket = async (req, res) => {
     if (!supportTicket) {
       return res.status(404).json({message:"Ticket not found."})
     }
-
 
     if (supportTicket.userId !== userId && req.user.role !== "ADMIN") {
       return res.status(403).json({message:"Unauthorized Access."})

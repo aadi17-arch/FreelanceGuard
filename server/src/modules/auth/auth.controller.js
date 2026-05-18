@@ -157,7 +157,6 @@ export const getProfile = async (req, res) => {
       heldAmount = activeContracts.reduce((sum, c) => sum + c.heldAmount, 0);
     }
 
-
     return res.status(200).json({
       ...user,
       heldAmount,
