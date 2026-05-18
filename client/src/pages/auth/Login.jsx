@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
 import { 
-  Shield, 
+  ShieldCheck, 
   Lock, 
   Mail, 
   ArrowRight, 
@@ -37,25 +37,31 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="auth-page min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-[420px] px-2 sm:px-0 space-y-10 relative z-10"
+        className="w-full max-w-[420px] px-2 sm:px-0 space-y-6 relative z-10"
       >
-        <div className="flex flex-col items-center gap-6">
-          <Link to="/" className="group">
-             <div className="w-16 h-16 bg-zinc-900 rounded-[2rem] flex items-center justify-center shadow-2xl group-hover:rotate-6 transition-transform">
-                <Shield size={32} className="text-emerald-500" />
+        <div className="flex flex-col items-center gap-3">
+          <Link to="/" className="group flex items-center gap-2.5">
+             <div className="w-10 h-10 bg-zinc-900 rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2l9 4.9v9.8L12 22l-9-5.3V6.9L12 2z" />
+                  <circle cx="12" cy="12" r="3" className="fill-emerald-500" />
+                  <path d="M12 2v7" />
+                  <path d="M12 15v7" />
+                </svg>
              </div>
+             <span className="text-xl font-bold tracking-tight text-zinc-900">Freelance<span className="text-emerald-600">Guard</span></span>
           </Link>
-          <div className="text-center space-y-3">
-             <h2 className="text-3xl font-bold tracking-tight text-zinc-900 leading-tight">Welcome back</h2>
-             <p className="text-sm font-medium text-zinc-400 italic">"Secure your work. Protect your income."</p>
+          <div className="text-center space-y-1">
+             <h2 className="text-2xl font-bold tracking-tight text-zinc-900 leading-tight">Welcome back</h2>
+             <p className="text-xs font-medium text-zinc-400">"Secure your work. Protect your income."</p>
           </div>
         </div>
 
-        <div className="bg-white border border-zinc-100 rounded-[2.5rem] p-6 sm:p-8 lg:p-10 shadow-sm">
+        <div className="bg-white border border-zinc-100 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm">
            <form onSubmit={handleSubmit} className="space-y-6">
              <div className="space-y-4">
                <div className="space-y-2">
@@ -67,7 +73,7 @@ export default function Login() {
                    type="email"
                    value={email}
                    onChange={(e) => setEmail(e.target.value)}
-                   className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all"
+                   className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all"
                    placeholder="Enter your email address"
                    required
                  />
@@ -83,7 +89,7 @@ export default function Login() {
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all pr-12"
+                      className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl text-sm font-medium focus:bg-white focus:border-emerald-500 outline-none transition-all pr-12"
                       placeholder="Enter your password"
                       required
                     />
@@ -102,7 +108,7 @@ export default function Login() {
                <button 
                  type="submit" 
                  disabled={loading} 
-                 className="w-full py-4 bg-zinc-900 text-white rounded-xl text-sm font-bold shadow-2xl shadow-zinc-900/10 hover:bg-emerald-600 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
+                 className="w-full py-4 bg-zinc-900 text-white rounded-2xl text-sm font-bold shadow-2xl shadow-zinc-900/10 hover:bg-emerald-600 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
                >
                  {loading ? "Signing in..." : (
                    <>
