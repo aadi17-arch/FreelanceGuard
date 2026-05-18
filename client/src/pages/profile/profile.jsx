@@ -100,7 +100,7 @@ export default function Profile() {
   }, [user]);
 
   return (
-    <div className="w-full space-y-6 pb-20 px-6 bg-white">
+    <div className="w-full space-y-6 pb-20 px-6">
       <header className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-zinc-100 pb-6">
         <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
           <div className="relative">
@@ -144,7 +144,8 @@ export default function Profile() {
               </div>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+          { user?.role !== "ADMIN"?
+            <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
               {[
                 { label: "Total Earnings", value: `$${user?.totalEarned?.toLocaleString() || "0"}` }
               ].map((stat, i) => (
@@ -153,7 +154,10 @@ export default function Profile() {
                    <p className="text-[28px] font-bold tracking-tight leading-none text-zinc-900">{stat.value}</p>
                 </div>
               ))}
-           </div>
+            </div>
+            :
+            <div></div>
+           }
 
            <div className="bg-white border border-zinc-200 rounded-xl p-6 space-y-6 shadow-sm">
               <div className="flex items-center gap-2">
@@ -208,10 +212,10 @@ export default function Profile() {
       </div>
 
       {showEditModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div 
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+          <div
             onClick={() => setShowEditModal(false)}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60"
           />
 
           <div className="relative bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-zinc-200 flex flex-col">
