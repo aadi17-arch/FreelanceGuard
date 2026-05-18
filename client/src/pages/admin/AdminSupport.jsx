@@ -120,92 +120,85 @@ export default function AdminSupport() {
         </div>
       </div>
 
-      {/* Tickets Table */}
+      {/* Tickets List */}
       <div className="bg-white border border-zinc-200 rounded-[2rem] overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-zinc-50/50 border-b border-zinc-100">
-                <th className="px-6 py-4 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">User</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Ticket details</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-zinc-400 uppercase tracking-widest text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-100">
-              {loading ? (
-                <tr>
-                  <td colSpan="4" className="py-20 text-center">
-                    <div className="flex flex-col items-center gap-3">
-                      <div className="w-6 h-6 border-2 border-zinc-900 border-t-transparent rounded-full" />
-                      <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Loading...</span>
+        {loading ? (
+          <div className="py-20 text-center">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-6 h-6 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin mx-auto" />
+              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Loading...</span>
+            </div>
+          </div>
+        ) : filteredTickets.length === 0 ? (
+          <div className="py-20 text-center">
+            <div className="flex flex-col items-center gap-4 text-zinc-300">
+              <MessageSquare size={48} className="mx-auto" />
+              <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest">No matching tickets found</p>
+            </div>
+          </div>
+        ) : (
+          <div className="divide-y divide-zinc-100">
+            {filteredTickets.map((ticket) => (
+              <div key={ticket.id} className="p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 hover:bg-zinc-50/50 transition-colors group">
+                {/* User & Ticket details */}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 flex-1 min-w-0">
+                  {/* User profile */}
+                  <div className="flex items-center gap-3 shrink-0">
+                    <div className="w-9 h-9 bg-zinc-100 rounded-xl flex items-center justify-center text-zinc-400 shrink-0">
+                      <UserIcon size={16} />
                     </div>
-                  </td>
-                </tr>
-              ) : filteredTickets.length === 0 ? (
-                <tr>
-                  <td colSpan="4" className="py-20 text-center">
-                    <div className="flex flex-col items-center gap-4 text-zinc-300">
-                      <MessageSquare size={48} />
-                      <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest">No matching tickets found</p>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-zinc-900 leading-tight truncate max-w-[150px] sm:max-w-none">{ticket.user?.name || "Unknown User"}</p>
+                      <p className="text-[11px] text-zinc-400 truncate max-w-[150px] sm:max-w-none">{ticket.user?.email}</p>
                     </div>
-                  </td>
-                </tr>
-              ) : (
-                filteredTickets.map((ticket) => (
-                  <tr key={ticket.id} className="hover:bg-zinc-50/50 transition-colors group">
-                    <td className="px-6 py-5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-zinc-100 rounded-xl flex items-center justify-center text-zinc-400">
-                          <UserIcon size={16} />
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-zinc-900 leading-tight">{ticket.user?.name || "Unknown User"}</p>
-                          <p className="text-[11px] text-zinc-400">{ticket.user?.email}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-5">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{ticket.category}</span>
-                          <span className="text-[10px] text-zinc-300">•</span>
-                          <span className="text-[10px] text-zinc-400">{new Date(ticket.updatedAt).toLocaleDateString()}</span>
-                        </div>
-                        <h3 className="text-sm font-bold text-zinc-900 group-hover:text-emerald-600 transition-colors">{ticket.subject}</h3>
-                      </div>
-                    </td>
-                    <td className="px-6 py-5">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border uppercase tracking-wider ${getStatusStyle(ticket.status)}`}>
+                  </div>
+                  
+                  {/* Divider line for desktop */}
+                  <div className="hidden sm:block w-px h-8 bg-zinc-200 shrink-0" />
+
+                  {/* Ticket subject/info */}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{ticket.category}</span>
+                      <span className="text-[10px] text-zinc-300">•</span>
+                      <span className="text-[10px] text-zinc-400">{new Date(ticket.updatedAt).toLocaleDateString()}</span>
+                      <span className={`lg:hidden ml-auto px-2 py-0.5 rounded-full text-[9px] font-bold border uppercase tracking-wider ${getStatusStyle(ticket.status)}`}>
                         {ticket.status.replace('_', ' ')}
                       </span>
-                    </td>
-                    <td className="px-6 py-5 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        {ticket.status !== "CLOSED" && (
-                          <button
-                            onClick={(e) => handleResolve(ticket.id, e)}
-                            className="p-2 hover:bg-emerald-50 text-zinc-400 hover:text-emerald-600 rounded-lg transition-all"
-                            title="Resolve ticket"
-                          >
-                            <CheckCircle2 size={16} />
-                          </button>
-                        )}
-                        <Link
-                          to={`/support/ticket/${ticket.id}`}
-                          className="p-2 hover:bg-zinc-200 text-zinc-400 hover:text-zinc-900 rounded-lg transition-all"
-                          title="View thread"
-                        >
-                          <ChevronRight size={18} />
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                    </div>
+                    <h3 className="text-sm font-bold text-zinc-900 group-hover:text-emerald-600 transition-colors truncate">{ticket.subject}</h3>
+                  </div>
+                </div>
+
+                {/* Right side: Status Badge + Actions */}
+                <div className="flex items-center justify-between lg:justify-end gap-4 shrink-0 mt-2 lg:mt-0 pt-2 lg:pt-0 border-t border-zinc-100 lg:border-none">
+                  <span className={`hidden lg:inline-block px-2.5 py-1 rounded-full text-[10px] font-bold border uppercase tracking-wider shrink-0 ${getStatusStyle(ticket.status)}`}>
+                    {ticket.status.replace('_', ' ')}
+                  </span>
+                  
+                  <div className="flex items-center gap-2 ml-auto lg:ml-0">
+                    {ticket.status !== "CLOSED" && (
+                      <button
+                        onClick={(e) => handleResolve(ticket.id, e)}
+                        className="p-2 hover:bg-emerald-50 text-zinc-400 hover:text-emerald-600 rounded-lg transition-all"
+                        title="Resolve ticket"
+                      >
+                        <CheckCircle2 size={16} />
+                      </button>
+                    )}
+                    <Link
+                      to={`/support/ticket/${ticket.id}`}
+                      className="p-2 hover:bg-zinc-200 text-zinc-400 hover:text-zinc-900 rounded-lg transition-all"
+                      title="View thread"
+                    >
+                      <ChevronRight size={18} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
