@@ -29,9 +29,9 @@
   --radius-sm: 4px;
   --radius-md: 4px;
   --radius-lg: 4px;
-  --radius-xl: 4px;
-  --radius-2xl: 4px;
-  --radius-3xl: 4px;
+  --radius-xl: 12px;
+  --radius-2xl: 12px;
+  --radius-3xl: 16px;
 }
 
 @layer base {
@@ -206,3 +206,24 @@ a, button, input, select, textarea, [role="button"] {
   border-color: #d97706 !important;
   color: #ffffff !important;
 }
+
+/* Tighten spaces slightly on small heights to ensure zero scrolling while keeping elements premium */
+@media (max-height: 980px) {
+  .auth-page .space-y-6,
+  .auth-page .space-y-10 {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    gap: 1rem !important;
+  }
+  
+  .auth-page form.space-y-6,
+  .auth-page form.space-y-4 {
+    gap: 0.85rem !important;
+  }
+  
+  .auth-page .relative.z-10 > div:first-child {
+    gap: 0.5rem !important;
+  }
+}
+
+
