@@ -1,3 +1,4 @@
+import { includes } from "zod";
 import prisma from "../../config/database.js";
 
 export const raiseDispute = async (req, res) => {
@@ -39,15 +40,18 @@ export const raiseDispute = async (req, res) => {
 export const getDisputes = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    const disputes = await prisma.dispute.findMany({
-      where: {
+    const whereClause = req.user.role === "ADMIN"
+      ? {}
+      : {
         OR: [
           { raisedById: userId },
           { milestone: { contract: { project: { clientId: userId } } } },
           { milestone: { contract: { freelancerId: userId } } }
         ]
-      },
+      };
+
+    const disputes = await prisma.dispute.findMany({
+      where: whereClause,
       include: {
         milestone: {
           include: {
@@ -146,23 +150,121 @@ export const uploadEvidence = async (req, res) => {
   }
 };
 export const clearDispute = async (req, res) => {
-  try{const { id } = req.params;
-  const { resolution, currentStatus } = req.body;
-  const dispute=await prisma.dispute.update({
-    where:{id:id},
-    data: {
-      status: "RESOLVED",
-      resolution:resolution||"Admin final decision."
-    },
-    include:{milestone:true}
-  });
-  await prisma.milestone.update({
-    where: { id: dispute.milestoneId },
-    data:{status:"RESOLVED"}
-  });
-    res.status(200).json({message:"Case resolved and achieved",dispute});
-  }
-  catch (e) {
+  try {
+    const { id } = req.params;
+    const { resolution, action } = req.body;
+    const dispute = await prisma.dispute.findUnique({
+      where: { id },
+      include: {
+        milestone: {
+          include: {
+            contract: {
+              include: {
+                project : true
+              }
+            }
+          }
+        }
+      }
+
+    });
+    if (!dispute) {
+      return res.status(400).json({ message: "Dispute not found." });
+    }
+    if (dispute.status === "RESOLVED") return res.status(400).json({ message: "Dipsuted already resolved." });
+    const milestone = dispute.milestone;
+    const contract = milestone.contract;
+    const milestoneAmount = milestone.amount;
+    const clientId = contract.project.clientId;
+    const freelancerId = contract.freelancerId;
+
+    const updatedDispute = await prisma.$transaction(async (tx) => {
+      const updated = await tx.dispute.update({
+        where: { id },
+        data: {
+          status: "RESOLVED",
+          resolution: resolution || "Admin final decison"
+        }
+      });
+      await tx.milestone.update({
+        where: { id: dispute.milestoneId },
+        data: {
+          status: "RESOLVED"
+        }
+      });
+      if (action === 'RELEASED') {
+        await tx.user.update({
+          where: { id: clientId },
+          data: {
+            heldAmount: {
+              decrement: milestoneAmount
+            }
+          }
+        });
+        await tx.user.update({
+          where: { id: freelancerId },
+          data: {
+            walletBalance: {
+              increment: milestoneAmount
+            }
+          }
+        });
+        await tx.contract.update({
+          where: { id: milestone.contractId },
+          data: {
+            heldAmount: {
+              decrement: milestoneAmount
+            }
+          }
+        });
+        await tx.payment.create({
+          data: {
+            contractId: milestone.contractId,
+            milestoneId: milestone.id,
+            amount: milestoneAmount,
+            type: "RELEASE"
+          }
+        });
+      }
+      else {
+        await tx.user.update({
+          where: { id: clientId },
+          data: {
+            heldAmount: {
+              decrement: milestoneAmount
+            }
+          }
+        });
+        await tx.user.update({
+          where: { id: clientId },
+          data: {
+            walletBalance: {
+              increment: milestoneAmount
+            }
+          }
+        });
+        await tx.contract.update({
+          where: { id: milestone.contractId },
+          data: {
+            heldAmount: {
+              decrement: milestoneAmount
+            }
+          }
+        });
+        await tx.payment.create({
+          data: {
+            contractId: milestone.contractId,
+            milestoneId: milestone.id,
+            amount: milestoneAmount,
+            type: 'REFUND'
+          }
+        });
+      }
+      return updated;
+    });
+    return res.status(200).json({message:"Case Resolved",dispute:updatedDispute});
+
+  } catch (e) {
     return res.status(500).json({message:"Server error"});
   }
 }
