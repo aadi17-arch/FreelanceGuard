@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Scale,
   AlertCircle,
@@ -20,6 +20,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from '../../utils/toast';
+import { useAuth } from '../../context/AuthContext';
 
 const SupportHub = () => {
   const [disputes, setDisputes] = useState([]);
@@ -27,7 +28,16 @@ const SupportHub = () => {
   const [filter, setFilter] = useState('ALL');
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState("");
+  
+  // Real live chat state variables
+  const [activeTicket, setActiveTicket] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [loadingChat, setLoadingChat] = useState(false);
+  const [sendingChat, setSendingChat] = useState(false);
+  
+  const chatEndRef = useRef(null);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchDisputes();
@@ -44,6 +54,73 @@ const SupportHub = () => {
       toast.error("Failed to load cases.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Fetch or refresh active support tickets
+  const fetchActiveChatTicket = async () => {
+    try {
+      const response = await axios.get('/support/my-tickets');
+      // Find the most recent casual live chat session
+      const openTicket = response.data.find(t => t.category === 'CHAT' && t.status !== 'CLOSED');
+      if (openTicket) {
+        const details = await axios.get(`/support/ticket/${openTicket.id}`);
+        setActiveTicket(openTicket);
+        setChatMessages(details.data.messages || []);
+      } else {
+        setActiveTicket(null);
+        setChatMessages([]);
+      }
+    } catch (err) {
+      console.error("Failed to load support chat session", err);
+    }
+  };
+
+  // Setup live support REST polling (3 seconds interval) when widget is opened
+  useEffect(() => {
+    if (!isChatOpen) return;
+
+    setLoadingChat(true);
+    fetchActiveChatTicket().finally(() => setLoadingChat(false));
+
+    const interval = setInterval(fetchActiveChatTicket, 3000);
+    return () => clearInterval(interval);
+  }, [isChatOpen]);
+
+  // Auto-scroll inside floating widget
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages]);
+
+  const handleSendChatMessage = async (e) => {
+    e.preventDefault();
+    if (!chatMessage.trim() || sendingChat) return;
+
+    setSendingChat(true);
+    try {
+      if (activeTicket) {
+        // Send a reply to the existing active ticket
+        const response = await axios.post(`/support/reply/ticket/${activeTicket.id}`, {
+          content: chatMessage
+        });
+        setChatMessages((prev) => [...prev, response.data]);
+        setChatMessage("");
+      } else {
+        // Automatically create a new casual chat session
+        const response = await axios.post('/support/ticket', {
+          subject: "Live Query Chat",
+          category: "CHAT",
+          content: chatMessage
+        });
+        const newTicket = response.data.supportTicket;
+        setActiveTicket(newTicket);
+        setChatMessages(newTicket.messages || []);
+        setChatMessage("");
+      }
+    } catch (err) {
+      toast.error("Failed to send message to support");
+    } finally {
+      setSendingChat(false);
     }
   };
 
@@ -139,46 +216,90 @@ const SupportHub = () => {
       {/* 3. Floating Messenger Popup */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
         {isChatOpen && (
-          <div className="w-[320px] h-[450px] bg-white rounded-none border border-zinc-200 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
+          <div className="w-[320px] h-[450px] bg-white rounded-3xl border border-zinc-200 flex flex-col overflow-hidden shadow-2xl animate-in slide-in-from-bottom-4 duration-300">
             {/* Chat Header */}
             <div className="bg-zinc-900 p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-none bg-emerald-500 flex items-center justify-center text-white">
+                <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center text-white shrink-0">
                   <MessagesSquare size={16} />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-white">Support Agent</p>
-                  <p className="text-[10px] text-emerald-400 font-bold">Online</p>
+                  <p className="text-xs font-bold text-white leading-none">Support Admin</p>
+                  <p className="text-[10px] text-emerald-400 font-bold mt-1">Online • Live Chat</p>
                 </div>
               </div>
-              <button onClick={() => setIsChatOpen(false)} className="text-zinc-400 hover:text-white">
+              <button 
+                onClick={() => setIsChatOpen(false)} 
+                className="w-7 h-7 rounded-lg hover:bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white transition-all"
+              >
                 <ChevronDown size={18} />
               </button>
             </div>
 
             {/* Chat Messages Area */}
-            <div className="flex-grow p-4 overflow-y-auto bg-zinc-50 space-y-4">
-              <div className="bg-white border border-zinc-200 p-3 rounded-none max-w-[85%]">
-                <p className="text-xs font-medium text-zinc-600 leading-relaxed">
-                  Hi! How can we help you today?
-                </p>
-              </div>
+            <div className="flex-grow p-4 overflow-y-auto bg-zinc-50 space-y-4 scrollbar-none flex flex-col">
+              {loadingChat ? (
+                <div className="flex-grow flex flex-col items-center justify-center space-y-2">
+                  <div className="w-5 h-5 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin" />
+                  <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Securing Connection...</p>
+                </div>
+              ) : chatMessages.length === 0 ? (
+                <div className="bg-white border border-zinc-200 p-4 rounded-2xl rounded-tl-none shadow-sm space-y-1.5 max-w-[90%] mt-2">
+                  <p className="text-xs font-bold text-zinc-900 leading-normal">
+                    Hi! Welcome to secure chat.
+                  </p>
+                  <p className="text-[11px] text-zinc-500 leading-relaxed font-medium">
+                    Need help? Type your message below to immediately start a private chat thread with an Admin.
+                  </p>
+                </div>
+              ) : (
+                chatMessages.map((msg, idx) => {
+                  const isMe = msg.senderId === user?.id;
+                  const isAdmin = msg.sender?.role === "ADMIN" || !isMe; // If not me, treat as Support Admin response
+
+                  return (
+                    <div key={msg.id || idx} className={`flex ${isMe ? "justify-end" : "justify-start"} w-full`}>
+                      <div className={`max-w-[85%] rounded-2xl p-3 text-xs leading-normal shadow-sm ${
+                        isMe 
+                          ? "bg-zinc-900 text-white rounded-tr-none" 
+                          : "bg-white text-zinc-800 border border-zinc-100 rounded-tl-none"
+                      }`}>
+                        {!isMe && (
+                          <p className="text-[8px] font-bold text-emerald-600 uppercase tracking-wider mb-1">
+                            {msg.sender?.role === "ADMIN" ? "Support Admin" : "Support"}
+                          </p>
+                        )}
+                        <p className="whitespace-pre-wrap break-words font-medium">{msg.content}</p>
+                        <p className={`text-[8px] text-right mt-1.5 opacity-50 font-financial ${isMe ? "text-zinc-300" : "text-zinc-400"}`}>
+                          {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+              <div ref={chatEndRef} />
             </div>
 
             {/* Chat Input */}
             <div className="p-3 bg-white border-t border-zinc-100">
-              <div className="flex items-center gap-2 bg-zinc-50 rounded-none px-3 py-2 border border-zinc-200">
+              <form onSubmit={handleSendChatMessage} className="flex items-center gap-2 bg-zinc-50 rounded-2xl px-4 py-2 border border-zinc-200">
                 <input
                   type="text"
-                  placeholder="Type a message..."
-                  className="flex-grow bg-transparent text-xs font-medium focus:outline-none placeholder:text-zinc-400"
+                  placeholder={sendingChat ? "Sending..." : "Type a message..."}
+                  className="flex-grow bg-transparent text-xs font-bold focus:outline-none placeholder:text-zinc-400 text-zinc-900 disabled:opacity-50"
                   value={chatMessage}
                   onChange={(e) => setChatMessage(e.target.value)}
+                  disabled={sendingChat}
                 />
-                <button className="text-zinc-900 hover:text-black">
-                  <ArrowRight size={16} />
+                <button 
+                  type="submit" 
+                  disabled={!chatMessage.trim() || sendingChat}
+                  className="w-8 h-8 rounded-xl bg-zinc-900 hover:bg-black text-white flex items-center justify-center transition-all disabled:opacity-30 active:scale-90"
+                >
+                  <ArrowRight size={14} />
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         )}
@@ -186,11 +307,11 @@ const SupportHub = () => {
         {/* Floating Icon */}
         <button
           onClick={() => setIsChatOpen(!isChatOpen)}
-          className={`w-14 h-14 rounded-none shadow-none border border-zinc-200 flex items-center justify-center transition-all hover:bg-zinc-900 active:bg-zinc-200 ${
-            isChatOpen ? 'bg-zinc-900 text-white rotate-180' : 'bg-emerald-600 text-white'
+          className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 duration-300 ${
+            isChatOpen ? 'bg-zinc-950 text-white rotate-180' : 'bg-zinc-900 text-white shadow-zinc-300'
           }`}
         >
-          {isChatOpen ? <ChevronDown size={24} /> : <MessagesSquare size={24} />}
+          {isChatOpen ? <ChevronDown size={20} /> : <MessagesSquare size={20} />}
         </button>
       </div>
     </div>
