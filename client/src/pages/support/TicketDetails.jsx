@@ -83,27 +83,28 @@ export default function TicketDetails() {
   if (!ticket) return null;
 
   return (
-    <div className="w-full h-full flex flex-col space-y-6">
+    <div className="w-full h-full flex flex-col space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex items-start gap-3 min-w-0">
           <Link 
             to="/support" 
-            className="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center hover:bg-zinc-50 transition-all text-zinc-500"
+            className="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center hover:bg-zinc-50 transition-all text-zinc-500 shrink-0"
           >
             <ArrowLeft size={18} />
           </Link>
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-3">
-              <h1 className="text-xl font-bold text-zinc-900 tracking-tight">{ticket.subject}</h1>
-              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-wider ${getStatusColor(ticket.status)}`}>
+          <div className="space-y-1 min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-base sm:text-lg md:text-xl font-bold text-zinc-900 tracking-tight leading-tight break-words">{ticket.subject}</h1>
+              <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border uppercase tracking-wider shrink-0 ${getStatusColor(ticket.status)}`}>
                 {ticket.status}
               </span>
             </div>
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-              Ticket ID: <span className="text-zinc-900 font-financial">{ticket.id.split('-')[0]}</span>
-              <span className="mx-2 opacity-20">•</span>
-              Opened on {new Date(ticket.createdAt).toLocaleDateString()}
+            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-1.5 flex-wrap">
+              <span>Ticket ID:</span>
+              <span className="text-zinc-900 font-financial">{ticket.id.split('-')[0]}</span>
+              <span className="opacity-20">•</span>
+              <span>Opened on {new Date(ticket.createdAt).toLocaleDateString()}</span>
             </p>
           </div>
         </div>
@@ -120,7 +121,7 @@ export default function TicketDetails() {
                 enqueueSnackbar("Failed to resolve ticket", { variant: "error" });
               }
             }}
-            className="h-10 px-5 bg-zinc-900 hover:bg-black text-white rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm text-xs font-bold"
+            className="h-10 px-5 bg-zinc-900 hover:bg-black text-white rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm text-xs font-bold w-full lg:w-auto shrink-0 active:scale-95"
           >
             <CheckCircle2 size={14} />
             Resolve
@@ -129,39 +130,37 @@ export default function TicketDetails() {
       </div>
 
       {/* Main Conversation Area */}
-      <div className="flex-grow flex flex-col bg-white border border-zinc-200 rounded-[2rem] overflow-hidden shadow-sm h-[calc(100vh-250px)]">
+      <div className="flex-grow flex flex-col bg-white border border-zinc-200 rounded-[2rem] overflow-hidden shadow-sm min-h-[450px] lg:h-[calc(100vh-260px)]">
         {/* Messages List */}
-        <div className="flex-grow overflow-y-auto p-8 space-y-8 scrollbar-hide bg-zinc-50">
+        <div className="flex-grow overflow-y-auto p-4 sm:p-8 space-y-6 sm:space-y-8 scrollbar-none bg-zinc-50">
           {ticket.messages.map((message) => {
             const isMe = message.senderId === user.id;
             const isAdmin = message.sender?.role === "ADMIN";
 
             return (
               <div key={message.id} className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
-                <div className={`flex gap-4 max-w-[75%] ${isMe ? "flex-row-reverse" : "flex-row"}`}>
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm border ${
-                    isAdmin ? "bg-rui-success text-white border-rui-success" : "bg-white text-zinc-400 border-zinc-100"
+                <div className={`flex gap-3 sm:gap-4 max-w-[85%] sm:max-w-[75%] ${isMe ? "flex-row-reverse" : "flex-row"}`}>
+                  <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm border ${
+                    isAdmin ? "bg-zinc-900 text-white border-zinc-900" : "bg-white text-zinc-400 border-zinc-100"
                   }`}>
-                    {isAdmin ? <Shield size={18} /> : <User size={18} />}
+                    {isAdmin ? <Shield size={16} /> : <User size={16} />}
                   </div>
                   
-                  <div className={`space-y-1.5 ${isMe ? "items-end" : "items-start"}`}>
+                  <div className={`space-y-1.5 min-w-0 ${isMe ? "items-end" : "items-start"}`}>
                     <div className="flex items-center gap-2 px-1">
-                      <span className="text-[10px] font-bold text-zinc-900 uppercase tracking-widest">
-                        {isAdmin ? "Support" : (isMe ? "You" : "User")}
+                      <span className="text-[9px] sm:text-[10px] font-bold text-zinc-900 uppercase tracking-widest">
+                        {isAdmin ? "Support" : (isMe ? "You" : message.sender?.name || "User")}
                       </span>
-                      <span className="text-[10px] text-zinc-300 opacity-50">•</span>
-                      <span className="text-[10px] text-zinc-400 font-financial uppercase">
+                      <span className="text-[9px] sm:text-[10px] text-zinc-300 opacity-50">•</span>
+                      <span className="text-[9px] sm:text-[10px] text-zinc-400 font-financial uppercase">
                         {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
                     
-                    <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${
+                    <div className={`p-3.5 sm:p-4 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm break-words whitespace-pre-wrap ${
                       isMe 
-                        ? "bg-rui-dark text-white rounded-tr-none" 
-                        : (isAdmin 
-                            ? "bg-white text-zinc-900 border border-rui-success/20 rounded-tl-none" 
-                            : "bg-white text-zinc-700 border border-zinc-100 rounded-tl-none")
+                        ? "bg-zinc-900 text-white rounded-tr-none" 
+                        : "bg-white text-zinc-700 border border-zinc-100 rounded-tl-none"
                     }`}>
                       {message.content}
                     </div>
@@ -175,31 +174,31 @@ export default function TicketDetails() {
 
         {/* Message Input Area */}
         {ticket.status !== "CLOSED" ? (
-          <div className="p-6 bg-white border-t border-zinc-100">
-            <form onSubmit={handleSendReply} className="flex gap-4">
+          <div className="p-4 sm:p-6 bg-white border-t border-zinc-100">
+            <form onSubmit={handleSendReply} className="flex gap-3 sm:gap-4">
               <input
                 type="text"
                 value={reply}
                 onChange={(e) => setReply(e.target.value)}
                 placeholder="Type your secure message..."
                 disabled={sending}
-                className="flex-grow h-14 bg-zinc-50 border border-zinc-200 rounded-2xl px-6 text-sm focus:outline-none focus:ring-1 focus:ring-rui-success focus:border-rui-success transition-all disabled:opacity-50"
+                className="flex-grow h-12 sm:h-14 bg-zinc-50 border border-zinc-200 rounded-2xl px-5 text-xs sm:text-sm focus:outline-none focus:border-zinc-900 transition-all disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={sending || !reply.trim()}
-                className="w-14 h-14 bg-rui-dark hover:bg-black text-white rounded-2xl flex items-center justify-center transition-all disabled:bg-zinc-200 shadow-lg shadow-zinc-200"
+                className="w-12 h-12 sm:w-14 sm:h-14 bg-zinc-900 hover:bg-black text-white rounded-2xl flex items-center justify-center transition-all disabled:bg-zinc-200 active:scale-95 shrink-0 shadow-sm"
               >
                 {sending ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  <Send size={20} />
+                  <Send size={18} />
                 )}
               </button>
             </form>
           </div>
         ) : (
-          <div className="p-8 bg-zinc-50 border-t border-zinc-100 flex items-center justify-center gap-3 text-zinc-400">
+          <div className="p-6 sm:p-8 bg-zinc-50 border-t border-zinc-100 flex items-center justify-center gap-3 text-zinc-400">
             <CheckCircle2 size={16} />
             <p className="text-[10px] font-bold uppercase tracking-widest">This session has been archived and resolved</p>
           </div>
