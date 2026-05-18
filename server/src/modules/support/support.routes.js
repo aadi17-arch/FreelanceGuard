@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/ticket",authMiddleware,roleMiddleware(["CLIENT", "FREELANCER"]),createTicket);
 router.get("/ticket/:id",authMiddleware,getUserTicket);
-router.post("/reply/ticket/:id", authMiddleware,roleMiddleware(["ADMIN"]), replyToTicket);
+router.post("/reply/ticket/:id", authMiddleware, replyToTicket);
 router.get("/my-tickets", authMiddleware, getMyTickets);
 router.get("/admin/all", authMiddleware, roleMiddleware(["ADMIN"]), getAllTickets);
 router.put("/ticket/:id/resolve",authMiddleware,roleMiddleware(["ADMIN"]),resolveTicket);
