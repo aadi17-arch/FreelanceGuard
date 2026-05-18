@@ -30,6 +30,7 @@ model User {
   assignedTickets SupportTicket[] @relation("AdminTickets")
   supportMessages SupportMessage[]
   notifications   Notification[]
+  chatMessages    ChatMessage[]
 }
 
 model Project {
@@ -59,6 +60,7 @@ model Contract {
   project      Project        @relation(fields: [projectId], references: [id])
   milestones   Milestone[]
   payments     Payment[]
+  chatMessages ChatMessage[]
 }
 
 model Milestone {
@@ -92,7 +94,7 @@ model Dispute {
   milestoneId String
   raisedById  String
   reason      String
-  status      String    @default("OPEN") // OPEN, RESOLVED, ARBITRATION
+  status      String    @default("OPEN") // OPEN, RESOLVED
   resolution  String?
   createdAt   DateTime  @default(now())
   milestone   Milestone @relation(fields: [milestoneId], references: [id])
@@ -190,7 +192,15 @@ model Notification {
 
   user        User        @relation(fields: [userId], references: [id])
 }
-
+model ChatMessage {
+  id    String    @id @default(uuid())
+  contractId String
+  senderId   String
+  text       String
+  createdAt  DateTime @default(now())
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  sender     User     @relation(fields: [senderId], references: [id])
+}
 
 
 enum Role {
