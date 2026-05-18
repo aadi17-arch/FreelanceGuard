@@ -6,12 +6,12 @@ import { fileURLToPath } from "url";
 import authRoutes from "./modules/auth/auth.routes.js";
 import projectRoutes from "./modules/projects/project.routes.js";
 import bidRoutes from "./modules/projects/bid.routes.js";
-import escrowRoutes from "./modules/escrow/escrow.routes.js"
+import escrowRoutes from "./modules/escrow/escrow.routes.js";
 import kycRoutes from "./modules/kyc/kyc.routes.js";
 import disputeRoutes from "./modules/dispute/dispute.routes.js";
-import milestoneRoutes from "./modules/milestone/milestone.routes.js"
+import milestoneRoutes from "./modules/milestone/milestone.routes.js";
 import proposalRoutes from "./modules/proposals/proposal.routes.js";
-import supportRoutes from "./modules/support/support.routes.js"
+import supportRoutes from "./modules/support/support.routes.js";
 import chatRoutes from "./modules/chat/chat.routes.js";
 
 dotenv.config();
