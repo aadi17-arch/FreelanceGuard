@@ -68,11 +68,14 @@ const DisputeDetails = () => {
    const handleResolve = async (action) => {
       setResolving(true);
       try {
-         // Logic to resolve dispute would go here
+         await axios.put(`/dispute/resolve/${id}`, {
+            action,
+            resolution:`Admin resolved dispute : ${action === 'RELEASED' ? 'Funds released to freelancer' : 'Funds refunded to client.'}`
+         });
          toast.success(`Dispute ${action} successfully.`);
          fetchDisputeDetails();
       } catch (error) {
-         toast.error("Failed to update dispute status.");
+          toast.error(error.response?.data?.message || "Failed to update dispute status.");
       } finally {
          setResolving(false);
       }
@@ -102,7 +105,7 @@ const DisputeDetails = () => {
                   </button>
                   <div>
                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400">Id</span>
+                        <span className="text-[15px] font-black  tracking-wider text-zinc-800">Dispute details</span>
                         <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-sm border border-emerald-100">#{dispute?.id?.slice(0, 8)}</span>
                      </div>
                      <h1 className="text-xs font-bold tracking-tight text-zinc-900"></h1>
@@ -121,9 +124,9 @@ const DisputeDetails = () => {
             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 p-5 bg-zinc-50 border border-zinc-200 rounded-sm w-full">
                {/* Left: Project Title */}
                <div className="space-y-1 max-w-md shrink-0">
-                  <div className="flex items-center gap-1.5 text-zinc-400">
-                     <Scale size={12} />
-                     <span className="text-[10px] font-bold tracking-widest">Dispute details</span>
+                  <div className="flex items-center gap-1.5 text-zinc-500">
+
+                     <span className="text-[14px] font-bold tracking-widest">Project</span>
                   </div>
                   <h2 className="text-xl font-black tracking-tight text-zinc-900 leading-tight">
                      {dispute?.milestone?.contract?.project?.title}
@@ -133,13 +136,13 @@ const DisputeDetails = () => {
                {/* Middle: Details (Raised By, Budget, Reason) */}
                <div className="flex flex-wrap items-center gap-8 xl:border-l xl:border-zinc-200 xl:pl-6 flex-grow">
                   <div>
-                     <p className="text-[10px] font-bold text-zinc-400">
+                     <p className="text-[10px] font-bold text-zinc-500">
                         {dispute?.raisedBy?.role === 'CLIENT' ? 'Client' : 'Freelancer'}
                      </p>
                      <p className="text-xs font-bold text-zinc-900">{dispute?.raisedBy?.name}</p>
                   </div>
                   <div>
-                     <p className="text-[10px] font-black text-zinc-400 tracking-wider mb-0.5">Budget</p>
+                     <p className="text-[10px] font-black text-zinc-500 tracking-wider mb-0.5">Budget</p>
                      <p className="text-xs font-bold text-zinc-900">${dispute?.milestone?.contract?.totalAmount?.toLocaleString()}</p>
                   </div>
                   <div className="max-w-[320px]">
@@ -162,7 +165,7 @@ const DisputeDetails = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 w-full">
 
                {/* Main content - Dynamic columns depending on admin resolution panel */}
-               <div className={`${isAdmin ? 'lg:col-span-8' : 'lg:col-span-12'} space-y-6 w-full`}>
+               <div className={`${(isAdmin || isResolved) ? 'lg:col-span-8' : 'lg:col-span-12'} space-y-6 w-full`}>
 
                   {showUpload && (
                      <form onSubmit={handleUploadEvidenceSubmit} className="p-4 bg-zinc-50 border border-zinc-200 rounded-sm space-y-3 w-full animate-fadeIn">
@@ -215,10 +218,10 @@ const DisputeDetails = () => {
                            Submit Evidence
                         </button>
                   )}
-                  <div className="flex items-center justify-between pb-3 w-full">
-                     <div className="flex items-center gap-2 text-zinc-900">
-                        <FileText size={14} className="text-zinc-900" />
-                        <h3 className="text-[12px] font-black tracking">Submitted Evidence</h3>
+                  <div className="flex items-center justify-between pb-3 border-b border-zinc-200 w-full mb-4">
+                     <div className="flex items-center gap-2.5 text-zinc-950">
+                        <FileText size={18} className="text-zinc-950 stroke-[2.5]" />
+                        <h3 className="text-sm font-black tracking-wider text-zinc-950">Submitted Evidence</h3>
                      </div>
                   </div>
 
@@ -244,16 +247,13 @@ const DisputeDetails = () => {
 
                </div>
 
-               {isAdmin && (
-                  <div className="lg:col-span-4 space-y-6 w-full">
+               {(isAdmin || isResolved) && (
+                  <div className="lg:col-span-4 space-y-6 w-full animate-fadeIn">
                      <div className="p-6 border border-zinc-200 bg-white rounded-sm space-y-6 w-full">
                         <div className="space-y-1.5">
-                           <div className="flex items-center gap-2">
-                              <ShieldCheck size={13} className="text-emerald-500" />
-                              <h3 className="text-[11px] font-black uppercase tracking-wider text-zinc-900">Administrator Panel</h3>
-                           </div>
+                           <h4 className="text-xs font-black uppercase tracking-wider text-zinc-800">Verdict</h4>
                            <p className="text-[10px] font-medium text-zinc-500 leading-relaxed">
-                              As an administrator, you must review the evidence submitted and determine the final fund allocation. This action is final.
+                              {isResolved ? "Final verdict and case closure details." : "Review the Evidence and cast final decision."}
                            </p>
                         </div>
 
@@ -275,17 +275,31 @@ const DisputeDetails = () => {
                                  </button>
                               </>
                            ) : (
-                              <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-sm flex items-center gap-2.5">
-                                 <CheckCircle2 size={14} className="text-emerald-600" />
-                                 <span className="text-[9px] font-black uppercase tracking-widest text-emerald-700">Case Resolved</span>
+                              <div className={`p-4 border rounded-sm flex flex-col gap-2.5 ${
+                                  dispute?.resolution?.toLowerCase().includes('released') || dispute?.resolution?.toLowerCase().includes('freelancer')
+                                     ? 'bg-emerald-50 border-emerald-100 text-emerald-700'
+                                     : 'bg-blue-50 border-blue-100 text-blue-700'
+                               }`}>
+                                 <div className="flex items-center gap-2">
+                                    <CheckCircle2 size={16} className={
+                                        dispute?.resolution?.toLowerCase().includes('released') || dispute?.resolution?.toLowerCase().includes('freelancer')
+                                           ? 'text-emerald-600'
+                                           : 'text-blue-600'
+                                     } />
+                                    <span className="text-[10px] font-black uppercase tracking-wider">
+                                        {dispute?.resolution?.toLowerCase().includes('released') || dispute?.resolution?.toLowerCase().includes('freelancer')
+                                           ? 'Released to Freelancer'
+                                           : 'Refunded to Client'}
+                                     </span>
+                                 </div>
+                                 <p className="text-xs font-medium text-zinc-600 border-t border-dashed border-zinc-200/60 pt-2 mt-1 leading-relaxed">
+                                    {dispute?.resolution}
+                                 </p>
                               </div>
                            )}
                         </div>
 
-                        <div className="pt-4 border-t border-zinc-100 flex items-center gap-2 text-zinc-400">
-                           <AlertTriangle size={12} />
-                           <span className="text-[9px] font-black uppercase tracking-widest">Binding Dispute Policy</span>
-                        </div>
+
                      </div>
                   </div>
                )}
