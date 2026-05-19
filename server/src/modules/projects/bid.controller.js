@@ -61,6 +61,21 @@ export const createBid = async (req, res) => {
 export const getProjectBids = async (req, res) => {
   try {
     const { projectId } = req.params;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+    const project = await prisma.project.findUnique({
+      where: { id: projectId }
+    });
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    if (userRole !== "ADMIN" && project.clientId !== userId) {
+      return res.status(403).json({ message: "Access denied. Only the project owner or administrator can view bids." });
+    }
+
     const bids = await prisma.bid.findMany({
       where: { projectId },
       include: {
@@ -77,4 +92,4 @@ export const getProjectBids = async (req, res) => {
   catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
-}
+};
