@@ -25,12 +25,11 @@ model User {
   kyc KYC?
   bio           String?    @default("")
 
-  // Support & Notifications
-  supportTickets SupportTicket[] @relation("UserTickets")
-  assignedTickets SupportTicket[] @relation("AdminTickets")
-  supportMessages SupportMessage[]
+  liveChatSessions LiveChatSession[]
+  liveChatMessages LiveChatMessage[]
   notifications   Notification[]
   chatMessages    ChatMessage[]
+  payments        Payment[]        @relation("UserPayments")
 }
 
 model Project {
@@ -80,13 +79,15 @@ model Milestone {
 
 model Payment {
   id          String      @id @default(uuid())
-  contractId  String
+  contractId  String?
   milestoneId String?
+  userId      String?
   amount      Float
   type        PaymentType
   createdAt   DateTime    @default(now())
-  contract    Contract    @relation(fields: [contractId], references: [id])
+  contract    Contract?   @relation(fields: [contractId], references: [id])
   milestone   Milestone?  @relation(fields: [milestoneId], references: [id])
+  user        User?       @relation("UserPayments", fields: [userId], references: [id])
 }
 
 model Dispute {
@@ -156,31 +157,28 @@ model Proposal {
   @@unique([projectId, freelancerId])
 
 }
-model SupportTicket {
-  id          String      @id @default(uuid())
-  userId      String      // The user who opened the ticket
-  adminId     String?     // The support agent assigned (optional)
-  subject     String
-  category    String      @default("GENERAL") // GENERAL, PAYMENT, TECHNICAL, DISPUTE
-  status      String      @default("OPEN")    // OPEN, IN_PROGRESS, CLOSED
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+model LiveChatSession {
+  id        String   @id @default(uuid())
+  userId    String
+  status    String   @default("OPEN") // OPEN, CLOSED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user        User        @relation("UserTickets", fields: [userId], references: [id])
-  admin       User?       @relation("AdminTickets", fields: [adminId], references: [id])
-  messages    SupportMessage[]
+  user      User            @relation(fields: [userId], references: [id])
+  messages  LiveChatMessage[]
 }
 
-model SupportMessage {
-  id          String      @id @default(uuid())
-  ticketId    String
-  senderId    String      // Can be the User or the Admin
-  content     String
-  createdAt   DateTime    @default(now())
+model LiveChatMessage {
+  id        String   @id @default(uuid())
+  sessionId String
+  senderId  String
+  content   String
+  createdAt DateTime @default(now())
 
-  ticket      SupportTicket @relation(fields: [ticketId], references: [id])
-  sender      User          @relation(fields: [senderId], references: [id])
+  session   LiveChatSession @relation(fields: [sessionId], references: [id])
+  sender    User            @relation(fields: [senderId], references: [id])
 }
+
 model Notification {
   id          String      @id @default(uuid())
   userId      String
@@ -236,6 +234,8 @@ enum PaymentType {
   DEPOSIT
   RELEASE
   REFUND
+  WALLET_ADD
+  WITHDRAWAL
 }
 
 enum BidStatus {
