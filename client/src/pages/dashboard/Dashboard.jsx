@@ -49,7 +49,7 @@ export default function Dashboard() {
    return (
       <div className="space-y-4 pb-4">
          <section className="grid grid-cols-1 gap-4">
-            <div className="bg-zinc-50 border border-zinc-200 rounded-[10px] p-6 relative overflow-hidden">
+            <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-6 relative overflow-hidden">
                <div className="relative z-10 space-y-4">
                   <div className="space-y-2">
                      <h1 className="text-3xl lg:text-4xl font-bold tracking-tight text-zinc-900">Hello, {user?.name?.split(' ')[0]}!</h1>
@@ -59,12 +59,12 @@ export default function Dashboard() {
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3">
                      <Link to="/marketplace" className="w-full sm:w-auto">
-                        <button className="w-full px-6 py-3 bg-emerald-600 border border-emerald-600 text-white rounded-[10px] text-sm font-bold transition-all hover:bg-emerald-700 flex items-center justify-center gap-2">
+                        <button className="w-full px-6 py-3 bg-emerald-600 border border-emerald-600 text-white rounded-lg text-sm font-bold transition-all hover:bg-emerald-700 flex items-center justify-center gap-2">
                            {user?.role === 'CLIENT' ? 'Marketplace' : 'Find work'}
                         </button>
                      </Link>
                      <Link to="/contracts" className="w-full sm:w-auto">
-                        <button className="w-full px-6 py-3 bg-white text-zinc-900 border border-zinc-200 rounded-[10px] text-sm font-bold transition-all hover:bg-zinc-50 flex items-center justify-center">
+                        <button className="w-full px-6 py-3 bg-white text-zinc-900 border border-zinc-200 rounded-lg text-sm font-bold transition-all hover:bg-zinc-50 flex items-center justify-center">
                            Active projects
                         </button>
                      </Link>
@@ -94,8 +94,8 @@ export default function Dashboard() {
                  color: "bg-rose-50 text-rose-600 border-rose-100 shadow-sm shadow-rose-100/50"
                },
             ].map((stat, i) => (
-               <div key={i} className="bg-white border border-zinc-200 rounded-xl p-5 flex items-center gap-4 transition-all hover:scale-[1.02]">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center border shrink-0 ${stat.color}`}>
+               <div key={i} className="bg-white border border-zinc-200 rounded-lg p-5 flex items-center gap-4 transition-all hover:scale-[1.02]">
+                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center border shrink-0 ${stat.color}`}>
                      {React.cloneElement(stat.icon, { size: 20, strokeWidth: 2.5 })}
                   </div>
                   <div>
@@ -113,7 +113,7 @@ export default function Dashboard() {
                   What's happening
                </h3>
 
-               <div className="bg-white border border-zinc-200 rounded-[10px] overflow-hidden">
+               <div className="bg-white border border-zinc-200 rounded-lg overflow-hidden">
                   {recentActivity.length > 0 ? recentActivity.map((item, index) => (
                      <div key={item.id} className={`p-[20px] flex items-center justify-between hover:bg-zinc-50 transition-all group cursor-pointer ${index !== recentActivity.length - 1 ? 'border-b border-zinc-100' : ''}`}>
                         <div className="flex items-center gap-4">
