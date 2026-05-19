@@ -21,43 +21,50 @@ export default function AdminDashboard() {
     if (activeTab === "TICKETS") {
       return disputes;
     }
-    return tickets.filter(t => t.category === "CHAT");
+    // LiveChat sessions do not have ticket categories; treat all as chat sessions here.
+    return tickets;
   };
 
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const [ticketsRes, disputesRes] = await Promise.all([
-        axios.get("/support/admin/all"),
+        axios.get("/livechat/admin/sessions"),
         axios.get("/dispute")
       ]);
       setTickets(ticketsRes.data);
       setDisputes(disputesRes.data.disputes || []);
     } catch (error) {
+      enqueueSnackbar("Failed to fetch admin dashboard data", { variant: "error" });
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [enqueueSnackbar]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  const handleResolve = async (id, type) => {
+  const handleResolve = async (id, type, action = null) => {
     try {
       if (type === 'TICKET') {
-        await axios.put(`/support/ticket/${id}/resolve`);
+        await axios.put(`/livechat/session/${id}/close`);
+        enqueueSnackbar("Ticket closed successfully", { variant: "success" });
       }
       else if (type === 'DISPUTE') {
+        if (!action) {
+          enqueueSnackbar("Please select resolution type", { variant: "warning" });
+          return;
+        }
         await axios.put(`/dispute/resolve/${id}`, {
-          admin,
-          resolution : 'Quick resolve from Admin Dashboard.'
+          action, // 'RELEASED' or 'REFUNDED'
+          resolution: `Admin resolved dispute: ${action === 'RELEASED' ? 'Funds released to freelancer.' : 'Funds refunded to client.'}`
         });
+        enqueueSnackbar(`Dispute ${action.toLowerCase()} successfully`, { variant: "success" });
       }
-      enqueueSnackbar("Resolved", { variant: "success" });
       fetchData();
     } catch (error) {
-      enqueueSnackbar("Error", { variant: "error" });
+      enqueueSnackbar("Error resolving case", { variant: "error" });
     }
   };
 
@@ -80,7 +87,7 @@ export default function AdminDashboard() {
               : "text-zinc-500 hover:text-zinc-700"
           }`}
         >
-          <Scale size={14} /> Tickets
+          <Scale size={14} /> Disputes
         </button>
         <button
           onClick={() => setActiveTab("CHATS")}
@@ -113,9 +120,9 @@ export default function AdminDashboard() {
                   <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 border ${
                     activeTab === "TICKETS"
                       ? "bg-amber-50 text-amber-700 border-amber-100"
-                      : (item.category === "CHAT" ? "bg-emerald-50 text-emerald-750 border-emerald-100" : "bg-blue-50 text-blue-700 border-blue-100")
+                      : "bg-emerald-50 text-emerald-700 border-emerald-100"
                   }`}>
-                    {activeTab === "TICKETS" ? <AlertTriangle size={16} /> : (item.category === "CHAT" ? <MessageCircle size={16} /> : <HelpCircle size={16} />)}
+                    {activeTab === "TICKETS" ? <AlertTriangle size={16} /> : <MessageCircle size={16} />}
                   </div>
 
                   <div className="min-w-0 flex-1">
@@ -123,7 +130,7 @@ export default function AdminDashboard() {
                       <span className="text-[13px] font-bold text-zinc-900 truncate max-w-[200px] sm:max-w-none">
                         {activeTab === "TICKETS"
                           ? (item.milestone?.contract?.project?.title || "Disputed Milestone")
-                          : item.subject}
+                          : `Live chat - ${item.user?.name || "User"}`}
                       </span>
                       <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border ${
                         item.status === "OPEN"
@@ -155,16 +162,32 @@ export default function AdminDashboard() {
 
                 {/* Right side: Action Triggers */}
                 <div className="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0 justify-end shrink-0">
-                  {item.status !== "RESOLVED" && item.status !== "CLOSED" && (
+                  {item.status !== "RESOLVED" && item.status !== "CLOSED" && activeTab === "TICKETS" && (
+                    <div className="flex gap-1.5 flex-1 md:flex-none">
+                      <button
+                        onClick={() => handleResolve(item.id, 'DISPUTE', 'RELEASED')}
+                        className="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-lg transition-all text-center"
+                      >
+                        Release
+                      </button>
+                      <button
+                        onClick={() => handleResolve(item.id, 'DISPUTE', 'REFUNDED')}
+                        className="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold rounded-lg transition-all text-center"
+                      >
+                        Refund
+                      </button>
+                    </div>
+                  )}
+                  {item.status !== "RESOLVED" && item.status !== "CLOSED" && activeTab === "CHATS" && (
                     <button
-                      onClick={() => handleResolve(item.id, activeTab === "TICKETS" ? 'DISPUTE' : 'TICKET')}
+                      onClick={() => handleResolve(item.id, 'TICKET')}
                       className="px-4 py-2 bg-zinc-900 text-white text-[11px] font-bold rounded-lg hover:bg-black transition-all flex-1 md:flex-none text-center"
                     >
-                      Resolve
+                      Close Chat
                     </button>
                   )}
                   <Link
-                    to={activeTab === "TICKETS" ? `/dispute/${item.id}` : `/support/ticket/${item.id}`}
+                    to={activeTab === "TICKETS" ? `/dispute/${item.id}` : `/livechat/session/${item.id}`}
                     className="px-4 py-2 bg-white text-zinc-900 border border-zinc-200 text-[11px] font-bold rounded-lg hover:bg-zinc-50 transition-all flex-1 md:flex-none text-center"
                   >
                     View Details →
