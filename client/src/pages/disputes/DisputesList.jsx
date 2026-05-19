@@ -58,10 +58,10 @@ const SupportHub = () => {
 
   const fetchActiveChatTicket = async () => {
     try {
-      const response = await axios.get('/support/my-tickets');
-      const openTicket = response.data.find(t => t.category === 'CHAT' && t.status !== 'CLOSED');
+      const response = await axios.get('/livechat/my-sessions');
+      const openTicket = response.data.find(t => t.status !== 'CLOSED');
       if (openTicket) {
-        const details = await axios.get(`/support/ticket/${openTicket.id}`);
+        const details = await axios.get(`/livechat/session/${openTicket.id}`);
         setActiveTicket(openTicket);
         setChatMessages(details.data.messages || []);
       } else {
@@ -94,18 +94,14 @@ const SupportHub = () => {
     setSendingChat(true);
     try {
       if (activeTicket) {
-        const response = await axios.post(`/support/reply/ticket/${activeTicket.id}`, {
+        const response = await axios.post(`/livechat/reply/${activeTicket.id}`, {
           content: chatMessage
         });
         setChatMessages((prev) => [...prev, response.data]);
         setChatMessage("");
       } else {
-        const response = await axios.post('/support/ticket', {
-          subject: "Live Query Chat",
-          category: "CHAT",
-          content: chatMessage
-        });
-        const newTicket = response.data.supportTicket;
+        const response = await axios.post('/livechat/session', { content: chatMessage });
+        const newTicket = response.data.session;
         setActiveTicket(newTicket);
         setChatMessages(newTicket.messages || []);
         setChatMessage("");
