@@ -176,18 +176,33 @@ export default function Market() {
               </div>
 
               <div className="flex items-center gap-3">
-                {user?.role === "FREELANCER" && (
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      navigate(`/project/${proj.id}`);
-                    }}
-                    className="px-5 py-2 bg-zinc-900 text-white rounded-lg text-[10px] font-bold hover:bg-black transition-all"
-                  >
-                    Send proposal
-                  </button>
-                )}
+                {user?.role === "FREELANCER" && (() => {
+                  const hasSentProposal = proj.bids?.some(bid => bid.freelancerId === user?.id);
+                  return hasSentProposal ? (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigate(`/project/${proj.id}`);
+                      }}
+                      className="px-5 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-[10px] font-bold hover:bg-emerald-100/70 transition-all flex items-center gap-1.5"
+                    >
+                      <ShieldCheck size={11} className="text-emerald-600 animate-pulse" />
+                      <span>Proposal sent</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigate(`/project/${proj.id}`);
+                      }}
+                      className="px-5 py-2 bg-zinc-900 text-white rounded-lg text-[10px] font-bold hover:bg-black transition-all"
+                    >
+                      Send proposal
+                    </button>
+                  );
+                })()}
                 <div className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 group-hover:bg-zinc-950 group-hover:text-white group-hover:border-zinc-950 transition-all duration-300">
                   <ChevronRight size={14} />
                 </div>
