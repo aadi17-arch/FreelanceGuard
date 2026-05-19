@@ -37,6 +37,11 @@ export const getAllProjects = async (req, res) => {
             name: true,
             email: true
           }
+        },
+        bids: {
+          select: {
+            freelancerId: true
+          }
         }
       }
     });
@@ -45,7 +50,7 @@ export const getAllProjects = async (req, res) => {
   catch (error) {
     return res.status(500).json({ message: "Server Error" });
   }
-}
+};
 
 export const getMyProject = async (req, res) => {
   try {
@@ -206,6 +211,15 @@ export const hireFreelancer = async (req, res) => {
           totalAmount: parseFloat(bidAmount),
           heldAmount: parseFloat(bidAmount),
           status: 'ACTIVE'
+        }
+      });
+
+      await tx.payment.create({
+        data: {
+          contractId: contract.id,
+          amount: parseFloat(bidAmount),
+          type: "DEPOSIT",
+          userId: clientId
         }
       });
 
