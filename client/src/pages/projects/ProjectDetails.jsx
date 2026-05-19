@@ -22,6 +22,7 @@ export default function ProjectDetails() {
   const [proposal, setProposal] = useState("");
   const [milestones, setMilestones] = useState([{ title: "", amount: "" }]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,18 +42,42 @@ export default function ProjectDetails() {
 
   const handleBidSubmit = async (e) => {
     e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
     const totalBidAmount = calculateTotalAmount();
     try {
-      await axios.post("/bids/createBid", {
+      const res = await axios.post("/bids/createBid", {
         projectId: id,
         proposal,
         amount: totalBidAmount,
         milestones: milestones
       });
       toast.success("Your proposal has been sent.");
+
+      // Update local state immediately so that the form collapses into the "Proposal sent" checkmark box instantly
+      setProject((prev) => {
+        if (!prev) return prev;
+        const newBid = {
+          id: res.data.bid?.id || Math.random().toString(),
+          projectId: id,
+          freelancerId: user.id,
+          amount: totalBidAmount,
+          proposal: proposal,
+          freelancer: {
+            id: user.id,
+            name: user.name
+          }
+        };
+        return {
+          ...prev,
+          bids: [...(prev.bids || []), newBid]
+        };
+      });
+
       setTimeout(() => navigate("/dashboard"), 2000);
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong.");
+      setSubmitting(false);
     }
   };
 
@@ -137,7 +162,6 @@ export default function ProjectDetails() {
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs font-bold text-zinc-900 truncate leading-none mb-1">{project?.client?.name}</p>
-                  <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider leading-none">Client</p>
                 </div>
               </div>
               <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-400 shrink-0">
@@ -181,7 +205,7 @@ export default function ProjectDetails() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between px-0.5">
                         <label className="text-[10px] font-bold text-zinc-400">Contract terms</label>
-                        <button 
+                        <button
                           type="button"
                           onClick={addMilestone}
                           className="text-[10px] font-bold text-rui-success hover:underline"
@@ -193,7 +217,7 @@ export default function ProjectDetails() {
                       {milestones.map((ms, index) => (
                         <div key={index} className="flex flex-col sm:flex-row gap-2 p-3 bg-zinc-50 border border-zinc-200 rounded-lg">
                           <div className="flex-grow w-full">
-                            <input 
+                            <input
                               type="text"
                               required
                               placeholder="Stage title"
@@ -205,7 +229,7 @@ export default function ProjectDetails() {
                           <div className="flex gap-2 w-full sm:w-auto">
                             <div className="flex-grow sm:w-28 relative">
                               <DollarSign className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400" size={10} />
-                              <input 
+                              <input
                                 type="number"
                                 required
                                 placeholder="0"
@@ -215,7 +239,7 @@ export default function ProjectDetails() {
                               />
                             </div>
                             {milestones.length > 1 && (
-                              <button 
+                              <button
                                 type="button"
                                 onClick={() => removeMilestone(index)}
                                 className="h-10 px-3 bg-white border border-zinc-200 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-500 hover:border-red-200 transition-all shrink-0"
@@ -232,7 +256,7 @@ export default function ProjectDetails() {
                         <span className="text-xs font-extrabold text-emerald-600 font-financial">${calculateTotalAmount().toLocaleString()}</span>
                       </div>
                     </div>
-                      
+
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-bold text-zinc-400 px-0.5">Proposal message</label>
                       <textarea
@@ -247,9 +271,14 @@ export default function ProjectDetails() {
 
                     <button
                       type="submit"
-                      className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border border-emerald-600 shadow-sm"
+                      disabled={submitting}
+                      className={`w-full py-3 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border shadow-sm ${
+                        submitting
+                          ? "bg-zinc-400 border-zinc-400 cursor-not-allowed"
+                          : "bg-emerald-600 hover:bg-emerald-700 border-emerald-600"
+                      }`}
                     >
-                      Send proposal
+                      {submitting ? "Sending..." : "Send proposal"}
                     </button>
                   </form>
                 </div>
