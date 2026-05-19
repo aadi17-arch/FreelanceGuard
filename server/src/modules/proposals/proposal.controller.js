@@ -16,9 +16,12 @@ export const createProposal = async (req, res) => {
     if (existing) {
       return res.status(400).json({ message: "You have already submitted a proposal for this project" });
     }
-    const totalMilestonePrice = milestones.reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
-    if (totalMilestonePrice !== amount) {
-      return res.status(403).json({ message: "Milestones amount must be same after adding." });
+    if (!milestones || !Array.isArray(milestones) || milestones.length === 0) {
+      return res.status(400).json({ message: "At least one milestone is required" });
+    }
+    const totalMilestonePrice = milestones.reduce((acc, curr) => acc + parseFloat(curr.amount || 0), 0);
+    if (totalMilestonePrice !== parseFloat(amount)) {
+      return res.status(400).json({ message: "Milestones total amount must match the proposal budget." });
     }
     const newProposal = await prisma.proposal.create({
       data: {
@@ -123,6 +126,15 @@ export const acceptProposals = async (req, res) => {
           totalAmount: proposal.amount,
           heldAmount: proposal.amount,
           status: 'ACTIVE'
+        }
+      });
+
+      await tx.payment.create({
+        data: {
+          contractId: contract.id,
+          amount: proposal.amount,
+          type: "DEPOSIT",
+          userId: req.user.id
         }
       });
 
