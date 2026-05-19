@@ -115,6 +115,11 @@ export const getDisputeDetails = async (req, res) => {
     if (!dispute) {
       return res.status(404).json({ error: "Case not found in vault archive" });
     }
+    const clientId = dispute.milestone.contract.project.clientId;
+    const freelancerId = dispute.milestone.contract.freelancerId;
+    if (req.user.role !== "ADMIN" && req.user.id !== clientId && req.user.id !== freelancerId) {
+      return res.status(403).json({ error: "Access denied. Unauthorized to view this dispute." });
+    }
 
     res.json(dispute);
   } catch (error) {
@@ -129,9 +134,33 @@ export const uploadEvidence = async (req, res) => {
     const { id } = req.params;
     const { fileName } = req.body;
     const userId = req.user.id;
+    const userRole = req.user.role;
 
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const dispute = await prisma.dispute.findUnique({
+      where: { id },
+      include: {
+        milestone: {
+          include: {
+            contract: {
+              include: { project: true }
+            }
+          }
+        }
+      }
+    });
+
+    if (!dispute) {
+      return res.status(404).json({ message: "Dispute not found" });
+    }
+
+    const clientId = dispute.milestone.contract.project.clientId;
+    const freelancerId = dispute.milestone.contract.freelancerId;
+    if (userRole !== "ADMIN" && userId !== clientId && userId !== freelancerId) {
+      return res.status(403).json({ message: "Access denied. Cannot upload evidence to this dispute." });
     }
 
     const evidence = await prisma.evidence.create({
@@ -139,7 +168,7 @@ export const uploadEvidence = async (req, res) => {
         disputeId: id,
         uploadedById: userId,
         fileName: fileName || req.file.originalname,
-        fileUrl: req.file.path
+        fileUrl: req.file.path.replace(/\\/g, '/')
       }
     });
 
