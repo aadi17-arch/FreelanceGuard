@@ -151,6 +151,14 @@ export const depositToEscrow = async (req, res) => {
           status: "IN_PROGRESS"
         }
       });
+      await tx.payment.create({
+        data: {
+          contractId: contract.id,
+          amount: contract.totalAmount,
+          type: "DEPOSIT",
+          userId: client.id
+        }
+      });
       return { message: "SUCCESS" };
     });
 
@@ -167,17 +175,27 @@ export const addFundsToWallet = async (req, res) => {
     if (!amount || parseFloat(amount) <= 0) {
       return res.status(400).json({ message: "Invalid amount" });
     }
-    const user = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        walletBalance: {
-          increment: parseFloat(amount)
+    const result = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.update({
+        where: { id: userId },
+        data: {
+          walletBalance: {
+            increment: parseFloat(amount)
+          }
         }
-      }
+      });
+      await tx.payment.create({
+        data: {
+          amount: parseFloat(amount),
+          type: "WALLET_ADD",
+          userId: userId
+        }
+      });
+      return user;
     });
     res.status(200).json({
       message: "Funds added successfully",
-      walletBalance: user.walletBalance
+      walletBalance: result.walletBalance
     });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
@@ -195,17 +213,27 @@ export const withdrawFundsFromWallet = async (req, res) => {
     if (currentUser.walletBalance < parseFloat(amount)) {
       return res.status(400).json({ message: "Insufficient wallet balance" });
     }
-    const user = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        walletBalance: {
-          decrement: parseFloat(amount)
+    const result = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.update({
+        where: { id: userId },
+        data: {
+          walletBalance: {
+            decrement: parseFloat(amount)
+          }
         }
-      }
+      });
+      await tx.payment.create({
+        data: {
+          amount: parseFloat(amount),
+          type: "WITHDRAWAL",
+          userId: userId
+        }
+      });
+      return user;
     });
     res.status(200).json({
       message: "Withdrawal completed successfully",
-      walletBalance: user.walletBalance
+      walletBalance: result.walletBalance
     });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
@@ -329,12 +357,17 @@ export const getUserTransactions = async (req, res) => {
 
     const transactions = await prisma.payment.findMany({
       where: {
-        contract: {
-          OR: [
-            { freelancerId: userId },
-            { project: { clientId: userId } }
-          ]
-        }
+        OR: [
+          {
+            contract: {
+              OR: [
+                { freelancerId: userId },
+                { project: { clientId: userId } }
+              ]
+            }
+          },
+          { userId: userId }
+        ]
       },
       include: {
         contract: {
