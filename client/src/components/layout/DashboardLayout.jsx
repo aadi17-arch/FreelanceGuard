@@ -27,15 +27,15 @@ export default function DashboardLayout({ children }) {
     const titles = {
       "/dashboard": "Dashboard",
       "/marketplace": "Find projects",
-      "/escrow": "Safe holding",
+      "/escrow": "Vault",
       "/profile": "My profile",
       "/kyc": "Verification",
       "/contracts": "Active projects",
       "/proposals": user?.role === "CLIENT" ? "Received bids" : "My bids",
       "/analytics": "Reports",
       "/messages": "Messages",
-      "/disputes": "Support",
-      "/create-project": "New project"
+      "/disputes": "Issues",
+      "/create-project": "New project",
     };
 
     if (titles[path]) return titles[path];
@@ -45,7 +45,10 @@ export default function DashboardLayout({ children }) {
     return "Management";
   };
 
-  if (user?.role?.toUpperCase() === "ADMIN" && location.pathname === "/dashboard") {
+  if (
+    user?.role?.toUpperCase() === "ADMIN" &&
+    location.pathname === "/dashboard"
+  ) {
     navigate("/admin");
     return null;
   }
@@ -70,7 +73,6 @@ export default function DashboardLayout({ children }) {
       </div>
 
       <div className="flex-grow flex flex-col lg:ml-56 min-h-screen relative w-full overflow-x-hidden">
-
         <header className="sticky top-0 z-50 bg-white border-b border-zinc-100 px-4 py-3 lg:px-8 lg:py-5 flex justify-between items-center">
           <div className="flex items-center gap-4 min-w-0">
             <button
@@ -111,9 +113,14 @@ export default function DashboardLayout({ children }) {
                 to="/escrow"
                 className="flex items-center gap-2.5 px-3.5 py-1.5 md:px-4 md:py-2 rounded-lg border border-zinc-200 hover:border-zinc-900 hover:bg-zinc-50 transition-all bg-white"
               >
-                <Wallet size={14} className="text-zinc-400 group-hover:text-zinc-900" />
+                <Wallet
+                  size={14}
+                  className="text-zinc-400 group-hover:text-zinc-900"
+                />
                 <div className="flex flex-col items-start leading-none">
-                  <span className="text-[8px] font-bold text-zinc-400 mb-0.5">Wallet</span>
+                  <span className="text-[8px] font-bold text-zinc-400 mb-0.5">
+                    Wallet
+                  </span>
                   <span className="text-[12px] font-bold text-zinc-900">
                     ${user?.walletBalance?.toLocaleString() || "0"}
                   </span>
@@ -169,9 +176,7 @@ export default function DashboardLayout({ children }) {
         </header>
 
         <main className="px-4 py-6 lg:px-8 lg:py-10 w-full overflow-x-hidden">
-          <div className="w-full">
-            {children}
-          </div>
+          <div className="w-full">{children}</div>
         </main>
       </div>
     </div>
