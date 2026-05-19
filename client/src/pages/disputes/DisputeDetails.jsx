@@ -33,13 +33,25 @@ const DisputeDetails = () => {
       e.preventDefault();
       if (!selectedFile) return;
       setUploading(true);
+      const formData = new FormData();
+      formData.append("evidence", selectedFile);
+      formData.append("fileName", fileNotes || selectedFile.name);
       try {
-         toast.success(`Evidence selected: ${selectedFile.name}`);
+         await axios.post(
+            `/dispute/evidence/${id}`,
+            formData, {
+               headers: {
+                  'Content-Type': 'multipart/form-data'
+               }
+            }
+         );
+         toast.success("Evidence uploaded successfully!");
          setSelectedFile(null);
          setFileNotes("");
          setShowUpload(false);
+         fetchDisputeDetails();
       } catch (err) {
-         toast.error("Failed to select evidence.");
+         toast.error(err.response?.data?.message || "Failed to upload evidence.");
       } finally {
          setUploading(false);
       }
