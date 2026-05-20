@@ -288,6 +288,28 @@ export const clearDispute = async (req, res) => {
           }
         });
       }
+
+      const listofMilestone = await tx.milestone.findMany({
+        where: { contractId: milestone.contractId }
+      });
+      const notFinishedMilestones = listofMilestone.filter(
+        m => m.id !== dispute.milestoneId &&
+             m.status !== "APPROVED" &&
+             m.status !== "RELEASED" &&
+             m.status !== "RESOLVED"
+      );
+
+      if (notFinishedMilestones.length === 0) {
+        await tx.contract.update({
+          where: { id: milestone.contractId },
+          data: { status: "COMPLETED" }
+        });
+        await tx.project.update({
+          where: { id: contract.projectId },
+          data: { status: "COMPLETED" }
+        });
+      }
+
       return updated;
     });
     return res.status(200).json({message:"Case Resolved",dispute:updatedDispute});
