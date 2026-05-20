@@ -64,15 +64,10 @@ export default function Sidebar({ onClose }) {
   return (
     <aside className="h-screen w-56 bg-zinc-50 border-r border-zinc-200 flex flex-col py-6 z-[60]">
       <div className="px-6 mb-8 flex justify-between items-center">
-        <Link to={isAdmin ? "/admin" : "/dashboard"} onClick={onClose} className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center">
-            <ShieldCheck size={16} className="text-emerald-500" />
-          </div>
-          <div>
-            <h1 className="text-[15px] font-bold tracking-tight text-zinc-900 leading-none">
-              Freelance<span className="text-emerald-600">Guard</span>
-            </h1>
-          </div>
+        <Link to={isAdmin ? "/admin" : "/dashboard"} onClick={onClose} className="inline-block">
+          <span className="inline-block px-3.5 py-0.5 border border-zinc-900 bg-zinc-50/10 rounded-[50%] text-base font-logo font-bold text-zinc-900 select-none -rotate-[6deg] transform origin-center transition-all shadow-[0_2px_4px_rgba(24,24,27,0.04)] hover:shadow-[0_6px_15px_rgba(16,185,129,0.15)] hover:scale-105 hover:bg-emerald-50/30 hover:border-emerald-600 duration-200">
+            Freelance<span className="text-emerald-600">Guard</span>
+          </span>
         </Link>
         <button onClick={onClose} className="lg:hidden p-1.5 hover:bg-zinc-100 rounded-lg transition-colors">
           <X size={16} className="text-zinc-400" />
