@@ -23,11 +23,12 @@ export default function Home() {
   return (
     <div className="public-page min-h-screen bg-white text-zinc-900 flex flex-col items-center overflow-x-hidden font-body selection:bg-emerald-100">
       <nav className="w-full max-w-7xl mx-auto px-5 py-5 md:py-6 flex items-center justify-between z-[100] sticky top-0 bg-white border-b border-zinc-100">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-zinc-900 rounded-2xl flex items-center justify-center shadow-lg shadow-zinc-900/10">
-            <Lock size={16} className="text-emerald-500" />
-          </div>
-          <span className="text-lg font-bold tracking-tight text-zinc-900">Freelance<span className="text-emerald-600">Guard</span></span>
+        <div className="flex items-center">
+          <Link to="/">
+            <span className="inline-block px-6 py-1 border-2 border-zinc-900 bg-zinc-50/10 rounded-[50%] text-2xl md:text-3xl lg:text-4xl font-logo font-bold text-zinc-900 select-none -rotate-[6deg] transform origin-center transition-all shadow-[0_3px_6px_rgba(24,24,27,0.04),_0_1px_3px_rgba(24,24,27,0.08)] hover:shadow-[0_10px_25px_rgba(16,185,129,0.15)] hover:scale-105 hover:bg-emerald-50/30 hover:border-emerald-600 duration-200">
+              Freelance<span className="text-emerald-600">Guard</span>
+            </span>
+          </Link>
         </div>
         
         <div className="hidden md:flex items-center gap-8 text-[13px] font-semibold text-zinc-500">
@@ -36,7 +37,7 @@ export default function Home() {
           <a href="#pricing" className="hover:text-zinc-900 transition-colors">Pricing</a>
           <Link to="/login" className="hover:text-zinc-900 transition-colors">Sign in</Link>
           <Link to="/register">
-            <button className="bg-zinc-900 text-white px-6 py-2.5 rounded-2xl font-bold hover:bg-emerald-600 transition-all text-[13px]">
+            <button className="bg-zinc-900 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-emerald-600 transition-all text-[13px]">
               Create account
             </button>
           </Link>
@@ -335,11 +336,12 @@ export default function Home() {
 
       <footer className="w-full max-w-7xl mx-auto px-6 py-16 md:py-20 flex flex-col md:flex-row justify-between items-center gap-12 border-t border-zinc-100">
         <div className="flex flex-col items-center md:items-start gap-5">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-zinc-900 rounded-2xl flex items-center justify-center shadow-lg shadow-zinc-900/10">
-              <ShieldCheck size={16} className="text-emerald-500" />
-            </div>
-            <span className="text-lg font-bold tracking-tight text-zinc-900">Freelance<span className="text-emerald-600">Guard</span></span>
+          <div className="flex items-center">
+            <Link to="/">
+              <span className="inline-block px-6 py-1 border-2 border-zinc-900 bg-zinc-50/10 rounded-[50%] text-2xl md:text-3xl lg:text-4xl font-logo font-bold text-zinc-900 select-none -rotate-[6deg] transform origin-center transition-all shadow-[0_3px_6px_rgba(24,24,27,0.04),_0_1px_3px_rgba(24,24,27,0.08)] hover:shadow-[0_10px_25px_rgba(16,185,129,0.15)] hover:scale-105 hover:bg-emerald-50/30 hover:border-emerald-600 duration-200">
+                Freelance<span className="text-emerald-600">Guard</span>
+              </span>
+            </Link>
           </div>
           <p className="text-xs font-bold text-zinc-500 tracking-tight">&copy; {new Date().getFullYear()} FreelanceGuard. Simple and secure payments.</p>
         </div>
