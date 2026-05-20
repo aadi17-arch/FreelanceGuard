@@ -44,19 +44,13 @@ export default function Login() {
         className="w-full max-w-[420px] px-2 sm:px-0 space-y-6 relative z-10"
       >
         <div className="flex flex-col items-center gap-3">
-          <Link to="/" className="group flex items-center gap-2.5">
-             <div className="w-10 h-10 bg-zinc-900 rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform">
-                <svg viewBox="0 0 24 24" className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2l9 4.9v9.8L12 22l-9-5.3V6.9L12 2z" />
-                  <circle cx="12" cy="12" r="3" className="fill-emerald-500" />
-                  <path d="M12 2v7" />
-                  <path d="M12 15v7" />
-                </svg>
-             </div>
-             <span className="text-xl font-bold tracking-tight text-zinc-900">Freelance<span className="text-emerald-600">Guard</span></span>
+          <Link to="/">
+            <span className="inline-block px-5 py-0.5 border-2 border-zinc-900 bg-zinc-50/10 rounded-[50%] text-xl md:text-2xl font-logo font-bold text-zinc-900 select-none -rotate-[6deg] transform origin-center transition-all shadow-[0_3px_6px_rgba(24,24,27,0.04),_0_1px_3px_rgba(24,24,27,0.08)] hover:shadow-[0_10px_25px_rgba(16,185,129,0.15)] hover:scale-105 hover:bg-emerald-50/30 hover:border-emerald-600 duration-200">
+              Freelance<span className="text-emerald-600">Guard</span>
+            </span>
           </Link>
           <div className="text-center space-y-1">
-             <h2 className="text-2xl font-bold tracking-tight text-zinc-900 leading-tight">Welcome back</h2>
+             <h2 className="text-xl font-bold tracking-tight text-zinc-900 leading-tight">Welcome back</h2>
              <p className="text-xs font-medium text-zinc-400">"Secure your work. Protect your income."</p>
           </div>
         </div>
@@ -112,7 +106,7 @@ export default function Login() {
                >
                  {loading ? "Signing in..." : (
                    <>
-                    Sign in to Account
+                    Sign in
                     <ArrowRight size={16} />
                    </>
                  )}
