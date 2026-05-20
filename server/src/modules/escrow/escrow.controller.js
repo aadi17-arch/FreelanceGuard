@@ -323,7 +323,10 @@ export const approveAndReleaseMilestoneAmount = async (req, res) => {
         where: {contractId:milestone.contractId},
       });
       const notApprovedMilestone = listofMilestone.filter(
-        m=>m.id !==milestoneId &&m.status!=="APPROVED"&&m.status!=="RELEASED"
+        m => m.id !== milestoneId &&
+             m.status !== "APPROVED" &&
+             m.status !== "RELEASED" &&
+             m.status !== "RESOLVED"
       );
       if (notApprovedMilestone.length === 0) {
         await tx.contract.update({
