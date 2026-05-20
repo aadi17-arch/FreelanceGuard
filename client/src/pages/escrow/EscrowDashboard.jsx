@@ -329,9 +329,6 @@ export default function SafeHoldingDashboard() {
                         {isIncoming ? "+" : "-"}${tx.amount?.toLocaleString()}
                       </p>
                     </div>
-                    <div className="w-8 h-8 rounded-full border border-zinc-100 flex items-center justify-center text-zinc-400 group-hover:bg-zinc-900 group-hover:text-white transition-all">
-                      <ChevronRight size={14} />
-                    </div>
                   </div>
                 </div>
               );
