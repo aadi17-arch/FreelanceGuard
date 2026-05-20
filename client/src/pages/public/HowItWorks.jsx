@@ -55,14 +55,13 @@ export default function HowItWorks() {
     <div className="public-page min-h-screen bg-white font-body overflow-x-hidden">
       {/* Navigation */}
       <nav className="px-4 py-5 md:px-6 md:py-6 flex justify-between items-center max-w-7xl mx-auto border-b border-zinc-100">
-        <Link to="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-zinc-900 rounded-xl flex items-center justify-center shadow-lg shadow-zinc-900/10">
-            <ShieldCheck size={16} className="text-emerald-500" />
-          </div>
-          <span className="text-lg font-bold tracking-tight text-zinc-900">Freelance<span className="text-emerald-600">Guard</span></span>
+        <Link to="/">
+          <span className="inline-block px-6 py-1 border-2 border-zinc-900 bg-zinc-50/10 rounded-[50%] text-2xl md:text-3xl lg:text-4xl font-logo font-bold text-zinc-900 select-none -rotate-[6deg] transform origin-center transition-all shadow-[0_3px_6px_rgba(24,24,27,0.04),_0_1px_3px_rgba(24,24,27,0.08)] hover:shadow-[0_10px_25px_rgba(16,185,129,0.15)] hover:scale-105 hover:bg-emerald-50/30 hover:border-emerald-600 duration-200">
+            Freelance<span className="text-emerald-600">Guard</span>
+          </span>
         </Link>
         <Link to="/login">
-          <button className="px-5 py-2 bg-zinc-900 text-white rounded-2xl text-[11px] font-bold hover:bg-zinc-800 transition-all">
+          <button className="px-5 py-2 bg-zinc-900 text-white rounded-lg text-[11px] font-bold hover:bg-zinc-800 transition-all">
             Sign in
           </button>
         </Link>
