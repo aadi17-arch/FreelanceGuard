@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes.js";
 import projectRoutes from "./modules/projects/project.routes.js";
 import bidRoutes from "./modules/projects/bid.routes.js";
@@ -24,6 +25,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 const __filename = fileURLToPath(import.meta.url);
@@ -31,6 +33,7 @@ const __dirname = path.dirname(__filename);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
+// Routes must be loaded AFTER parsing middlewares
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/bids", bidRoutes);
@@ -47,11 +50,14 @@ app.get('/', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  console.error('SERVER_ERROR:', err);
   res.status(err.status || 500).json({
-    message: "An unexpected server error occurred"
+    message: err.message || "An unexpected server error occurred"
   });
 });
 
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+export { app, server };

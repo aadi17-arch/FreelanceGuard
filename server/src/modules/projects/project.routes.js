@@ -2,10 +2,12 @@ import express from "express";
 import authMiddleware, { roleMiddleware } from "../auth/auth.middleware.js";
 import { createProject, getAllProjects, getMyProject, getProjectStats, getProjectById, hireFreelancer } from "./project.controller.js"
 import kycmiddleware from "../kyc/kyc.middleware.js";
+import { validateRequest } from "../../middleware/validation.middleware.js";
+import { createProjectSchema } from "../../validations/project.validation.js";
 
 const router = express.Router();
 
-router.post("/create", authMiddleware, roleMiddleware(["CLIENT"]), kycmiddleware, createProject);
+router.post("/create", authMiddleware, roleMiddleware(["CLIENT"]), kycmiddleware, validateRequest(createProjectSchema), createProject);
 
 router.get("/", getAllProjects);
 router.get("/all", getAllProjects);

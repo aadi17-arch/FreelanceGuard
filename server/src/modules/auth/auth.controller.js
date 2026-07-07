@@ -27,18 +27,12 @@ export const register = async (req, res) => {
       }
     });
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        role: user.role
-      },
-      process.env.JWT_SECRET || "fallback_secret",
-      { expiresIn: "7d" }
-    );
+    const { accessToken, refreshToken } = generateTokens(user);
+    setRefreshTokenCookie(res, refreshToken);
 
     res.status(201).json({
       message: "User registered Successfully",
-      token,
+      token: accessToken,
       user: {
         id: user.id,
         email: user.email,
@@ -73,17 +67,12 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Wrong Password" });
     }
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        role: user.role
-      },
-      process.env.JWT_SECRET || "fallback_secret",
-      { expiresIn: "7d" }
-    );
+    const { accessToken, refreshToken } = generateTokens(user);
+    setRefreshTokenCookie(res, refreshToken);
+
     res.status(200).json({
       message: "Login Successful",
-      token,
+      token: accessToken,
       user: {
         id: user.id,
         email: user.email,
@@ -213,3 +202,56 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
+const generateTokens = (user) => {
+  const accessToken = jwt.sign(
+    { id: user.id, role: user.role },
+    process.env.JWT_SECRET || "fallback_secret",
+    { expiresIn: "1h" }
+  );
+  const refreshToken = jwt.sign(
+    { id: user.id, role: user.role },
+    process.env.JWT_SECRET || "fallback_secret",
+    { expiresIn: "7d" }
+  );
+  return { accessToken, refreshToken };
+};
+
+const setRefreshTokenCookie = (res, token) => {
+  res.cookie("refreshToken", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  });
+};
+
+export const refresh = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json({ message: "Refresh Token Missing" });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(refreshToken, process.env.JWT_SECRET || "fallback_secret");
+    } catch (e) {
+      return res.status(403).json({ message: "Invalid or Expired Refresh Token" });
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: decoded.id } });
+    if (!user) {
+      return res.status(403).json({ message: "User not found" });
+    }
+
+    const tokens = generateTokens(user);
+    setRefreshTokenCookie(res, tokens.refreshToken);
+
+    res.status(200).json({
+      token: tokens.accessToken
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
