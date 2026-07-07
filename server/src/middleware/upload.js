@@ -1,28 +1,25 @@
-import multer from "multer";
-import path from "path";
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import multer from 'multer';
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/kyc');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + path.extname(file.originalname));
-  }
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
-  }
-  else {
-    cb(new Error("Not Valid Format,Please Uplaod JPEG OR PNG Only"));
-  }
-};
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'freelanceguard_uploads',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
+  },
+});
+
 const upload = multer({
   storage: storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024
-  },
-  fileFilter: fileFilter
-
+  limits: { fileSize: 5 * 1024 * 1024 }
 });
+
 export default upload;
+
