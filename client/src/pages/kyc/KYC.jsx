@@ -82,7 +82,7 @@ export default function Verification() {
               <div className="relative rounded-[1.5rem] overflow-hidden border border-zinc-50 bg-zinc-50 transition-all">
                 {user.kyc.documentUrl ? (
                   <img
-                    src={`http://localhost:5001/${user.kyc.documentUrl.replace(/\\/g, '/')}`}
+                    src={user.kyc.documentUrl.startsWith('http') ? user.kyc.documentUrl : `${axios.defaults.baseURL.replace('/api', '')}/${user.kyc.documentUrl.replace(/\\/g, '/')}`}
                     alt="ID Document"
                     className="w-full aspect-video object-cover"
                   />

@@ -16,10 +16,10 @@ const RaiseDisputeModal = ({ isOpen, onClose, milestoneId, milestoneTitle }) => 
 
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5001/api/dispute', {
+      const response = await axios.post('/dispute', {
         milestoneId,
         reason
-      }, { withCredentials: true });
+      });
 
       toast.success("Dispute protocol initiated successfully");
       onClose();
